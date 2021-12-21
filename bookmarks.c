@@ -90,19 +90,25 @@ int main(void)
 		}
 		
 		printf(
-			"\t\t\t<h%d>%s</h%d>\n",
+			"\t\t\t<h%d>%s</h%d>\n%s",
 			sections_level[section_i] + 1,
 			sections_header[section_i],
-			sections_level[section_i] + 1
+			sections_level[section_i] + 1,
+			n_section_link[section_i] > 0 ? "\t\t\t<ul>\n" : ""
 		);
 		
 		for (int link_i = 0; link_i < n_section_link[section_i]; link_i++)
 		{
 			printf(
-				"\t\t\t<li><a href=\"%s\">\n\t\t\t\t%s\n\t\t\t</li></a>\n",
+				"\t\t\t\t<li><a href=\"%s\">\n\t\t\t\t\t%s\n\t\t\t\t</a></li>\n",
 				sections_links_url[section_i][link_i],
 				sections_links_anchor[section_i][link_i]
 			);
+		}
+		
+		if (n_section_link[section_i] > 0)
+		{
+			printf("%s", "\t\t\t</ul>\n");
 		}
 		
 		if (section_i == n_section - 1 || 1 == sections_level[section_i + 1])
@@ -111,7 +117,7 @@ int main(void)
 		}
 	}
 	
-	printf("%s%s%s", "\t\t<article>\n", BODY_CLOSE, HTML_CLOSE);
+	printf("%s%s%s", "\t\t</article>\n", BODY_CLOSE, HTML_CLOSE);
 	
 	return 0;
 }

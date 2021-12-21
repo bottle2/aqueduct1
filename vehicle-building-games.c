@@ -8,6 +8,7 @@
 #include "html.h"
 
 #define TITLE "List of vehicle building games"
+#define STYLES
 
 #define LOCATION_XS(X)                        \
 X(ADDICTING_GAMES  , "Addicting Games"  , NIL) \

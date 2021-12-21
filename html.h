@@ -9,6 +9,7 @@
 "\t\t<link rel=\"icon\" type=\"image/svg+xml\" href=\"./logo.svg\">\n"             \
 "\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n" \
 "\t\t<title>" TITLE " - aqueduct1</title>\n"                                       \
+STYLES                                                                             \
 "\t</head>\n"
 
 #define BODY_OPEN  "\t<body>\n\t\t<h1>" TITLE "</h1>\n"

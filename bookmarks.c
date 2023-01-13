@@ -32,13 +32,13 @@
 
 static int const sections_level[] = {
 	#define SECTION_X(LEVEL, ...) LEVEL,
-	#include "bookmarks.xs"
+	#include "bookmarks.inc"
 	#undef SECTION_X
 };
 
 static char const *sections_header[] = {
 	#define SECTION_X(LEVEL, HEADER, ...) HEADER,
-	#include "bookmarks.xs"
+	#include "bookmarks.inc"
 	#undef SECTION_X
 };
 
@@ -46,7 +46,7 @@ static char const **sections_links_url[] = {
 	#define NIL NULL
 	#define SECTION_X(LEVEL, HEADER, LINKS_XS) (char const *[]){LINKS_XS},
 	#define LINK_X(URL, ...) URL,
-	#include "bookmarks.xs"
+	#include "bookmarks.inc"
 	#undef LINK_X
 	#undef SECTION_X
 	#undef NIL
@@ -56,7 +56,7 @@ static char const **sections_links_anchor[] = {
 	#define NIL NULL
 	#define SECTION_X(LEVEL, HEADER, LINKS_XS) (char const *[]){LINKS_XS},
 	#define LINK_X(URL, ANCHOR) ANCHOR,
-	#include "bookmarks.xs"
+	#include "bookmarks.inc"
 	#undef LINK_X
 	#undef SECTION_X
 	#undef NIL
@@ -64,7 +64,7 @@ static char const **sections_links_anchor[] = {
 
 static int n_section =
 	#define SECTION_X(...) + 1
-	#include "bookmarks.xs"
+	#include "bookmarks.inc"
 	#undef SECTION_X
 ;
 
@@ -72,7 +72,7 @@ static int const n_section_link[] = {
 	#define NIL 0
 	#define SECTION_X(LEVEL, HEADER, LINKS_XS) LINKS_XS,
 	#define LINK_X(...) + 1
-	#include "bookmarks.xs"
+	#include "bookmarks.inc"
 	#undef LINK_X
 	#undef SECTION_X
 	#undef NIL

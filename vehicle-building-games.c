@@ -100,19 +100,19 @@ INDENT "</ul>\n"
 
 static char const *names[] = {
 	#define  GAME_X(NAME, ...) NAME,
-	#include "vehicle-building-games.xs"
+	#include "vehicle-building-games.inc"
 	#undef   GAME_X
 };
 
 static char const *notes[] = {
 	#define  GAME_X(NAME, NOTE, ...) NOTE,
-	#include "vehicle-building-games.xs"
+	#include "vehicle-building-games.inc"
 	#undef   GAME_X
 };
 
 static char const *footnotes[] = {
 	#define  GAME_X(NAME, NOTE, FOOTNOTE, ...) FOOTNOTE,
-	#include "vehicle-building-games.xs"
+	#include "vehicle-building-games.inc"
 	#undef   GAME_X
 };
 
@@ -120,7 +120,7 @@ static enum location const *game_locations[] = {
 	#define  GAME_X(NAME, NOTE, FOOTNOTE, LOCATION_XS) (enum location const []){LOCATION_XS},
 	#define  LOCATION_X(LOCATION, RESOURCES_XS) LOCATION,
 	#define  NIL NO_LOCATION
-	#include "vehicle-building-games.xs"
+	#include "vehicle-building-games.inc"
 	#undef   GAME_X
 	#undef   LOCATION_X
 	#undef   NIL
@@ -131,7 +131,7 @@ static enum attribute const **game_location_resource_attributes[] = {
 	#define  LOCATION_X(LOCATION, RESOURCE_XS) (enum attribute const []){RESOURCE_XS},
 	#define  RESOURCE_X(ATTRIBUTE, ...) ATTRIBUTE,
 	#define  NIL (enum attribute const []){NO_ATTRIBUTE}
-	#include "vehicle-building-games.xs"
+	#include "vehicle-building-games.inc"
 	#undef   GAME_X
 	#undef   LOCATION_X
 	#undef   RESOURCE_X
@@ -143,7 +143,7 @@ static char const ***game_location_resource_indexes[] = {
 	#define  LOCATION_X(LOCATION, RESOURCE_XS) (char const *[]){RESOURCE_XS},
 	#define  RESOURCE_X(ATTRIBUTE, INDEX, ...) INDEX,
 	#define  NIL NULL
-	#include "vehicle-building-games.xs"
+	#include "vehicle-building-games.inc"
 	#undef   GAME_X
 	#undef   LOCATION_X
 	#undef   RESOURCE_X
@@ -155,7 +155,7 @@ static char const ***game_location_resource_urls[] = {
 	#define  LOCATION_X(LOCATION, RESOURCE_XS) (char const *[]){RESOURCE_XS},
 	#define  RESOURCE_X(ATTRIBUTE, INDEX, URL) URL,
 	#define  NIL NULL
-	#include "vehicle-building-games.xs"
+	#include "vehicle-building-games.inc"
 	#undef   GAME_X
 	#undef   LOCATION_X
 	#undef   RESOURCE_X
@@ -164,13 +164,13 @@ static char const ***game_location_resource_urls[] = {
 
 static int const n_game =
 	#define  GAME_X(...) + 1
-	#include "vehicle-building-games.xs"
+	#include "vehicle-building-games.inc"
 	#undef   GAME_X
 ;
 
 static int const n_footnote =
 	#define  GAME_X(NAME, NOTE, FOOTNOTE, ...) + (FOOTNOTE != NULL)
-	#include "vehicle-building-games.xs"
+	#include "vehicle-building-games.inc"
 	#undef   GAME_X
 ;
 
@@ -178,7 +178,7 @@ static int const n_location_per_game[] = {
 	#define  GAME_X(NAME, NOTE, FOOTNOTE, LOCATION_XS) LOCATION_XS,
 	#define  LOCATION_X(...) + 1
 	#define  NIL 0
-	#include "vehicle-building-games.xs"
+	#include "vehicle-building-games.inc"
 	#undef   GAME_X
 	#undef   LOCATION_X
 	#undef   NIL
@@ -189,7 +189,7 @@ static int const *n_resource_per_location_per_game[] = {
 	#define  LOCATION_X(LOCATION, RESOURCE_XS) RESOURCE_XS,
 	#define  RESOURCE_X(...) + 1
 	#define  NIL -1
-	#include "vehicle-building-games.xs"
+	#include "vehicle-building-games.inc"
 	#undef   GAME_X
 	#undef   LOCATION_X
 	#undef   RESOURCE_X

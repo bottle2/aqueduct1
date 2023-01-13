@@ -57,6 +57,7 @@ SECTION_X(2, "Resources",
 	LINK_X("https://graphics.stanford.edu/~seander/bithacks.html"                                           , "Bit Twiddling Hacks"                                                                                )
 	LINK_X("https://wiki.sei.cmu.edu/confluence/display/c/SEI+CERT+C+Coding+Standard"                       , "SEI CERT C Coding Standard - SEI CERT C Coding Standard - Confluence"                               )
 	LINK_X("https://nginx.org/en/docs/dev/development_guide.html#code_style"                                , "Development guide#coding_style"                                                                     )
+	LINK_X("https://github.com/jpoirier/picoc"                                                              , "jpoirier/picoc: A very small C interpreter"                                                         )
 )
 SECTION_X(2, "Libraries",
 	LINK_X("https://github.com/orangeduck/mpc"                                        , "orangeduck/mpc: A Parser Combinator library for C"                                                       )
@@ -73,6 +74,7 @@ SECTION_X(2, "Libraries",
 	LINK_X("https://en.cppreference.com/w/c/links/libs"                               , "open source C libraries"                                                                                 )
 	LINK_X("https://en.wikipedia.org/wiki/Category:C_(programming_language)_libraries", "Category:C (programming language) libraries - Wikipedia"                                                 )
 	LINK_X("https://www.tapirgames.com/blog/open-source-physics-engines"              , "Full List Of Open Source Physics Engines * Blog"                                                         )
+	LINK_X("https://github.com/RandyGaul/cute_headers"                                , "RandyGaul/cute_headers: One-file C/C++ libraries with no dependencies, primarily used for games"         )
 )
 SECTION_X(3, "Neural Networks",
 	LINK_X("https://github.com/codeplea/genann" , "GitHub - codeplea/genann: simple neural network library in ANSI C")
@@ -90,6 +92,19 @@ SECTION_X(1, "Services",
 	LINK_X("https://www.rsync.net/index.html", "rsync - Cloud Storage for Offsite Backup"        )
 	LINK_X("https://www.flickr.com/"         , "Flickr"                                          )
 	LINK_X("https://lelivros.love/"          , "Le Livros"                                       )
+)
+
+SECTION_X(1, "Specifications",
+	LINK_X("https://datatracker.ietf.org/doc/html/rfc4646"           , "RFC4646 Tags for Identifying Languages"                            )
+	LINK_X("https://datatracker.ietf.org/doc/html/rfc8446"           , "RFC8446 The Transport Layer Security (TLS) Protocol Version 1.3"   )
+	LINK_X("https://datatracker.ietf.org/doc/html/rfc5246"           , "RFC5246 The Transport Layer Security (TLS) Protocol Version 1.2"   )
+	LINK_X("gemini://gemini.circumlunar.space/docs/specification.gmi", "Project Gemini Speculative specification"                          )
+	LINK_X("https://datatracker.ietf.org/doc/html/rfc2616"           , "RFC2616 Hypertext Transfer Protocol -- HTTP/1.1"                   )
+	LINK_X("https://datatracker.ietf.org/doc/html/rfc3875"           , "RFC3875 The Common Gateway Interface (CGI) Version 1.1"            )
+	LINK_X("https://datatracker.ietf.org/doc/html/rfc3986"           , "RFC3986 Uniform Resource Identifier (URI): Generic Syntax"         )
+	LINK_X("https://datatracker.ietf.org/doc/html/rfc2046"           , "Multipurpose Internet Mail Extensions (MIME) Part Two: Media Types")
+	LINK_X("https://datatracker.ietf.org/doc/html/rfc1436"           , "RFC1436 The Internet Gopher Protocol"                              )
+	LINK_X("https://datatracker.ietf.org/doc/html/rfc7540"           , "RFC7540 Hypertext Transfer Protocol Version 2 (HTTP/2)"            )
 )
 
 SECTION_X(1, "Guides",
@@ -124,6 +139,7 @@ SECTION_X(1, "Guides",
 	LINK_X("https://stackoverflow.com/questions/91791/grep-and-sed-equivalent-for-xml-command-line-processing", "Grep and Sed Equivalent for XML Command Line Processing - Stack Overflow"                               )
 	LINK_X("https://wiki.creativecommons.org/wiki/Main_Page"                                                  , "Creative Commons"                                                                                       )
 	LINK_X("http://utf8everywhere.org/"                                                                       , "UTF-8 Everywhere"                                                                                       )
+	LINK_X("https://www.youtube.com/c/FastbitEmbeddedBrainAcademy/videos"                                     , "Fastbit Embedded Brain Academy - YouTube"                                                               )
 )
 SECTION_X(2, "Minetest",
 	LINK_X("https://your-land.de/index.php/2020/06/26/modding-sources-as-of-june-2020/", "Modding sources as of June 2020"    )
@@ -239,6 +255,7 @@ SECTION_X(1, "Culture",
 )
 
 SECTION_X(1, "Blogs",
+	LINK_X("https://research.swtch.com/"                             , "research!rsc"                                      )
 	LINK_X("https://www.internalpointers.com/"                       , "Internal Pointers - Internal Pointers"             )
 	LINK_X("http://lambda-the-ultimate.org/"                         , "Lambda the Ultimate | Programming Languages Weblog")
 	LINK_X("https://cellperformance.beyond3d.com/articles/index.html", "CellPerformance"                                   )

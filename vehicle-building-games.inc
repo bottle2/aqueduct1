@@ -1153,3 +1153,4 @@ GAME_X("Battleships Forever", NULL, NULL,
 GAME_X("Waste of Space", NULL, NULL,
 	LOCATION_X(GITHUB, RESOURCE_X(MENTION, NULL, "https://github.com/raysan5/raylib/issues/1326#issuecomment-666333718"))
 )
+

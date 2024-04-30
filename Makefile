@@ -11,7 +11,7 @@ vehicle-building-games.html:vehicle-building-games
 
 DEPS=libuv
 
-CFLAGS=\
+CFLAGS=-g3 \
 -Wpedantic -Wall -Wextra -Wshadow \
 -fno-strict-aliasing \
 $$(pkg-config --cflags $(DEPS)) -Illhttp
@@ -20,9 +20,9 @@ LDLIBS=$$(pkg-config --libs $(DEPS))
 LLHTTP=llhttp/api.o llhttp/http.o llhttp/llhttp.o
 LLHTTP_SOURCE=llhttp/api.c llhttp/http.c llhttp/llhttp.c llhttp/llhttp.h
 LLHTTP_URL=https://raw.githubusercontent.com/nodejs/node/main/deps/llhttp
-LLHTTP_RECIPE=$(CC) -Os -g3 -Wall -Wextra -Wno-unused-parameter -o $@ -c $*.c
+LLHTTP_RECIPE=$(CC) -g3 -Wall -Wextra -Wno-unused-parameter -o $@ -c $*.c
 
-SOURCE=main.c
+SOURCE=main.c parse.c
 
 site:$(SOURCE) $(LLHTTP)
 	$(CC) $(CFLAGS) -o $@ $(SOURCE) $(LLHTTP) $(LDLIBS)

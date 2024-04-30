@@ -5,6 +5,8 @@
 
 #include <llhttp.h>
 
+#include "parse.h"
+
 #define DEFAULT_PORT    7000
 #define DEFAULT_BACKLOG  128
 
@@ -116,8 +118,82 @@ static void on_new_connection(uv_stream_t *server, int status)
         uv_close((uv_handle_t *)client, on_close);
 }
 
+static void on_movies_change(
+    uv_fs_event_t *handle,
+    char const *path,
+    int events,
+    int status
+) {
+    (void)handle;
+
+#if 0
+    assert(UV_RENAME == status || UV_CHANGE == status);
+#endif
+
+    printf("%d %s %d\n", events, path, status);
+
+    size_t len = 1000;
+    char buffer[1000] = {0};
+    int rc = uv_fs_event_getpath(handle, buffer, &len);
+    printf("%d %s %zu\n", rc, buffer, len);
+}
+
+uv_fs_t read_movie = {0};
+
+uv_file fucking_desc;
+uv_buf_t portion = {.base = (char [21]){0}, .len = 20};
+
+struct line_builder lb = {0};
+
+void read_cb(uv_fs_t *fil)
+{
+    if (fil->result < 0)
+    {
+        fprintf(stderr, "fs read error %s\n", uv_strerror(fil->result));
+        exit(EXIT_FAILURE);
+    }
+
+    if (0 == fil->result)
+    {
+        // close this shit fuck
+        puts("we should close this piss fuck");
+        vomit();
+    }
+    else
+    {
+#if 0
+        printf("%.*s", (int)fil->result, portion.base);
+#endif
+        portion.base[fil->result] = '\0';
+        line_builder_add(&lb, portion.base);
+        int what_the_fuck = uv_fs_read(loop, fil, fucking_desc, &portion, 1, -1, read_cb);
+
+#if 0
+        printf("read returned %d\n", what_the_fuck);
+#endif
+    }
+}
+
+void open_cb(uv_fs_t *fil)
+{
+    if (fil->result < 0)
+    {
+        fprintf(stderr, "fs open error 2 %s\n", uv_strerror(fil->result));
+        exit(EXIT_FAILURE);
+    }
+
+    fucking_desc = fil->result;
+
+    int what_the_fuck = uv_fs_read(loop, fil, fucking_desc, &portion, 1, -1, read_cb);
+
+#if 0
+    printf("read returned %d\n", what_the_fuck);
+#endif
+}
+
 int main(void)
 {
+    lb.line = malloc(1);
     loop = uv_default_loop();
     uv_tcp_t server;
     uv_tcp_init(loop, &server);
@@ -136,6 +212,30 @@ int main(void)
     if (r)
     {
         fprintf(stderr, "Listen error %s\n", uv_strerror(r));
+        return EXIT_FAILURE;
+    }
+
+    // TODO it stops working after rm or mv!
+    uv_fs_event_t movies_event = {0};
+    r = uv_fs_event_init(loop, &movies_event);
+
+    if (r)
+    {
+        fprintf(stderr, "fs loop error %s\n", uv_strerror(r));
+        return EXIT_FAILURE;
+    }
+
+    r = uv_fs_event_start(&movies_event, on_movies_change, "./movies.txt", 0);
+
+    if (r)
+    {
+        fprintf(stderr, "fs event error %s\n", uv_strerror(r));
+        return EXIT_FAILURE;
+    }
+
+    if ((r = uv_fs_open(loop, &read_movie, "./movies.txt", UV_FS_O_SEQUENTIAL | UV_FS_O_RDONLY, 0, open_cb)))
+    {
+        fprintf(stderr, "fs open error %s\n", uv_strerror(r));
         return EXIT_FAILURE;
     }
 

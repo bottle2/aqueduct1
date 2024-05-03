@@ -15,3 +15,10 @@ int main(void)
 
     return 0;
 }
+
+{
+    while ((c = getchar()) != EOF)
+        while (lb_add(&lb, (char []){c}, 1))
+        {
+        }
+}

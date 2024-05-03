@@ -128,7 +128,7 @@ void vomit(void)
         return;
     }
 
-#if 0
+#if 1
     printf(HEAD, title);
 #endif
 

@@ -1,6 +1,6 @@
 PAGES=bookmarks.html vehicle-building-games.html
 
-TARGET=site
+TARGET=site batch
 
 all:$(TARGET) $(PAGES)
 
@@ -11,7 +11,7 @@ vehicle-building-games.html:vehicle-building-games
 
 DEPS=libuv
 
-CFLAGS=-g3 \
+CFLAGS=-g3 -fsanitize=address,undefined \
 -Wpedantic -Wall -Wextra -Wshadow \
 -fno-strict-aliasing \
 $$(pkg-config --cflags $(DEPS)) -Illhttp
@@ -26,6 +26,9 @@ SOURCE=main.c parse.c
 
 site:$(SOURCE) $(LLHTTP)
 	$(CC) $(CFLAGS) -o $@ $(SOURCE) $(LLHTTP) $(LDLIBS)
+
+batch:batch.c parse.c
+	$(CC) $(CFLAGS) -o $@ batch.c parse.c $(LDLIBS)
 
 clean:
 	rm -f $(LLHTTP) $(TARGET)

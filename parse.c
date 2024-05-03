@@ -74,9 +74,17 @@ static union element * element_new(enum type type)
     return it;
 }
 
+void process_line(char const *line);
+
 void line_builder_add(struct line_builder *lb, char *buffer, int len)
 {
-    for (int i = 0; i < len; i++)
+    if (0 == len && lb->len > 0)
+    {
+        lb->line[lb->len] = '\0';
+        process_line(lb->line);
+    }
+
+    for (int i = 0; i < len && buffer[i] != '\0'; i++)
     {
         if ('\n' == buffer[i] || '\r' == buffer[i])
             lb->found_newline = true;
@@ -120,7 +128,9 @@ void vomit(void)
         return;
     }
 
+#if 0
     printf(HEAD, title);
+#endif
 
     bool is_mov = false;
     bool is_pp = false;
@@ -194,22 +204,6 @@ void vomit(void)
     title = NULL;
 }
 
-#if 0
-int main(void)
-{
-    char *line = NULL;
-
-    struct line_builder lb = {.line = malloc(1)};
-    int c;
-    while ((c = getchar()) != EOF)
-        line_builder_add(&lb, (char []){c}, 1);
-
-    vomit();
-
-    return 0;
-}
-#endif
-
 void process_line(char const *line)
 {
     {
@@ -230,8 +224,10 @@ void process_line(char const *line)
                 else
                 {
                     ptrdiff_t len = quote_right - quote_left - 1;
+		    assert(len >= 0);
                     title = malloc(len + 1);
                     strncpy(title, quote_left + 1, len);
+                    title[len] = '\0';
                 }
             }
             else if (!strncmp(".HEADING", line, 8))
@@ -252,12 +248,15 @@ void process_line(char const *line)
                     else
                     {
                         ptrdiff_t len = quote_right - quote_left - 1;
+			assert(len >= 0);
                         *last = element_new(HEADING);
                         if (NULL == elements)
                             elements = *last;
                         (*last)->heading.level = level;
+                        assert(len >= 1);
                         (*last)->heading.text = malloc(len + 1);
                         strncpy((*last)->heading.text, quote_left + 1, len);
+                        (*last)->heading.text[len] = '\0';
                         last = &(*last)->next;
                     }
                 }
@@ -311,6 +310,11 @@ void process_line(char const *line)
                         assert(len_tag >= 1);
                         offset = start_tag + len_tag;
                     }
+                    else if (1 == code)
+                    {
+                        puts("error no year");
+                        return;
+                    }
                     else
                     {
                         printf("c %d\n", code);
@@ -321,7 +325,7 @@ void process_line(char const *line)
                 // find or create block
 
                 int len = lone ? 0 : lenlasta(offset + n_read, isgraph);
-                if (!lone && 0 == len)
+                if (!lone && len <= 0)
                 {
                     puts("error no movie name");
                     return;
@@ -343,6 +347,7 @@ void process_line(char const *line)
                     which->defined = false;
                     which->symbol = malloc(len_symbol + 1);
                     strncpy(which->symbol, start_symbol, len_symbol);
+                    which->symbol[len_symbol] = '\0';
                     *last_mov = which;
                 }
 
@@ -355,11 +360,13 @@ void process_line(char const *line)
                     }
                     else
                     {
+                        assert(len >= 1);
                         which->year = year;
                         which->aut = aut_code;
                         which->defined = true;
                         which->name = malloc(len + 1);
                         strncpy(which->name, offset + n_read, len);
+                        which->name[len] = '\0';
                         puts("filme novo");
                     }
                 }
@@ -377,7 +384,7 @@ void process_line(char const *line)
                 *last = element_new(TEXT);
                 if (NULL == elements)
                     elements = *last;
-                (*last)->text = malloc(strlen(line + 1));
+                (*last)->text = malloc(strlen(line) + 1);
                 strcpy((*last)->text, line);
                 last = &(*last)->next;
                 puts("texto solto");

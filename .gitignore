@@ -4,3 +4,5 @@ vehicle-building-games
 vehicle-building-games.html
 *.obj
 *.exe
+tags
+*.o

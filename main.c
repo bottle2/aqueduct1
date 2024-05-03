@@ -164,13 +164,12 @@ void read_cb(uv_fs_t *fil)
 #if 0
         printf("%.*s", (int)fil->result, portion.base);
 #endif
-        portion.base[fil->result] = '\0';
-        line_builder_add(&lb, portion.base);
-        int what_the_fuck = uv_fs_read(loop, fil, fucking_desc, &portion, 1, -1, read_cb);
-
 #if 0
-        printf("read returned %d\n", what_the_fuck);
+        portion.base[fil->result] = '\0';
 #endif
+        line_builder_add(&lb, portion.base, fil->result);
+        if (uv_fs_read(loop, fil, fucking_desc, &portion, 1, -1, read_cb) != 0)
+            assert(!"impossible return");
     }
 }
 
@@ -184,11 +183,8 @@ void open_cb(uv_fs_t *fil)
 
     fucking_desc = fil->result;
 
-    int what_the_fuck = uv_fs_read(loop, fil, fucking_desc, &portion, 1, -1, read_cb);
-
-#if 0
-    printf("read returned %d\n", what_the_fuck);
-#endif
+    if (uv_fs_read(loop, fil, fucking_desc, &portion, 1, -1, read_cb) != 0)
+        assert(!"impossible return");
 }
 
 int main(void)

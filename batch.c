@@ -1,24 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "code.h"
 #include "parse.h"
 
 int main(void)
 {
     struct line_builder lb = {.line = malloc(1), .capacity = 1};
+    struct movies movies = {.last = &movies.elements};
     int c;
+    enum code code;
     while ((c = getchar()) != EOF)
-        line_builder_add(&lb, (char []){c}, 1);
-    line_builder_add(&lb, NULL, 0);
+        if ((code = line_builder_add(&movies, &lb, (char []){c}, 1)) != CODE_OKAY)
+	{
+            fprintf(stderr, "stdin: %s\n", code_msg(code));
+            return EXIT_FAILURE;
+	}
+    if ((code = line_builder_add(&movies, &lb, NULL, 0)) != CODE_OKAY)
+    {
+        fprintf(stderr, "stdin: %s\n", code_msg(code));
+        return EXIT_FAILURE;
+    }
 
-    vomit();
+    if ((code = vomit(&movies)) != CODE_OKAY)
+    {
+        fprintf(stderr, "stdin: %s\n", code_msg(code));
+        return EXIT_FAILURE;
+    }
 
-    return 0;
-}
-
-{
-    while ((c = getchar()) != EOF)
-        while (lb_add(&lb, (char []){c}, 1))
-        {
-        }
+    return EXIT_SUCCESS;
 }

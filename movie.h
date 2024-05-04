@@ -6,28 +6,50 @@
 struct movie
 {
     char *symbol;
-    int acode;
+    bool defined;
+    int aut;
     int year;
     char *name;
+    struct movie *next;
 };
 
-struct tag
+union element
 {
-    char *symbol;
-    int n_child;
-    struct tag *children;
-    bool is_inline;
+    struct
+    {
+        enum type { NONE, HEADING, MOV, PP, TEXT, TITLE } type;
+        union element *next;
+        union
+        {
+            char *text;
+            struct movie *movie;
+        };
+    };
+    struct heading
+    {
+        enum type type;
+        union element *next;
+        int level;
+        char *text;
+    } heading;
 };
 
-struct obligatory
+static union element * element_new(enum type type)
 {
-    bool is_exclusive;
-    int n;
-    struct tag *them;
-};
+    union element *it = malloc(sizeof (*it));
+    it->type = type;
+    it->next = NULL;
+    return it;
+}
 
-struct text
+struct movies
 {
+    struct movie *mov_first;
+
+    union element *elements;
+    union element **last;
+
+    char *title;
 };
 
 #endif

@@ -3,7 +3,10 @@
 
 #include <stdbool.h>
 
-void vomit(void);
+#include "code.h"
+#include "movie.h"
+
+enum code vomit(struct movies *movies);
 
 struct line_builder
 {
@@ -13,6 +16,6 @@ struct line_builder
     bool found_newline;
 };
 
-void line_builder_add(struct line_builder *lb, char *buffer, int len);
+enum code line_builder_add(struct movies *movies, struct line_builder *lb, char *buffer, int len);
 
 #endif

@@ -145,6 +145,8 @@ uv_buf_t portion = {.base = (char [21]){0}, .len = 20};
 
 struct line_builder lb = {0};
 
+struct movies movies = {0};
+
 void read_cb(uv_fs_t *fil)
 {
     if (fil->result < 0)
@@ -157,7 +159,9 @@ void read_cb(uv_fs_t *fil)
     {
         // close this shit fuck
         puts("we should close this piss fuck");
-        vomit();
+        int code = vomit(&movies);
+        if (code != CODE_OKAY)
+            fprintf(stderr, "error %d: %s\n", code, code_msg(code));
     }
     else
     {
@@ -167,8 +171,10 @@ void read_cb(uv_fs_t *fil)
 #if 0
         portion.base[fil->result] = '\0';
 #endif
-        line_builder_add(&lb, portion.base, fil->result);
-        if (uv_fs_read(loop, fil, fucking_desc, &portion, 1, -1, read_cb) != 0)
+        int code;
+        if ((code = line_builder_add(&movies, &lb, portion.base, fil->result)) != CODE_OKAY)
+            fprintf(stderr, "error %d: %s\n", code, code_msg(code));
+        else if (uv_fs_read(loop, fil, fucking_desc, &portion, 1, -1, read_cb) != 0)
             assert(!"impossible return");
     }
 }
@@ -190,6 +196,7 @@ void open_cb(uv_fs_t *fil)
 int main(void)
 {
     lb.line = malloc(1);
+    lb.capacity = 1;
     loop = uv_default_loop();
     uv_tcp_t server;
     uv_tcp_init(loop, &server);
@@ -213,6 +220,7 @@ int main(void)
 
     // TODO it stops working after rm or mv!
     uv_fs_event_t movies_event = {0};
+    movies.last = &movies.elements;
     r = uv_fs_event_init(loop, &movies_event);
 
     if (r)

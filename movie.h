@@ -34,14 +34,6 @@ union element
     } heading;
 };
 
-static union element * element_new(enum type type)
-{
-    union element *it = malloc(sizeof (*it));
-    it->type = type;
-    it->next = NULL;
-    return it;
-}
-
 struct movies
 {
     struct movie *mov_first;

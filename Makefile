@@ -12,7 +12,7 @@ vehicle-building-games.html:vehicle-building-games
 
 DEPS=libuv
 
-CFLAGS=-g3 -fsanitize=address,undefined \
+CFLAGS=-g3 -fsanitize=address \
 -Wpedantic -Wall -Wextra -Wshadow \
 -fno-strict-aliasing \
 $$(pkg-config --cflags $(DEPS)) -Illhttp

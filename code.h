@@ -3,6 +3,7 @@
 X(CODE_OKAY                 , ""                     ) \
 X(CODE_ERROR_BUILDER_REALLOC, "error builder realloc") \
 X(CODE_ERROR_NO_TITLE       , "error no title"       ) \
+X(CODE_ERROR_TITLE_REDEF    , "error title twice"    ) \
 X(CODE_ERROR_REPEATED_PP    , "error repeated pp"    ) \
 X(CODE_ERROR_HANGING_TEXT   , "error hanging text"   ) \
 X(CODE_ERROR_MOVIE_UNDEFINED, "error movie undefined") \

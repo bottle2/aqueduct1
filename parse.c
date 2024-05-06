@@ -152,6 +152,16 @@ enum code vomit(struct movies *movies)
     return CODE_OKAY;
 }
 
+static union element * element_new(enum type type)
+{
+    union element *it = malloc(sizeof (*it));
+    it->type = type;
+    it->next = NULL;
+    return it;
+}
+
+// XXX fucking ugly code but what the fuck re2c, Ragel or flex??
+
 static enum code process_line(struct movies *movies, char const *line)
 {
 #if 1
@@ -162,6 +172,8 @@ static enum code process_line(struct movies *movies, char const *line)
 
     if (!strncmp(".TITLE", line, 6))
     {
+        if (movies->title)
+            return CODE_ERROR_TITLE_REDEF;
         char *quote_left = strchr(line, '\"');
         char *quote_right = strrchr(line, '\"');
 
@@ -172,9 +184,7 @@ static enum code process_line(struct movies *movies, char const *line)
 
         ptrdiff_t len = quote_right - quote_left - 1;
         assert(len >= 0);
-        movies->title = malloc(len + 1);
-        strncpy(movies->title, quote_left + 1, len);
-        movies->title[len] = '\0';
+        movies->title = strndup(quote_left + 1, len);
     }
     else if (!strncmp(".HEADING", line, 8))
     {
@@ -197,9 +207,7 @@ static enum code process_line(struct movies *movies, char const *line)
             movies->elements = *(movies->last);
         (*(movies->last))->heading.level = level;
         assert(len >= 1);
-        (*(movies->last))->heading.text = malloc(len + 1);
-        strncpy((*(movies->last))->heading.text, quote_left + 1, len);
-        (*(movies->last))->heading.text[len] = '\0';
+        (*(movies->last))->heading.text = strndup(quote_left + 1, len);
         movies->last = &(*(movies->last))->next;
 
         puts("achou heading");
@@ -227,32 +235,26 @@ static enum code process_line(struct movies *movies, char const *line)
         int aut_code;
         int n_read;
         int year;
-        int code;
         bool lone = false;
 
-        while ((code = sscanf(offset, " tt%d %d %n", &aut_code, &year, &n_read)) != 2)
+        switch (sscanf(offset, " tt%d %d %n", &aut_code, &year, &n_read))
         {
-            if (EOF == code)
-            {
+            case 0: // Fall through.
+            case EOF:
                 lone = true;
-                break;
-            }
-            else if (0 == code)
-            {
-                char *start_tag = strpbrk(offset, "_ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-                if (NULL == start_tag)
-                    return CODE_ERROR_NO_TAG_MOVIE;
-                int len_tag = strspn(start_tag, "_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
-                assert(len_tag >= 1);
-                offset = start_tag + len_tag;
-            }
-            else if (1 == code)
+            break;
+
+            case 1:
                 return CODE_ERROR_NO_YEAR;
-            else
-            {
-                printf("c %d\n", code);
-                break;
-            }
+            break;
+            
+            case 2:
+                // Nothing to do.
+            break;
+
+            default:
+                assert(!"Impossible code");
+            break;
         }
 
         // find or create block
@@ -275,9 +277,7 @@ static enum code process_line(struct movies *movies, char const *line)
             which = malloc(sizeof (*which));
             which->next = NULL;
             which->defined = false;
-            which->symbol = malloc(len_symbol + 1);
-            strncpy(which->symbol, start_symbol, len_symbol);
-            which->symbol[len_symbol] = '\0';
+            which->symbol = strndup(start_symbol, len_symbol);
             *last_mov = which;
         }
 
@@ -290,9 +290,7 @@ static enum code process_line(struct movies *movies, char const *line)
             which->year = year;
             which->aut = aut_code;
             which->defined = true;
-            which->name = malloc(len + 1);
-            strncpy(which->name, offset + n_read, len);
-            which->name[len] = '\0';
+            which->name = strndup(offset + n_read, len);
             puts("filme novo");
         }
         else

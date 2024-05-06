@@ -13,6 +13,8 @@ struct movie
     struct movie *next;
 };
 
+struct movie ** movie_find(struct movie **first, char *symbol, int len);
+
 union element
 {
     struct

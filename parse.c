@@ -22,6 +22,22 @@
 
 #define END "</body>\n</html>"
 
+#ifdef WIN32
+// XXX piss piss piss piss cock piss piss piss piss piss piss fuck fuck
+// why can't MSYS2 declare strndup?????????????????????????????????????
+char *strndup(const char *s, size_t len)
+{
+    char *copy = malloc(len + 1);
+    if (NULL == copy)
+        return NULL;
+    size_t i = 0;
+    for (; i < len && s[i] != '\0'; i++)
+        copy[i] = s[i];
+    copy[i] = '\0';
+    return copy;
+}
+#endif
+
 static size_t lenlasta(char const s[static 1], int (*accept)(int))
 {
     size_t len = 0;
@@ -263,18 +279,11 @@ static enum code process_line(struct movies *movies, char const *line)
         if (!lone && len <= 0)
             return CODE_ERROR_NO_MOVIE_NAME;
 
-        struct movie **last_mov = &movies->mov_first;
-        struct movie *which = movies->mov_first;
+        struct movie **last_mov = movie_find(&movies->mov_first, start_symbol, len_symbol);
 
-        while (which != NULL && strncmp(which->symbol, start_symbol, len_symbol))
+	if (NULL == *last_mov)
         {
-            last_mov = &which->next;
-            which = which->next;
-        }
-
-        if (NULL == which)
-        {
-            which = malloc(sizeof (*which));
+            struct movie *which = malloc(sizeof (*which));
             which->next = NULL;
             which->defined = false;
             which->symbol = strndup(start_symbol, len_symbol);
@@ -283,10 +292,11 @@ static enum code process_line(struct movies *movies, char const *line)
 
         if (!lone)
         {
-            if (which->defined)
+            if ((*last_mov)->defined)
                 return CODE_ERROR_MOVIE_ALREADY_DEFINED;
 
             assert(len >= 1);
+            struct movie *which = *last_mov;
             which->year = year;
             which->aut = aut_code;
             which->defined = true;
@@ -299,7 +309,7 @@ static enum code process_line(struct movies *movies, char const *line)
         *(movies->last) = element_new(MOV);
         if (NULL == movies->elements)
             movies->elements = *(movies->last);
-        (*(movies->last))->movie = which;
+        (*(movies->last))->movie = *last_mov;
         movies->last = &(*(movies->last))->next;
     }
     else

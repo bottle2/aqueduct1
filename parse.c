@@ -178,6 +178,23 @@ static union element * element_new(enum type type)
 
 // XXX fucking ugly code but what the fuck re2c, Ragel or flex??
 
+static bool shitty_quote(char const *line, char **start, int *len)
+{
+    char *left = strchr(line, '\"');
+
+    if (NULL == left) return false;
+
+    char *right = strrchr(left + 1, '\"');
+
+    if (NULL == right ) return false;
+
+    *start = left + 1;
+    *len = right - left - 1;
+    assert(*len >= 0);
+
+    return true;
+}
+
 static enum code process_line(struct movies *movies, char const *line)
 {
 #if 1
@@ -190,17 +207,11 @@ static enum code process_line(struct movies *movies, char const *line)
     {
         if (movies->title)
             return CODE_ERROR_TITLE_REDEF;
-        char *quote_left = strchr(line, '\"');
-        char *quote_right = strrchr(line, '\"');
-
-        if (NULL == quote_right
-                || NULL == quote_left
-                || quote_right == quote_left)
+        char *start;
+        int len;
+        if (!shitty_quote(line, &start, &len) || len <= 0)
             return CODE_ERRO_TITLE_HEAD;
-
-        ptrdiff_t len = quote_right - quote_left - 1;
-        assert(len >= 0);
-        movies->title = strndup(quote_left + 1, len);
+        movies->title = strndup(start, len);
     }
     else if (!strncmp(".HEADING", line, 8))
     {
@@ -208,22 +219,16 @@ static enum code process_line(struct movies *movies, char const *line)
         if (sscanf(line + 8, "%d", &level) != 1
                 || level < 1 || level > 6)
             return CODE_ERRO_LEVEL;
-        char *quote_left = strchr(line, '\"');
-        char *quote_right = strrchr(line, '\"');
 
-        if (NULL == quote_right
-                || NULL == quote_left
-                || quote_right == quote_left)
+        char *start;
+        int len;
+        if (!shitty_quote(line, &start, &len) || len <= 0)
             return CODE_ERRO_TITLE;
-
-        ptrdiff_t len = quote_right - quote_left - 1;
-        assert(len >= 0);
         *(movies->last) = element_new(HEADING);
         if (NULL == movies->elements)
             movies->elements = *(movies->last);
         (*(movies->last))->heading.level = level;
-        assert(len >= 1);
-        (*(movies->last))->heading.text = strndup(quote_left + 1, len);
+        (*(movies->last))->heading.text = strndup(start, len);
         movies->last = &(*(movies->last))->next;
 
         puts("achou heading");

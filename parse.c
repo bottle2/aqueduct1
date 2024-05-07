@@ -168,12 +168,22 @@ enum code vomit(struct movies *movies)
     return CODE_OKAY;
 }
 
-static union element * element_new(enum type type)
+// I'm a three start programmer.
+static void elemend_add(union element ***last, union element it, enum code *error)
 {
-    union element *it = malloc(sizeof (*it));
-    it->type = type;
-    it->next = NULL;
-    return it;
+    if (*error != CODE_OKAY)
+        return;
+
+    union element *novo = malloc(sizeof (*novo));
+
+    if (NULL == novo)
+    {
+        *error = CODE_ENOMEM;
+        return;
+    }
+
+    *(**last = novo) = it;
+    *(*last = &novo->next) = NULL;
 }
 
 // XXX fucking ugly code but what the fuck re2c, Ragel or flex??
@@ -195,52 +205,87 @@ static bool shitty_quote(char const *line, char **start, int *len)
     return true;
 }
 
+static char * try_get_some_quote(char const *line, enum code *error)
+{
+    if (*error != CODE_OKAY)
+        return NULL;
+
+    char *start;
+    int len;
+
+    if (!shitty_quote(line, &start, &len))
+    {
+        *error = CODE_ERROR_NO_QUOTED;
+        return NULL;
+    }
+
+    if (0 == len)
+    {
+        *error = CODE_EMPTY_STRING;
+        return NULL;
+    }
+
+    char *str = strndup(start, len);
+    if (NULL == str)
+    {
+        *error = CODE_ENOMEM;
+        return NULL;
+    }
+
+    return str;
+}
+
+static int get_some_level(char const *line, enum code *error)
+{
+    if (*error != CODE_OKAY)
+        return 0;
+
+    int level = 0;
+    if (sscanf(line + 8, "%d", &level) != 1
+            || level < 1 || level > 6)
+        *error = CODE_ERRO_LEVEL;
+
+    return level;
+}
+
 static enum code process_line(struct movies *movies, char const *line)
 {
-#if 1
+    enum code code = CODE_OKAY;
+
+#if 0
     puts(line);
 #endif
+
     if (!strncmp(".\\\"", line, 3))
         return CODE_OKAY;
 
     if (!strncmp(".TITLE", line, 6))
     {
         if (movies->title)
-            return CODE_ERROR_TITLE_REDEF;
-        char *start;
-        int len;
-        if (!shitty_quote(line, &start, &len) || len <= 0)
-            return CODE_ERRO_TITLE_HEAD;
-        movies->title = strndup(start, len);
+            code = CODE_ERROR_TITLE_REDEF;
+        else
+        {
+            movies->title = try_get_some_quote(line, &code);
+
+            if (code != CODE_OKAY && code != CODE_ENOMEM)
+                code = CODE_ERROR_NO_TITLE;
+        }
     }
     else if (!strncmp(".HEADING", line, 8))
     {
-        int level;
-        if (sscanf(line + 8, "%d", &level) != 1
-                || level < 1 || level > 6)
-            return CODE_ERRO_LEVEL;
+        union element e = { .heading = {
+            .type = HEADING,
+            .text = try_get_some_quote(line, &code),
+            .level = get_some_level(line, &code)
+        }};
 
-        char *start;
-        int len;
-        if (!shitty_quote(line, &start, &len) || len <= 0)
-            return CODE_ERRO_TITLE;
-        *(movies->last) = element_new(HEADING);
-        if (NULL == movies->elements)
-            movies->elements = *(movies->last);
-        (*(movies->last))->heading.level = level;
-        (*(movies->last))->heading.text = strndup(start, len);
-        movies->last = &(*(movies->last))->next;
+        if (CODE_OKAY == code)
+            elemend_add(&movies->last, e, &code);
 
         puts("achou heading");
     }
     else if (!strncmp(".PP", line, 3))
-    {
-        *(movies->last) = element_new(PP);
-        if (NULL == movies->elements)
-            movies->elements = *(movies->last);
-        movies->last = &(*(movies->last))->next;
-        puts("achou paragraph");
-    }
+        elemend_add(&movies->last, (union element){.type = PP}, &code); 
     else if (!strncmp(".MOV", line, 4))
     {
         puts("achou filme");
@@ -311,22 +356,19 @@ static enum code process_line(struct movies *movies, char const *line)
         else
             puts("filme solto");
 
-        *(movies->last) = element_new(MOV);
-        if (NULL == movies->elements)
-            movies->elements = *(movies->last);
-        (*(movies->last))->movie = *last_mov;
-        movies->last = &(*(movies->last))->next;
+        elemend_add(&movies->last, (union element){.type = MOV, .movie = *last_mov}, &code);
     }
     else
     {
-        *(movies->last) = element_new(TEXT);
-        if (NULL == movies->elements)
-            movies->elements = *(movies->last);
-        (*(movies->last))->text = malloc(strlen(line) + 1);
-        strcpy((*(movies->last))->text, line);
-        movies->last = &(*(movies->last))->next;
+        char *text = strdup(line);
+
+        if (NULL == text)
+            code = CODE_ENOMEM;
+
+        elemend_add(&movies->last, (union element){.type = TEXT, .text = text}, &code);
+
         puts("texto solto");
     }
 
-    return CODE_OKAY;
+    return code;
 }

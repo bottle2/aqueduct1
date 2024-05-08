@@ -16,7 +16,7 @@ struct movie
     struct movie *next;
 };
 
-struct movie ** movie_find(struct movie **first, char *symbol, int len);
+struct movie * movie_find_or_create(struct movie **first, char *symbol, int len);
 
 struct element
 {
@@ -43,5 +43,7 @@ struct movies
 
     char *title;
 };
+
+void movies_free(struct movies *em);
 
 #endif

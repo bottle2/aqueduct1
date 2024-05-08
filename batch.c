@@ -28,5 +28,7 @@ int main(void)
         return EXIT_FAILURE;
     }
 
+    movies_free(&movies);
+
     return EXIT_SUCCESS;
 }

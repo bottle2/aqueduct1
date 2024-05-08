@@ -25,7 +25,7 @@
 #ifdef WIN32
 // XXX piss piss piss piss cock piss piss piss piss piss piss fuck fuck
 // why can't MSYS2 declare strndup?????????????????????????????????????
-char *strndup(const char *s, size_t len)
+static char *strndup(const char *s, size_t len)
 {
     char *copy = malloc(len + 1);
     if (NULL == copy)
@@ -168,7 +168,7 @@ enum code vomit(struct movies *movies)
     return CODE_OKAY;
 }
 
-// I'm a three star programmer.
+// I'm a three star programmer B)
 static void elemend_add(struct element ***last, struct element it, enum code *error)
 {
     if (*error != CODE_OKAY)
@@ -241,7 +241,7 @@ static int get_some_level(char const *line, enum code *error)
         return 0;
 
     int level = 0;
-    if (sscanf(line + 8, "%d", &level) != 1
+    if (sscanf(line, "%d", &level) != 1
             || level < 1 || level > 6)
         *error = CODE_ERRO_LEVEL;
 
@@ -253,7 +253,7 @@ static enum type identify(char const **line)
 {
     enum type type = TEXT;
 
-    #define X(A) if (!strncmp("." #A, *line, 1 + sizeof (#A))) \
+    #define X(A) if (!strncmp("." #A, *line, 1 + sizeof (#A) - 1)) \
                  { *line += sizeof (#A); type = A; goto skip; }
     INSTR_XS(X)
     #undef X
@@ -270,106 +270,96 @@ static enum code process_line(struct movies *movies, char const *line)
         return CODE_OKAY;
 
     enum   code    code = CODE_OKAY;
-    struct element e    = {0};
+    struct element e    = {.type = identify(&line)};
 
-    if (!strncmp(".TITLE", line, 6))
+    switch (e.type)
     {
-        if (movies->title)
-            code = CODE_ERROR_TITLE_REDEF;
-        else
-        {
+        case TITLE:
+            if (movies->title)
+                return CODE_ERROR_TITLE_REDEF;
+
             movies->title = try_get_some_quote(line, &code);
 
-            if (code != CODE_OKAY && code != CODE_ENOMEM)
-                code = CODE_ERROR_NO_TITLE;
-        }
-        return code;
-    }
-    else if (!strncmp(".HEADING", line, 8))
-    {
-        e.type = HEADING;
-        e.heading.text  = try_get_some_quote(line, &code);
-        e.heading.level = get_some_level(line, &code);
-    }
-    else if (!strncmp(".PP", line, 3))
-        e.type = PP;
-    else if (!strncmp(".MOV", line, 4))
-    {
-        char *start_symbol = strpbrk(line + 4, "_ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-        if (NULL == start_symbol)
-            return CODE_ERROR_NO_SYMBOL_MOVIE;
-        int len_symbol = strspn(start_symbol, "_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+            return code;
+        break;
 
-        assert(len_symbol >= 1);
+        case HEADING:
+            e.heading.level = get_some_level(line, &code);
+            e.heading.text  = try_get_some_quote(line, &code);
+        break;
 
-        char *offset = start_symbol + len_symbol;
-        int aut_code;
-        int n_read;
-        int year;
-        bool lone = false;
+        case PP: /* Do nothing. */ break;
 
-        switch (sscanf(offset, " tt%d %d %n", &aut_code, &year, &n_read))
+        case MOV:
         {
-            case 0: // Fall through.
-            case EOF:
-                lone = true;
-            break;
+            char *start_symbol = strpbrk(line, "_ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+            if (NULL == start_symbol)
+                return CODE_ERROR_NO_SYMBOL_MOVIE;
+            int len_symbol = strspn(start_symbol, "_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
 
-            case 1:
-                return CODE_ERROR_NO_YEAR;
-            break;
-            
-            case 2:
-                // Nothing to do.
-            break;
+            assert(len_symbol >= 1);
 
-            default:
-                assert(!"Impossible code");
-            break;
+            char *offset = start_symbol + len_symbol;
+            int aut_code;
+            int n_read;
+            int year;
+            bool lone = false;
+
+            switch (sscanf(offset, " tt%d %d %n", &aut_code, &year, &n_read))
+            {
+                case 0: // Fall through.
+                case EOF:
+                    lone = true;
+                break;
+
+                case 1:
+                    return CODE_ERROR_NO_YEAR;
+                break;
+                
+                case 2:
+                    // Nothing to do.
+                break;
+
+                default:
+                    assert(!"Impossible code");
+                break;
+            }
+
+            // find or create block
+
+            int len = lone ? 0 : lenlasta(offset + n_read, isgraph);
+            if (!lone && len <= 0)
+                return CODE_ERROR_NO_MOVIE_NAME;
+
+            struct movie *mov = movie_find_or_create(&movies->mov_first, start_symbol, len_symbol);
+            if (NULL == mov)
+                return CODE_ENOMEM;
+
+            if (!lone)
+            {
+                if (mov->defined)
+                    return CODE_ERROR_MOVIE_ALREADY_DEFINED;
+
+                assert(len >= 1);
+                mov->year = year;
+                mov->aut = aut_code;
+                mov->defined = true;
+                if (NULL == (mov->name = strndup(offset + n_read, len)))
+                {
+                    return CODE_ENOMEM;
+                }
+            }
+
+            e.movie = mov;
         }
+        break;
 
-        // find or create block
+        case TEXT:
+            if (NULL == (e.text = strdup(line)))
+                code = CODE_ENOMEM;
+        break;
 
-        int len = lone ? 0 : lenlasta(offset + n_read, isgraph);
-        if (!lone && len <= 0)
-            return CODE_ERROR_NO_MOVIE_NAME;
-
-        struct movie **last_mov = movie_find(&movies->mov_first, start_symbol, len_symbol);
-
-	if (NULL == *last_mov)
-        {
-            struct movie *which = malloc(sizeof (*which));
-            which->next = NULL;
-            which->defined = false;
-            which->symbol = strndup(start_symbol, len_symbol);
-            *last_mov = which;
-        }
-
-        if (!lone)
-        {
-            if ((*last_mov)->defined)
-                return CODE_ERROR_MOVIE_ALREADY_DEFINED;
-
-            assert(len >= 1);
-            struct movie *which = *last_mov;
-            which->year = year;
-            which->aut = aut_code;
-            which->defined = true;
-            which->name = strndup(offset + n_read, len);
-            puts("filme novo");
-        }
-        else
-            puts("filme solto");
-
-        e.type = MOV;
-        e.movie = *last_mov;
-    }
-    else
-    {
-        e.type = TEXT;
-
-        if (NULL == (e.text = strdup(line)))
-            code = CODE_ENOMEM;
+        default: assert(!"Impossibruh"); break;
     }
 
     elemend_add(&movies->last, e, &code);

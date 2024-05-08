@@ -3,6 +3,9 @@
 
 #include <stdbool.h>
 
+#include "expand.h"
+#include "instr.h"
+
 struct movie
 {
     char *symbol;
@@ -15,33 +18,28 @@ struct movie
 
 struct movie ** movie_find(struct movie **first, char *symbol, int len);
 
-union element
+struct element
 {
-    struct
+    enum type { TEXT, INSTR_XS(AS_1_OF_1_COMMA) } type;
+    struct element *next;
+    union
     {
-        enum type { NONE, HEADING, MOV, PP, TEXT, TITLE } type;
-        union element *next;
-        union
-        {
-            char *text;
-            struct movie *movie;
-        };
-    };
-    struct heading
-    {
-        enum type type;
-        union element *next;
-        int level;
         char *text;
-    } heading;
+        struct movie *movie;
+        struct heading
+        {
+            int level;
+            char *text;
+        } heading;
+    };
 };
 
 struct movies
 {
     struct movie *mov_first;
 
-    union element *elements;
-    union element **last;
+    struct element *elements;
+    struct element **last;
 
     char *title;
 };

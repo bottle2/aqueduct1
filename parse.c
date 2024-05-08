@@ -100,7 +100,7 @@ enum code vomit(struct movies *movies)
 
     bool is_mov = false;
     bool is_pp = false;
-    for (union element *curr = movies->elements; curr != NULL; curr = curr->next) switch (curr->type)
+    for (struct element *curr = movies->elements; curr != NULL; curr = curr->next) switch (curr->type)
     {
         case PP:
             if (is_pp)
@@ -168,13 +168,13 @@ enum code vomit(struct movies *movies)
     return CODE_OKAY;
 }
 
-// I'm a three start programmer.
-static void elemend_add(union element ***last, union element it, enum code *error)
+// I'm a three star programmer.
+static void elemend_add(struct element ***last, struct element it, enum code *error)
 {
     if (*error != CODE_OKAY)
         return;
 
-    union element *novo = malloc(sizeof (*novo));
+    struct element *novo = malloc(sizeof (*novo));
 
     if (NULL == novo)
     {
@@ -248,16 +248,29 @@ static int get_some_level(char const *line, enum code *error)
     return level;
 }
 
+// Bullshit I do because hurr hurr write your own handmade handcrafted lexer bro!!
+static enum type identify(char const **line)
+{
+    enum type type = TEXT;
+
+    #define X(A) if (!strncmp("." #A, *line, 1 + sizeof (#A))) \
+                 { *line += sizeof (#A); type = A; goto skip; }
+    INSTR_XS(X)
+    #undef X
+
+skip: while (!isgraph(**line) && **line != '\0')
+        (*line)++;
+
+    return type;
+}
+
 static enum code process_line(struct movies *movies, char const *line)
 {
-    enum code code = CODE_OKAY;
-
-#if 0
-    puts(line);
-#endif
-
     if (!strncmp(".\\\"", line, 3))
         return CODE_OKAY;
+
+    enum   code    code = CODE_OKAY;
+    struct element e    = {0};
 
     if (!strncmp(".TITLE", line, 6))
     {
@@ -270,26 +283,18 @@ static enum code process_line(struct movies *movies, char const *line)
             if (code != CODE_OKAY && code != CODE_ENOMEM)
                 code = CODE_ERROR_NO_TITLE;
         }
+        return code;
     }
     else if (!strncmp(".HEADING", line, 8))
     {
-        union element e = { .heading = {
-            .type = HEADING,
-            .text = try_get_some_quote(line, &code),
-            .level = get_some_level(line, &code)
-        }};
-
-        if (CODE_OKAY == code)
-            elemend_add(&movies->last, e, &code);
-
-        puts("achou heading");
+        e.type = HEADING;
+        e.heading.text  = try_get_some_quote(line, &code);
+        e.heading.level = get_some_level(line, &code);
     }
     else if (!strncmp(".PP", line, 3))
-        elemend_add(&movies->last, (union element){.type = PP}, &code); 
+        e.type = PP;
     else if (!strncmp(".MOV", line, 4))
     {
-        puts("achou filme");
-
         char *start_symbol = strpbrk(line + 4, "_ABCDEFGHIJKLMNOPQRSTUVWXYZ");
         if (NULL == start_symbol)
             return CODE_ERROR_NO_SYMBOL_MOVIE;
@@ -356,19 +361,18 @@ static enum code process_line(struct movies *movies, char const *line)
         else
             puts("filme solto");
 
-        elemend_add(&movies->last, (union element){.type = MOV, .movie = *last_mov}, &code);
+        e.type = MOV;
+        e.movie = *last_mov;
     }
     else
     {
-        char *text = strdup(line);
+        e.type = TEXT;
 
-        if (NULL == text)
+        if (NULL == (e.text = strdup(line)))
             code = CODE_ENOMEM;
-
-        elemend_add(&movies->last, (union element){.type = TEXT, .text = text}, &code);
-
-        puts("texto solto");
     }
+
+    elemend_add(&movies->last, e, &code);
 
     return code;
 }

@@ -9,11 +9,12 @@
 struct printer
 {
     void *data;
-    void (*print_str)(void *, char const *);
-    void (*print_int)(void *, int value, bool lzero, int width);
+    int (*pprintf)(void *data, char const *fmt, ...);
 };
 
-enum code vomit(struct movies *movies);
+int pfprintf(void *data, char const *fmt, ...);
+
+enum code vomit(struct printer p, struct movies *movies);
 
 struct line_builder
 {

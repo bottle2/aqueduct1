@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 #include "code.h"
 #include "parse.h"
@@ -37,6 +38,15 @@ static char *strndup(const char *s, size_t len)
     return copy;
 }
 #endif
+
+int pfprintf(void *data, char const *fmt, ...)
+{
+    va_list ap;
+    va_start(ap, fmt);
+    int code = vfprintf((FILE *)data, fmt, ap);
+    va_end(ap);
+    return code;
+}
 
 static size_t lenlasta(char const s[static 1], int (*accept)(int))
 {
@@ -93,12 +103,12 @@ enum code line_builder_add(struct movies *movies, struct line_builder *lb, char 
 
 // XXX We want to change THIS!
 // hmmmmmm state machines
-enum code vomit(struct movies *movies)
+enum code vomit(struct printer p, struct movies *movies)
 {
     if (NULL == movies->title)
         return CODE_ERROR_NO_TITLE;
 
-    printf(HEAD, movies->title);
+    p.pprintf(p.data, HEAD, movies->title);
 
     bool is_mov = false;
     bool is_pp = false;
@@ -110,39 +120,39 @@ enum code vomit(struct movies *movies)
             is_pp = true;
 	    if (is_mov)
 	    {
-                puts("</ul>");
+                p.pprintf(p.data, "</ul>\n");
                 is_mov = false;
             }
-            puts("<p>");
+            p.pprintf(p.data, "<p>\n");
         break;
         case TEXT:
             if (!is_pp || is_mov)
                 return CODE_ERROR_HANGING_TEXT;
             else
-                printf("  %s\n", curr->text);
+                p.pprintf(p.data, "  %s\n", curr->text);
         break;
         case HEADING:
             if (is_pp)
             {
                 is_pp = false;
-                puts("</p>");
+                p.pprintf(p.data, "</p>\n");
             }
             if (is_mov)
 	    {
-                puts("</ul>");
+                p.pprintf(p.data, "</ul>\n");
                 is_mov = false;
             }
-            printf("<h%d>%s</h%d>\n", curr->heading.level, curr->heading.text, curr->heading.level);
+            p.pprintf(p.data, "<h%d>%s</h%d>\n", curr->heading.level, curr->heading.text, curr->heading.level);
         break;
         case MOV:
             if (is_pp)
             {
-                puts("</p>");
+                p.pprintf(p.data, "</p>\n");
                 is_pp = false;
             }
             if (!is_mov)
             {
-                puts("<ul>");
+                p.pprintf(p.data, "<ul>\n");
                 is_mov = true;
             }
             if (!curr->movie->defined)
@@ -150,7 +160,7 @@ enum code vomit(struct movies *movies)
             else
             {
                 // https://developer.imdb.com/documentation/key-concepts
-                printf("  <li><a href=\"https://imdb.com/title/tt%07d/\">%s</a> (%d)</li>\n", curr->movie->aut, curr->movie->name, curr->movie->year);
+                p.pprintf(p.data, "  <li><a href=\"https://imdb.com/title/tt%07d/\">%s</a> (%d)</li>\n", curr->movie->aut, curr->movie->name, curr->movie->year);
             }
         break;
 
@@ -158,14 +168,9 @@ enum code vomit(struct movies *movies)
     }
 
     if (is_mov)
-        puts("</ul>");
+        p.pprintf(p.data, "</ul>\n");
 
-    puts(END);
-
-    movies->elements = NULL;
-    movies->last = &movies->elements;
-
-    movies->title = NULL;
+    p.pprintf(p.data, "%s\n", END);
 
     return CODE_OKAY;
 }

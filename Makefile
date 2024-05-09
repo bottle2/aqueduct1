@@ -1,7 +1,7 @@
 # XXX This is a mess OMG
 PAGES=bookmarks.html vehicle-building-games.html
 
-TARGET=site batch
+TARGET=site batch batch2
 
 all:$(TARGET) $(PAGES)
 
@@ -30,6 +30,9 @@ site:$(SOURCE) $(LLHTTP)
 
 batch:batch.c parse.c code.c
 	$(CC) $(CFLAGS) -o $@ batch.c parse.c code.c movie.c $(LDLIBS)
+
+batch2:batch2.c parse.c code.c
+	$(CC) $(CFLAGS) -o $@ batch2.c parse.c code.c movie.c $(LDLIBS)
 
 clean:
 	rm -f $(LLHTTP) $(TARGET)

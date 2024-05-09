@@ -40,13 +40,14 @@ void doc_free(struct doc *it)
 
     assert(it->refcnt >= 0);
 
-    for (struct doc *curr = it; curr != NULL && !curr->refcnt; )
+    if (it->next != NULL) for (struct doc *curr = it; curr != NULL && !curr->refcnt; )
     {
         struct doc *prev = curr->prev;
 
         curr->next.previous = curr->previous;
         curr->previous.next = curr->next;
 
+	free(curr->html5);
         free(curr);
 
         curr = prev;

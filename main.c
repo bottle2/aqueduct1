@@ -159,9 +159,10 @@ void read_cb(uv_fs_t *fil)
     {
         // close this shit fuck
         puts("we should close this piss fuck");
-        int code = vomit(&movies);
+        int code = vomit((struct printer){stdout, pfprintf}, &movies);
         if (code != CODE_OKAY)
             fprintf(stderr, "error %d: %s\n", code, code_msg(code));
+        movies_free(&movies);
     }
     else
     {

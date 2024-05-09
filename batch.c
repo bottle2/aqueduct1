@@ -22,7 +22,7 @@ int main(void)
         return EXIT_FAILURE;
     }
 
-    if ((code = vomit(&movies)) != CODE_OKAY)
+    if ((code = vomit((struct printer){stdout, pfprintf}, &movies)) != CODE_OKAY)
     {
         fprintf(stderr, "stdin: %s\n", code_msg(code));
         return EXIT_FAILURE;

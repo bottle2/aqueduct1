@@ -91,6 +91,8 @@ enum code line_builder_add(struct movies *movies, struct line_builder *lb, char 
     return CODE_OKAY;
 }
 
+// XXX We want to change THIS!
+// hmmmmmm state machines
 enum code vomit(struct movies *movies)
 {
     if (NULL == movies->title)

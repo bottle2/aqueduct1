@@ -6,6 +6,13 @@
 #include "code.h"
 #include "movie.h"
 
+struct printer
+{
+    void *data;
+    void (*print_str)(void *, char const *);
+    void (*print_int)(void *, int value, bool lzero, int width);
+};
+
 enum code vomit(struct movies *movies);
 
 struct line_builder

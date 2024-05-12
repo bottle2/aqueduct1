@@ -1,37 +1,60 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#include <uv.h>
+
+#include "code.h"
 #include "doc.h"
 
 struct doc
 {
-    int reference_count;
-    char *html5;
+    int refcnt;
+
+    uv_buf_t html5[4];
+
     struct doc *prev;
     struct doc *next;
+
+    char internal[30];
 };
 
-enum code doc_add(struct doc **previous, char const *html5)
+#define HEADERS \
+  "HTTP/1.1 200 OK\r\n" \
+  "Content-Type: text/html\r\n" \
+  "Content-Length: "
+
+enum code doc_add(struct doc **previous, char const *html5, size_t len)
 {
     struct doc *latest = malloc(sizeof (*latest));
 
     if (NULL == latest)
         return CODE_ENOMEM;
 
-    latest->refcnt = 0;
-    latest->html5  = html5;
-    latest->prev   = *previous;
-    latest->next   = NULL;
+    *latest = (struct doc)
+    {
+        .refcnt = 0,
+        .html5 = {
+            [0] = {.base = HEADERS      , .len = sizeof (HEADERS)},
+            [2] = {.base = "\r\n\r\n"   , .len = 4               },
+            [3] = {.base = (char *)html5, .len = len             },
+        },
+        .prev = *previous,
+        .next = NULL,
+    };
+
+    int ndigit = snprintf(latest->internal, sizeof (latest->internal), "%zu", len);
+    latest->html5[1].base = latest->internal;
+    latest->html5[1].len  = ndigit;
 
     *previous = latest;
 
     return CODE_OKAY;
 }
 
-struct doc * doc_get(struct doc *latest)
+uv_buf_t * doc_get(struct doc *latest)
 {
     latest->refcnt++;
-    return latest;
+    return latest->html5;
 }
 
 void doc_free(struct doc *it)
@@ -44,8 +67,8 @@ void doc_free(struct doc *it)
     {
         struct doc *prev = curr->prev;
 
-        curr->next.previous = curr->previous;
-        curr->previous.next = curr->next;
+        curr->next->prev = curr->prev;
+        curr->prev->next = curr->next;
 
 	free(curr->html5);
         free(curr);

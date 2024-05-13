@@ -16,6 +16,8 @@ struct doc
     struct doc *next;
 
     char internal[30];
+
+    int gen;
 };
 
 #define HEADERS \
@@ -23,8 +25,11 @@ struct doc
   "Content-Type: text/html\r\n" \
   "Content-Length: "
 
-enum code doc_add(struct doc **previous, char const *html5, size_t len)
+enum code doc_add(struct doc **previous, char const *html5, size_t len, int gen)
 {
+    if (*previous != NULL && (*previous)->gen > gen)
+        return CODE_OLD;
+
     struct doc *latest = malloc(sizeof (*latest));
 
     if (NULL == latest)
@@ -34,9 +39,9 @@ enum code doc_add(struct doc **previous, char const *html5, size_t len)
     {
         .refcnt = 0,
         .html5 = {
-            [0] = {.base = HEADERS      , .len = sizeof (HEADERS)},
-            [2] = {.base = "\r\n\r\n"   , .len = 4               },
-            [3] = {.base = (char *)html5, .len = len             },
+            [0] = {.base = HEADERS      , .len = sizeof (HEADERS) - 1},
+            [2] = {.base = "\r\n\r\n"   , .len = 4                   },
+            [3] = {.base = (char *)html5, .len = len                 },
         },
         .prev = *previous,
         .next = NULL,

@@ -39,6 +39,7 @@ struct movie * movie_find_or_create(struct movie **match, char *symbol, int len)
             return NULL;
         }
 
+        (*last)->name    = NULL;
         (*last)->next    = NULL;
         (*last)->defined = false;
     }
@@ -49,6 +50,7 @@ struct movie * movie_find_or_create(struct movie **match, char *symbol, int len)
 void movies_free(struct movies *em)
 {
     free(em->title);
+    em->title = NULL;
 
     struct element *curr = em->elements;
 
@@ -81,5 +83,7 @@ void movies_free(struct movies *em)
         curr2 = next;
     }
 
+    em->mov_first = NULL;
+    em->elements = NULL;
     em->last = &em->elements;
 }

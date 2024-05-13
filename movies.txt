@@ -29,5 +29,6 @@ Movies that.
 .HEADING 2 "Unwatched"
 .\".MOV BRANQUELAS tt0381707 
 .MOV RRR        tt8178634 2022 RRR
+.MOV THE_PLAYER tt0105151 1992 The Player
 .\"Other
 .\".MOV MATRIX     

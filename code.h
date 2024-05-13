@@ -17,7 +17,8 @@ X(CODE_ERROR_NO_MOVIE_NAME  , "error no movie_name"  ) \
 X(CODE_ERROR_MOVIE_ALREADY_DEFINED, "error movie already defined") \
 X(CODE_ENOMEM               , "error enomem"         ) \
 X(CODE_ERROR_NO_QUOTED      , "error incomplete quot") \
-X(CODE_EMPTY_STRING         , "string is empty"      )
+X(CODE_EMPTY_STRING         , "string is empty"      ) \
+X(CODE_OLD                  , "tried to add old file")
 
 #include "expand.h"
 

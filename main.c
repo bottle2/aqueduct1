@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <uv.h>
@@ -163,8 +164,15 @@ static void on_new_connection(uv_stream_t *server, int status)
 
 struct movie_req
 {
-    uv_fs_t file;
-    uv_file desc;
+    union // Look at the horrible evil evil evil things you are forcing me to do!!!!
+    {
+        struct
+        {
+            uv_fs_t file;
+            uv_file desc;
+        };
+        uv_work_t work;
+    };
     uv_buf_t buf[1];
     struct line_builder lb;
     struct movies movies;
@@ -172,7 +180,113 @@ struct movie_req
 
     char base[20];
     _Atomic bool stop;
+    bool good_read;
+
+    char *html5;
+    size_t html5_len;
 };
+
+void add_to_latest_movie(uv_work_t *work, int status)
+{
+    struct movie_req *req = (struct movie_req *)work;
+
+    if (UV_ECANCELED == status)
+        assert(NULL == req->html5);
+    else if (status != 0)
+        fprintf(stderr, "Mystery error %d: %s\n", status, uv_strerror(status));
+    else if (req->html5 != NULL && req->html5_len > 0)
+    {
+        enum code code = doc_add(&latest, req->html5, req->html5_len, req->gen);
+
+        if (code != CODE_OKAY)
+        {
+            fprintf(stderr, "error before adding!! %s\n", code_msg(code));
+            free(req->html5);
+        }
+    }
+    else
+        fprintf(stderr, "some error IDK!!\n");
+
+    movies_free(&req->movies);
+    free(req); // can we free this piece of shit HERE?
+}
+
+static int counter_printf(void *data, char const *fmt, ...)
+{
+    // thanks bubuche87 from #c chatroom @ libera.chat !!!
+    size_t *len = data;
+
+    va_list ap;
+    va_start(ap, fmt);
+
+    int code = vsnprintf(NULL, 0, fmt, ap);
+
+    assert(code >= 0);
+
+    if (code >= 0)
+        *len += code;
+
+    va_end(ap);
+
+    return code;
+}
+
+struct virt_file
+{
+    char *buffer;
+    size_t pos;
+    size_t cap;
+};
+
+static int actual_printf(void *data, char const *fmt, ...)
+{
+    struct virt_file *vf = data;
+
+    va_list ap;
+    va_start(ap, fmt);
+
+    int code = vsnprintf(vf->buffer + vf->pos, vf->cap, fmt, ap);
+
+    assert(code >= 0);
+
+    vf->pos += code;
+
+    assert(vf->pos < vf->cap);
+
+    va_end(ap);
+
+    return code;
+}
+
+void process_movie(uv_work_t *work)
+{
+    struct movie_req *req = (struct movie_req *)work;
+    req->html5     = NULL;
+    req->html5_len = -1;
+    struct virt_file vf = {0};
+    struct printer count = {.data = &vf.cap, .pprintf = counter_printf};
+    enum code code;
+    if ((code = vomit(count, &req->movies)) != CODE_OKAY)
+    {
+        fprintf(stderr, "error processing vomit: %s\n", code_msg(code));
+        // fail fail fail fail fail
+        return;
+    }
+    if (NULL == (vf.buffer = malloc(++vf.cap)))
+    {
+        fprintf(stderr, "error processing vomit: enomem enomem enomem");
+        return;
+    }
+
+    struct printer actual = {.data = &vf, .pprintf = actual_printf};
+
+    code = vomit(actual, &req->movies);
+
+    assert(CODE_OKAY == code);
+
+    req->html5     = vf.buffer;
+    req->html5_len = vf.pos;
+}
 
 static void maybe_open_movie(void);
 
@@ -204,6 +318,8 @@ void read_cb_movie(uv_fs_t *fil)
 {
     struct movie_req *req = (struct movie_req *)fil;
 
+    req->good_read = false;
+
     if (fil->result < 0)
     {
         fprintf(stderr, "fs movie read error %s\n", uv_strerror(fil->result));
@@ -218,11 +334,14 @@ void read_cb_movie(uv_fs_t *fil)
     }
     else if (0 == fil->result)
     {
+#if 0
         // LE IMPORTANT STUFF HAPPENS HERE. XXX
         int code = vomit((struct printer){stdout, pfprintf}, &req->movies);
         if (code != CODE_OKAY)
             fprintf(stderr, "error %d: %s\n", code, code_msg(code));
+#endif
         uv_fs_req_cleanup(fil);
+        req->good_read = true;
         uv_fs_close(loop, fil, req->desc, close_movie);
     }
     else
@@ -259,6 +378,21 @@ void close_movie(uv_fs_t *fil)
     }
 
     uv_fs_req_cleanup(fil);
+    if (req->good_read)
+    {
+        memset(&req->work, '\0', sizeof (req->work));
+        int re;
+        if ((re = uv_queue_work(loop, &req->work, process_movie, add_to_latest_movie)) != 0)
+        {
+            fprintf(stderr, "error queuing movie work: %s\n", uv_strerror(re));
+            goto free_everything;
+        }
+    }
+    else
+        goto free_everything;
+    free(req->lb.line);
+    return;
+free_everything:
     free(req->lb.line);
     movies_free(&req->movies);
     free(req);

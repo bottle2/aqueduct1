@@ -2,6 +2,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <uv.h>
 
 #include <llhttp.h>
@@ -468,7 +469,7 @@ void open_cb(uv_fs_t *fil)
 }
 #endif
 
-int main(void)
+int main(int argc, char *argv[])
 {
     atomic_init(&current, NULL);
     loop = uv_default_loop();
@@ -480,10 +481,23 @@ int main(void)
 
     struct sockaddr_in addr;
 
-    uv_ip4_addr("0.0.0.0", DEFAULT_PORT, &addr);
-    uv_tcp_bind(&server, (struct sockaddr const *)&addr, 0);
-
     int r;
+
+    if ((r = uv_ip4_addr(
+        argc > 1 ? argv[1]       : "0.0.0.0",
+        argc > 2 ? atoi(argv[2]) : DEFAULT_PORT,
+        &addr
+    )))
+    {
+        fprintf(stderr, "ip4 error %s\n", uv_strerror(r));
+        return EXIT_FAILURE;
+    }
+
+    if ((r = uv_tcp_bind(&server, (struct sockaddr const *)&addr, 0)))
+    {
+        fprintf(stderr, "bind error %s\n", uv_strerror(r));
+        return EXIT_FAILURE;
+    }
 
     if ((r = uv_listen((uv_stream_t *)&server, DEFAULT_BACKLOG, on_new_connection)))
     {

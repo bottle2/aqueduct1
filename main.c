@@ -33,6 +33,7 @@ struct client
         uint8_t superclass[sizeof (uv_write_t)];
         struct doc *doc_used;
     } write_doc_req;
+    bool did_headers;
 };
 
 #define RESPONSE \
@@ -71,16 +72,31 @@ static void on_read(uv_stream_t *client, ssize_t nread, uv_buf_t const *buf)
     }
     else if (nread > 0)
     {
-        struct write_req *req = malloc(sizeof (*req));
-
-        req->buf = uv_buf_init(buf->base, nread);
-
-        int err;
         llhttp_t *parser = &((struct client *)client)->parser;
-        if ((err = llhttp_execute(parser, buf->base, nread)) != HPE_OK)
+        llhttp_errno_t err = llhttp_execute(parser, buf->base, nread);
+
+        // Really hard to wrap my head around this shit library.
+        // also picohttpparser is just as bad
+        // "performance" "efficiency" KYS KYS KYS KYS KYS KYS KYS
+        // yeah let's obsess with AAAAAAAAAAAAAAAAA instead of writing USABLE DOCUMENTED libraries.
+        // Might as well rewrite using Ragel, I bet HTTP is entirely regular and these guys obsessing with aaaaaaaaaaaaaaaaaaaaaaaaa.
+        // Look at the horrible kludges I have to write because REEEEEEEEEEEEEEEEEEEEEE
+        switch (err)
         {
-            fprintf(stderr, "Parse error %s %s\n", llhttp_errno_name(err), parser->reason);
-            uv_close((uv_handle_t *)client, on_close);
+            case HPE_PAUSED: assert(!"I never pause");     break;
+            case HPE_USER:   assert(!"I never HPE_USER?"); break;
+
+            case HPE_PAUSED_UPGRADE: // Fall through.
+            case HPE_OK:
+                assert(((struct client *)client)->did_headers);
+            break;
+
+            case HPE_PAUSED_H2_UPGRADE: // Fall through.
+            default:
+                assert(!((struct client *)client)->did_headers);
+                fprintf(stderr, "Parse error %s: %s\n", llhttp_errno_name(err), parser->reason);
+                uv_close((uv_handle_t *)client, on_close);
+            break;
         }
     }
 
@@ -132,6 +148,8 @@ static int on_headers_complete(llhttp_t *parser)
         bufs, n_buf, on_write
     );
 
+    client->did_headers = true;
+
     return 0;
 }
 
@@ -150,6 +168,7 @@ static void on_new_connection(uv_stream_t *server, int status)
         fprintf(stderr, "OOM for client\n");
         return;
     }
+    client->did_headers = false;
 
     uv_tcp_init(loop, (uv_tcp_t *)client);
 

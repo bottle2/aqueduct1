@@ -27,6 +27,7 @@ SOURCE=main.c parse.c code.c movie.c doc.c
 
 site:$(SOURCE) $(LLHTTP)
 	$(CC) $(CFLAGS) -o $@ $(SOURCE) $(LLHTTP) $(LDLIBS)
+	-sudo setcap CAP_NET_BIND_SERVICE=ep $@
 
 batch:batch.c parse.c code.c
 	$(CC) $(CFLAGS) -o $@ batch.c parse.c code.c movie.c $(LDLIBS)

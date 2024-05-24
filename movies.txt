@@ -28,14 +28,37 @@ Movies that.
 .MOV APOCALYPSE_NOW     tt0078788 1979 Apocalypse Now
 .MOV PLATOON            tt0091763 1986 Platoon
 .MOV NASCIDO_PARA_MATAR tt0093058 1987 Full Metal Jacket
+.MOV TROPIC_THUNDER     tt0942385 2008 Tropic Thunder
+.HEADING 2 "Other watched"
+.PP
+Other movies I watched, but for which I have no remarks.
+.MOV WALL_STREET_WOLF tt0993846 2013 The Wolf of Wall Street
 .HEADING 2 "Unwatched"
-.\".MOV BRANQUELAS tt0381707 
-.MOV RRR        tt8178634 2022 RRR
-.MOV THE_PLAYER tt0105151 1992 The Player
+.MOV BRANQUELAS                tt0381707  2004 White Chicks
+.MOV RRR                       tt8178634  2022 RRR
+.MOV THE_PLAYER                tt0105151  1992 The Player
+.MOV CIVIL_WAR                 tt17279496 2024 Civil War
+.PP
+This one was mentioned in some IRC channel, dude said they probably wasted 40
+million of their 50 million budget in the last 20 minutes, and now I'm hooked.
+.MOV GOSFORD_PARK              tt0280707  2001 Gosford Park
+.MOV THE_ONION_MOVIE           tt0392878  2008 The Onion Movie
+.MOV _7_HOMENS_1_DESTINO       tt0054047  1960 The Magnificent Seven
+.MOV CANHONEIRO_YANG_TSE       tt0060934  1966 The Sand Pebbles
+.MOV MEAN_STREETS              tt0070379  1973 Mean Streets
+.MOV TO_KILL_A_MOCKINGBIRD     tt0056592  1962 To Kill a Mockingbird
+.MOV THE_KILLING_FIELDS        tt0087553  1984 The Killing Fields
+.MOV DAZED_AND_CONFUSED        tt0106677  1993 Dazed and Confused
+.MOV QUE_ISSO_COMPANHEIRO      tt0119815  1997 O Que é Isso, Companheiro?
+.PP
+I actually watched this one, but I don't remember it anymore.
+.MOV GIRL_INTERRUPTED          tt0172493  1999 Girl, Interrupted
+.MOV BAADER_MEINHOF            tt0765432  2008 Der Baader Meinhof Komplex
+.MOV X_MEN_DAYS_OF_FUTURE_PAST tt1877832  2014 X-Men: Days of Future Past
+.MOV IF____                    tt0063850  1968 If....
+.MOV BLUE_RUIN                 tt2359024  2013 Blue Ruin
 .\"Other
 .\".MOV MATRIX
-.HEADING 2 "Mundos paralelos"
-.MOV THE_ONE
 .\"
 .\"
 .\"

@@ -64,3 +64,10 @@ $(LLHTTP_SOURCE):
 
 #check_lb:check_lb.c lb.h lb.c
 #	$(CC) -Wpedantic -Wall -Wextra $$(pkgconf --cflags check) -o $@ check_lb.c lb.c $$(pkgconf --libs check)
+
+.SUFFIXES: .c .rl .svg
+
+.rl.c:
+	ragel $<
+.rl.svg:
+	ragel -pV $< | dot -Tsvg > $@

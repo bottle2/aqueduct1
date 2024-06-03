@@ -20,7 +20,7 @@ struct movie * movie_find_or_create(struct movie **first, char *symbol, int len)
 
 struct element
 {
-    enum type { TEXT, INSTR_XS(AS_1_OF_1_COMMA) } type;
+    enum type { INVALID, TEXT, INSTR_XS(AS_1_OF_1_COMMA) } type;
     struct element *next;
     union
     {

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ $# = 1 ]; then
+    ragel -pV $1 | dot -Tsvg > ${1%.*}.svg && start ${1%.*}.svg
+elif [ $# = 2 ]; then
+    ragel -pVM $2 $1 | dot -Tsvg > ${2%.*}.svg && start ${2%.*}.svg
+else
+    echo 'you dumbass'
+fi

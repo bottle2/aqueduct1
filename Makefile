@@ -12,7 +12,7 @@ vehicle-building-games.html:vehicle-building-games
 
 DEPS=libuv
 
-CFLAGS=-Os -flto -march=native \
+CFLAGS=-g3 \
 -Wpedantic -Wall -Wextra -Wshadow \
 -fno-strict-aliasing \
 $$(pkg-config --cflags $(DEPS)) -Illhttp

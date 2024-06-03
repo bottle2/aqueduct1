@@ -49,14 +49,16 @@ million of their 50 million budget in the last 20 minutes, and now I'm hooked.
 .MOV TO_KILL_A_MOCKINGBIRD     tt0056592  1962 To Kill a Mockingbird
 .MOV THE_KILLING_FIELDS        tt0087553  1984 The Killing Fields
 .MOV DAZED_AND_CONFUSED        tt0106677  1993 Dazed and Confused
-.MOV QUE_ISSO_COMPANHEIRO      tt0119815  1997 O Que é Isso, Companheiro?
-.PP
-I actually watched this one, but I don't remember it anymore.
 .MOV GIRL_INTERRUPTED          tt0172493  1999 Girl, Interrupted
 .MOV BAADER_MEINHOF            tt0765432  2008 Der Baader Meinhof Komplex
 .MOV X_MEN_DAYS_OF_FUTURE_PAST tt1877832  2014 X-Men: Days of Future Past
 .MOV IF____                    tt0063850  1968 If....
 .MOV BLUE_RUIN                 tt2359024  2013 Blue Ruin
+.MOV COWBOYS_ALIENS            tt0409847  2011 Cowboys &amp; Aliens
+.\" HAHAHAHA no HTML escaping yet
+.HEADING 2 "Movies I watched ages ago"
+.MOV QUE_ISSO_COMPANHEIRO tt0119815 1997 O Que é Isso, Companheiro?
+.MOV ALIENS               tt0090605 1986 Aliens
 .\"Other
 .\".MOV MATRIX
 .\"

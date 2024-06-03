@@ -19,6 +19,8 @@ struct parser
     int cap;
 
     char *title;
+
+    struct element e;
 };
 
 struct parser parser_init(void);
@@ -110,8 +112,6 @@ enum code parse(struct parser *parser, unsigned char *p, int len)
 
     enum code code = CODE_OKAY;
 
-    struct element e = {0};
-
     %%{
         alphtype unsigned char;
         access parser->;
@@ -124,20 +124,20 @@ enum code parse(struct parser *parser, unsigned char *p, int len)
                 fbreak;
         }
 
-        action type_text      { e.type = TEXT;    }
-        action type_heading   { e.type = HEADING; }
-        action type_paragraph { e.type = PP;      }
-        action type_movie     { e.type = MOV;     }
-        action type_invalid   { e.type = INVALID; puts("achei inválido"); }
+        action type_text      { parser->e.type = TEXT;    }
+        action type_heading   { parser->e.type = HEADING; }
+        action type_paragraph { parser->e.type = PP;      }
+        action type_movie     { parser->e.type = MOV;     }
+        action type_invalid   { parser->e.type = INVALID; puts("achei inválido"); }
 
         action add {
-            switch (e.type)
+            switch (parser->e.type)
             {
                 case TEXT:
                     printf("%d achei texto %s\n", parser->nl, parser->buf);
                 break;
                 case HEADING:
-                    printf("%d achei heading: %s\n", parser->nl, parser->buf);
+                    printf("%d achei heading %d: %s\n", parser->nl, parser->e.heading.level, parser->buf);
                 break;
                 case PP:
                     printf("%d achei parágrafo\n", parser->nl);
@@ -155,11 +155,7 @@ enum code parse(struct parser *parser, unsigned char *p, int len)
         }
 
         action add_title {
-            if (0 == parser->len)
-            {
-                code = CODE_EMPTY_STRING;
-                fhold; fbreak;
-            }
+            assert(parser->len > 0);
 
             printf("%d achei title: %s\n", parser->nl, parser->buf);
 
@@ -181,28 +177,32 @@ enum code parse(struct parser *parser, unsigned char *p, int len)
             }
         }
 
-        comment   = "\\\""    @!type_invalid [^\n]* %{ puts("achei comentário"); };
+        action level { parser->e.heading.level = fc - '0'; }
 
-        # TODO do not buf last double quote
-        # state machine, another definition, maybe four unions for each case.
-        title = "TITLE" $!type_invalid
-                (RWS '"' (any-'\n')+ $buf '"' OWS) <!error_no_quoted
-                %add_title;
+        action error_trailing { code = CODE_ERROR_TRAILING; }
 
-        heading   = "HEADING" @!type_invalid (RWS [^\n]*)? %{ puts("achei heading");    };
+        quoted = ('"' ('\\\"' @buf | '\\\\' @buf | (any - [\\\"\n]) @buf)+ '"') @!error_no_quoted;
 
-        action error_paragraph_trailing { code = CODE_ERROR_PP_TRAILING; }
+        comment = "\\\"" @!type_invalid [^\n]* %{ puts("achei comentário"); };
+
+        title = "TITLE" $!type_invalid (RWS quoted) OWS $!error_trailing %add_title;
+
+        action error_level { code = CODE_ERRO_LEVEL; }
+
+        heading = "HEADING" @type_heading @!type_invalid (RWS [1-6] @level) $!error_level (RWS quoted) OWS $!error_trailing %add;
+
         paragraph = "PP" @!type_invalid 
-                    OWS  $!error_paragraph_trailing %{ puts("achei parágrafo"); };
+                    OWS  $!error_trailing %{ puts("achei parágrafo"); };
 
-        movie     = "MOV"     @!type_invalid ((space - '\n') [^\n]*)? %{ puts("achei filme");      };
+        movie     = "MOV" @!type_invalid ((space - '\n') [^\n]*)? %{ puts("achei filme");      };
 
         command = '.' (comment | title | heading | paragraph | movie);
-        text    = [^.\n][^\n]* $buf %type_text %add;
-        # TODO skip whitespace?
+        text    = ([^.\n][^\n]*) $buf %type_text %add;
 
         line = command | text;
-        main := ('\n' >cntline | line >cntline '\n')*;
+        main :=
+        start: (null -> final | '\n' @cntline -> start | line >cntline -> keep),
+        keep:  (null -> final | '\n'          -> start);
     }%%
 
     return code;

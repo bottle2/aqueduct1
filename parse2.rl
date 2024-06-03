@@ -124,6 +124,11 @@ enum code parse(struct parser *parser, unsigned char *p, int len)
                 fbreak;
         }
 
+        action buf_white {
+            if ((code = parse_buf(parser, ' ')) != CODE_OKAY)
+                fbreak;
+        }
+
         action type_text      { parser->e.type = TEXT;    }
         action type_heading   { parser->e.type = HEADING; }
         action type_paragraph { parser->e.type = PP;      }
@@ -183,23 +188,38 @@ enum code parse(struct parser *parser, unsigned char *p, int len)
 
         quoted = ('"' ('\\\"' @buf | '\\\\' @buf | (any - [\\\"\n]) @buf)+ '"') @!error_no_quoted;
 
-        comment = "\\\"" @!type_invalid [^\n]* %{ puts("achei comentário"); };
+        comment = "\\\"" @!type_invalid [^\n]*;
 
-        title = "TITLE" $!type_invalid (RWS quoted) OWS $!error_trailing %add_title;
+        title = "TITLE"          $!type_invalid
+                (RWS quoted) OWS $!error_trailing %add_title;
 
         action error_level { code = CODE_ERRO_LEVEL; }
 
-        heading = "HEADING" @type_heading @!type_invalid (RWS [1-6] @level) $!error_level (RWS quoted) OWS $!error_trailing %add;
+        heading = "HEADING"  @type_heading @!type_invalid
+                  (RWS [1-6] @level)       $!error_level
+                  (RWS quoted) OWS         $!error_trailing %add;
 
         paragraph = "PP" @!type_invalid 
-                    OWS  $!error_trailing %{ puts("achei parágrafo"); };
+                    OWS  $!error_trailing %type_paragraph %add;
 
-        movie     = "MOV" @!type_invalid ((space - '\n') [^\n]*)? %{ puts("achei filme");      };
+        symbol = ([_A-Z][_A-Z0-9]*) $buf;
+        tok = ([^\n]+ -- RWS) @buf;
+        rest = tok (RWS tok >buf_white)* OWS;
+
+        # TODO
+        movie = "MOV" @!type_invalid #((space - '\n') [^\n]*)? 
+                RWS symbol OWS
+                (
+                    (RWS "tt" [0-9]{7,})
+                    (RWS [0-9]{4})
+                    (RWS rest)
+                )?
+                %{ puts("achei filme"); };
 
         command = '.' (comment | title | heading | paragraph | movie);
         text    = ([^.\n][^\n]*) $buf %type_text %add;
-
         line = command | text;
+
         main :=
         start: (null -> final | '\n' @cntline -> start | line >cntline -> keep),
         keep:  (null -> final | '\n'          -> start);

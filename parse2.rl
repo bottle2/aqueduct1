@@ -7,6 +7,23 @@
 #include "code.h"
 #include "movie.h"
 
+#ifdef WIN32
+#define STRNDUP_IMPL
+// XXX piss piss piss piss cock piss piss piss piss piss piss fuck fuck
+// why can't MSYS2 declare strndup?????????????????????????????????????
+static char *strndup(const char *s, size_t len)
+{
+    char *copy = malloc(len + 1);
+    if (NULL == copy)
+        return NULL;
+    size_t i = 0;
+    for (; i < len && s[i] != '\0'; i++)
+        copy[i] = s[i];
+    copy[i] = '\0';
+    return copy;
+}
+#endif
+
 %% machine movies;
 
 struct parser
@@ -23,12 +40,11 @@ struct parser
     struct element e;
 };
 
-struct movies *movies = NULL;
-
 struct parser parser_init(void);
 void parser_del(struct parser *parser);
-enum code parse(struct parser *parser, unsigned char *buffer, int len);
+enum code parse(struct parser *parser, unsigned char *buffer, int len, struct movies *movies);
 
+#ifndef NOMAIN
 int main(int argc, char *argv[])
 {
     char *category = setlocale(LC_ALL, ".UTF8");
@@ -42,10 +58,12 @@ int main(int argc, char *argv[])
 
     enum code code = CODE_OKAY;
 
+    struct movies movies = {.last = &movies.elements};
+
     while (CODE_OKAY == code && (c = fgetc(f)) != EOF)
-        if ((code = parse(&parser, &(unsigned char){c}, 1)) != CODE_OKAY)
+        if ((code = parse(&parser, &(unsigned char){c}, 1, &movies)) != CODE_OKAY)
             puts(code_msg(code));
-    if ((code = parse(&parser, NULL, 0)) != CODE_OKAY)
+    if ((code = parse(&parser, NULL, 0, &movies)) != CODE_OKAY)
         puts(code_msg(code));
 
     printf("line count = %d\n", parser.nl);
@@ -54,6 +72,7 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+#endif
 
 %% write data noerror nofinal noentry;
 
@@ -107,7 +126,7 @@ static enum code parse_buf(struct parser *parser, int c)
     return CODE_OKAY;
 }
 
-enum code parse(struct parser *parser, unsigned char *p, int len)
+enum code parse(struct parser *parser, unsigned char *p, int len, struct movies *movies)
 {
     unsigned char *pe  = 0 == len ? p : p + len;
     unsigned char *eof = 0 == len ? p : NULL;
@@ -138,13 +157,14 @@ enum code parse(struct parser *parser, unsigned char *p, int len)
         action type_invalid   { parser->e.type = INVALID; puts("achei inválido"); }
 
         action add {
+#if 0
             switch (parser->e.type)
             {
                 case TEXT:
-                    printf("%d achei texto %s\n", parser->nl, parser->buf);
+                    printf("%d achei texto\n", parser->nl);
                 break;
                 case HEADING:
-                    printf("%d achei heading %d: %s\n", parser->nl, parser->e.heading.level, parser->buf);
+                    printf("%d achei heading\n", parser->nl);
                 break;
                 case PP:
                     printf("%d achei parágrafo\n", parser->nl);
@@ -156,16 +176,44 @@ enum code parse(struct parser *parser, unsigned char *p, int len)
                     assert(!"Não sei");
                 break;
             }
-            if (parser->len > 0)
-                parser->buf[0] = '\0';
-            parser->len = 0;
+#endif
+            assert(0 == parser->len && '\0' == parser->buf[0]);
+
+            struct element *novo = malloc(sizeof (*novo));
+
+            if (NULL == novo)
+            {
+                code = CODE_ENOMEM;
+                if (parser->len > 0)
+                    parser->buf[0] = '\0';
+                parser->len = 0;
+                fhold; fbreak;
+            }
+
+            // TODO
+            *(movies->last) = novo;
+            *(movies->last = &novo->next) = NULL;
+#if 0
+            *(**last = novo) = it;
+            *(*last = &novo->next) = NULL;
+#endif
         }
 
         action add_title {
             assert(parser->len > 0);
+            if (movies->title)
+            {
+                code = CODE_ERROR_TITLE_REDEF;
+                fhold; fbreak;
+            }
+            if (!(movies->title = strndup(parser->buf, parser->len)))
+            {
+                code = CODE_ENOMEM;
+                fhold; fbreak;
+            }
+        }
 
-            printf("%d achei title: %s\n", parser->nl, parser->buf);
-
+        action zero {
             if (parser->len > 0)
                 parser->buf[0] = '\0';
             parser->len = 0;
@@ -193,13 +241,22 @@ enum code parse(struct parser *parser, unsigned char *p, int len)
         comment = "\\\"" @!type_invalid [^\n]*;
 
         title = "TITLE"          $!type_invalid
-                (RWS quoted) OWS $!error_trailing %add_title;
+                (RWS quoted) OWS $!error_trailing %add_title %zero;
 
         action error_level { code = CODE_ERRO_LEVEL; }
 
+        action heading_text
+        {
+            if (!(parser->e.heading.text = strndup(parser->buf, parser->len)))
+            {
+                code = CODE_ENOMEM;
+                fhold; fbreak;
+            }
+        }
+
         heading = "HEADING"  @type_heading @!type_invalid
                   (RWS [1-6] @level)       $!error_level
-                  (RWS quoted) OWS         $!error_trailing %add;
+                  (RWS quoted) OWS         $!error_trailing %heading_text %zero %add;
 
         paragraph = "PP" @!type_invalid 
                     OWS  $!error_trailing %type_paragraph %add;
@@ -213,25 +270,44 @@ enum code parse(struct parser *parser, unsigned char *p, int len)
         action error_no_year      { code = CODE_ERROR_NO_YEAR;         }
         action error_no_name      { code = CODE_ERROR_NO_MOVIE_NAME;   }
         action movie_retrieve {
-            if (NULL == (parser->e.movie = movie_find_or_create(&movies, parser->buf, parser->len)))
+            if (NULL == (parser->e.movie = movie_find_or_create(&movies->mov_first, parser->buf, parser->len)))
             {
                 code = CODE_ENOMEM;
                 fhold; fbreak;
             }
         }
-        # TODO
-        movie = ("MOV" @type_movie @!type_invalid #((space - '\n') [^\n]*)? 
-                (RWS symbol) $!error_no_symbol %movie_retrieve OWS
-                (
-                    (RWS "tt" [0-9]{7,}) <>!error_no_authority
-                    (RWS [0-9]{4})       <!error_no_year
-                    (RWS rest)           <!error_no_name
-                )?
-                ) %add;
+
+        action movie_aut {
+            parser->e.movie->aut *= 10;
+            parser->e.movie->aut += fc - '0';
+        }
+
+        action movie_year {
+            parser->e.movie->year *= 10;
+            parser->e.movie->year += fc - '0';
+        }
+        action movie_name {
+            if (!(parser->e.movie->name = strndup(parser->buf, parser->len)))
+            {
+                code = CODE_ENOMEM;
+                fhold; fbreak;
+            }
+        }
+        # this looks similar
+        movie = (
+            "MOV" %type_movie @!type_invalid
+            (RWS symbol) $!error_no_symbol %movie_retrieve %zero OWS
+            (
+                (RWS "tt" [0-9]{7,} $movie_aut ) @!error_no_authority
+                (RWS [0-9]{4}       $movie_year) @!error_no_year
+                (RWS rest)          %movie_name %zero $!error_no_name
+            )?
+        ) %add;
         # XXX review position of errors
+        # XXX conflicting error between aut and year. what do???
 
         command = '.' (comment | title | heading | paragraph | movie);
-        text    = ([^.\n][^\n]*) $buf %type_text %add;
+        text    = ([^.\n][^\n]*) $buf %type_text %zero %add;
         line = command | text;
 
         main :=
@@ -242,4 +318,7 @@ enum code parse(struct parser *parser, unsigned char *p, int len)
     return code;
 }
 
+#ifndef NOMAIN
 #include "code.c"
+#include "movie.c"
+#endif

@@ -4,7 +4,7 @@
 
 #include "movie.h"
 
-#ifdef WIN32
+#if defined(WIN32) && !defined(STRNDUP_IMPL)
 // god why oh god why god why oh god why why why god oh why god why god why why god
 static char *strndup(const char *s, size_t len)
 {

@@ -4,19 +4,22 @@
 #include "code.h"
 #include "parse.h"
 
+#define NOMAIN
+#include "parse2.c"
+
 int main(void)
 {
-    struct line_builder lb = {.line = malloc(1), .capacity = 1};
+    struct parser parser = parser_init();
     struct movies movies = {.last = &movies.elements};
     int c;
     enum code code;
     while ((c = getchar()) != EOF)
-        if ((code = line_builder_add(&movies, &lb, (char []){c}, 1)) != CODE_OKAY)
+        if ((code = parse(&parser, &(unsigned char){c}, 1, &movies)) != CODE_OKAY)
 	{
             fprintf(stderr, "stdin: %s\n", code_msg(code));
             return EXIT_FAILURE;
 	}
-    if ((code = line_builder_add(&movies, &lb, NULL, 0)) != CODE_OKAY)
+    if ((code = parse(&parser, NULL, 0, &movies)) != CODE_OKAY)
     {
         fprintf(stderr, "stdin: %s\n", code_msg(code));
         return EXIT_FAILURE;
@@ -27,6 +30,8 @@ int main(void)
         fprintf(stderr, "stdin: %s\n", code_msg(code));
         return EXIT_FAILURE;
     }
+
+    parser_del(&parser);
 
     movies_free(&movies);
 

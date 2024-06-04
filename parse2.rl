@@ -23,6 +23,8 @@ struct parser
     struct element e;
 };
 
+struct movies *movies = NULL;
+
 struct parser parser_init(void);
 void parser_del(struct parser *parser);
 enum code parse(struct parser *parser, unsigned char *buffer, int len);
@@ -206,15 +208,27 @@ enum code parse(struct parser *parser, unsigned char *p, int len)
         tok = ([^\n]+ -- RWS) @buf;
         rest = tok (RWS tok >buf_white)* OWS;
 
+        action error_no_symbol    { code = CODE_ERROR_NO_SYMBOL_MOVIE; }
+        action error_no_authority { code = CODE_ERROR_NO_AUT_MOVIE;    }
+        action error_no_year      { code = CODE_ERROR_NO_YEAR;         }
+        action error_no_name      { code = CODE_ERROR_NO_MOVIE_NAME;   }
+        action movie_retrieve {
+            if (NULL == (parser->e.movie = movie_find_or_create(&movies, parser->buf, parser->len)))
+            {
+                code = CODE_ENOMEM;
+                fhold; fbreak;
+            }
+        }
         # TODO
-        movie = "MOV" @!type_invalid #((space - '\n') [^\n]*)? 
-                RWS symbol OWS
+        movie = ("MOV" @type_movie @!type_invalid #((space - '\n') [^\n]*)? 
+                (RWS symbol) $!error_no_symbol %movie_retrieve OWS
                 (
-                    (RWS "tt" [0-9]{7,})
-                    (RWS [0-9]{4})
-                    (RWS rest)
+                    (RWS "tt" [0-9]{7,}) <>!error_no_authority
+                    (RWS [0-9]{4})       <!error_no_year
+                    (RWS rest)           <!error_no_name
                 )?
-                %{ puts("achei filme"); };
+                ) %add;
+        # XXX review position of errors
 
         command = '.' (comment | title | heading | paragraph | movie);
         text    = ([^.\n][^\n]*) $buf %type_text %add;

@@ -39,6 +39,8 @@ struct movie * movie_find_or_create(struct movie **match, char *symbol, int len)
             return NULL;
         }
 
+        (*last)->year    = 0;
+        (*last)->aut     = 0;
         (*last)->name    = NULL;
         (*last)->next    = NULL;
         (*last)->defined = false;

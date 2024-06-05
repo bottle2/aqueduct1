@@ -23,7 +23,7 @@ LLHTTP_SOURCE=llhttp/api.c llhttp/http.c llhttp/llhttp.c llhttp/llhttp.h
 LLHTTP_URL=https://raw.githubusercontent.com/nodejs/node/main/deps/llhttp
 LLHTTP_RECIPE=$(CC) -g3 -Wall -Wextra -Wno-unused-parameter -o $@ -c $*.c
 
-SOURCE=main.c parse.c code.c movie.c doc.c
+SOURCE=main.c parse.c code.c movie.c doc.c parse2.c
 
 site:$(SOURCE) $(LLHTTP)
 	$(CC) $(CFLAGS) -o $@ $(SOURCE) $(LLHTTP) $(LDLIBS)

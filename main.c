@@ -194,7 +194,7 @@ struct movie_req
         uv_work_t work;
     };
     uv_buf_t buf[1];
-    struct line_builder lb;
+    struct parser parser;
     struct movies movies;
     int gen;
 
@@ -354,12 +354,6 @@ void read_cb_movie(uv_fs_t *fil)
     }
     else if (0 == fil->result)
     {
-#if 0
-        // LE IMPORTANT STUFF HAPPENS HERE. XXX
-        int code = vomit((struct printer){stdout, pfprintf}, &req->movies);
-        if (code != CODE_OKAY)
-            fprintf(stderr, "error %d: %s\n", code, code_msg(code));
-#endif
         uv_fs_req_cleanup(fil);
         req->good_read = true;
         uv_fs_close(loop, fil, req->desc, close_movie);
@@ -367,7 +361,7 @@ void read_cb_movie(uv_fs_t *fil)
     else
     {
         int code;
-        if ((code = line_builder_add(&req->movies, &req->lb, req->base, fil->result)) != CODE_OKAY)
+        if ((code = parse(&req->parser, req->base, fil->result, &req->movies)) != CODE_OKAY)
         {
             fprintf(stderr, "error %d: %s\n", code, code_msg(code));
             uv_fs_req_cleanup(fil);
@@ -400,6 +394,10 @@ void close_movie(uv_fs_t *fil)
     uv_fs_req_cleanup(fil);
     if (req->good_read)
     {
+        int code;
+        if ((code = parse(&req->parser, NULL, 0, &req->movies)) != CODE_OKAY)
+            fprintf(stderr, "error %d: %s\n", code, code_msg(code));
+
         memset(&req->work, '\0', sizeof (req->work));
         int re;
         if ((re = uv_queue_work(loop, &req->work, process_movie, add_to_latest_movie)) != 0)
@@ -410,10 +408,10 @@ void close_movie(uv_fs_t *fil)
     }
     else
         goto free_everything;
-    free(req->lb.line);
+    parser_del(&req->parser);
     return;
 free_everything:
-    free(req->lb.line);
+    parser_del(&req->parser);
     movies_free(&req->movies);
     free(req);
 }
@@ -433,28 +431,21 @@ static void maybe_open_movie(void)
 
         if (NULL == candidate)
             fprintf(stderr, "OOM before reading movies\n");
-        else if (NULL == (candidate->lb.line = malloc(1))) // shitty shitty
-        {
-            fprintf(stderr, "OOM for line builder (movies)\n");
-            free(candidate);
-        }
         else
         {
+            candidate->parser = parser_init();
             memset(&candidate->file  , '\0', sizeof (candidate->file));
             memset(&candidate->movies, '\0', sizeof (candidate->movies));
             candidate->movies.last = &candidate->movies.elements;
             candidate->buf->base = candidate->base;
             candidate->buf->len  = 20; // shitty hardcode
-            candidate->lb.capacity = 1;
-            candidate->lb.len = 0;
-            candidate->lb.found_newline = false;
             candidate->desc = descriptor;
             // wtf is this ugly shit construction wtf wtf wtf wtf
             atomic_init(&candidate->stop, false);
             int re;
             if ((re = uv_fs_read(loop, (uv_fs_t *)candidate, descriptor, candidate->buf, 1, -1, read_cb_movie)) < 0)
             {
-                free(candidate->lb.line);
+                parser_del(&candidate->parser);
                 free(candidate);
                 fprintf(stderr, "failed first movie read: %s\n", uv_strerror(re));
             }
@@ -464,29 +455,10 @@ static void maybe_open_movie(void)
                 struct movie_req *curr = atomic_exchange(&current, candidate);
                 if (curr != NULL)
                     curr->stop = true;
-#if 0
-                current = candidate;
-#endif
             }
         }
     }
 }
-
-#if 0
-void open_cb(uv_fs_t *fil)
-{
-    if (fil->result < 0)
-    {
-        fprintf(stderr, "fs open error 2 %s\n", uv_strerror(fil->result));
-        exit(EXIT_FAILURE);
-    }
-
-    fucking_desc = fil->result;
-
-    if (uv_fs_read(loop, fil, fucking_desc, &portion, 1, -1, read_cb) != 0)
-        assert(!"impossible return");
-}
-#endif
 
 int main(int argc, char *argv[])
 {

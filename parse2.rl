@@ -6,6 +6,7 @@
 
 #include "code.h"
 #include "movie.h"
+#include "parse.h"
 
 #ifdef WIN32
 #define STRNDUP_IMPL
@@ -25,54 +26,6 @@ static char *strndup(const char *s, size_t len)
 #endif
 
 %% machine movies;
-
-struct parser
-{
-    int cs;
-    int nl;
-
-    char *buf;
-    int len;
-    int cap;
-
-    char *title;
-
-    struct element e;
-};
-
-struct parser parser_init(void);
-void parser_del(struct parser *parser);
-enum code parse(struct parser *parser, unsigned char *buffer, int len, struct movies *movies);
-
-#ifndef NOMAIN
-int main(int argc, char *argv[])
-{
-    char *category = setlocale(LC_ALL, ".UTF8");
-    assert(category != NULL);
-
-    FILE *f = argc >= 2 ? fopen(argv[1], "rb") : stdin;
-
-    struct parser parser = parser_init();
-
-    int c;
-
-    enum code code = CODE_OKAY;
-
-    struct movies movies = {.last = &movies.elements};
-
-    while (CODE_OKAY == code && (c = fgetc(f)) != EOF)
-        if ((code = parse(&parser, &(unsigned char){c}, 1, &movies)) != CODE_OKAY)
-            puts(code_msg(code));
-    if ((code = parse(&parser, NULL, 0, &movies)) != CODE_OKAY)
-        puts(code_msg(code));
-
-    printf("line count = %d\n", parser.nl);
-
-    parser_del(&parser);
-
-    return 0;
-}
-#endif
 
 %% write data noerror nofinal noentry;
 
@@ -150,33 +103,20 @@ enum code parse(struct parser *parser, unsigned char *p, int len, struct movies 
                 fbreak;
         }
 
-        action type_text      { parser->e.type = TEXT;    }
+        action type_text {
+            parser->e.type = TEXT;
+            if (!(parser->e.text = strndup(parser->buf, parser->len)))
+            {
+                code = CODE_ENOMEM;
+                fhold; fbreak;
+            }
+        }
         action type_heading   { parser->e.type = HEADING; }
         action type_paragraph { parser->e.type = PP;      }
         action type_movie     { parser->e.type = MOV;     }
         action type_invalid   { parser->e.type = INVALID; puts("achei inválido"); }
 
         action add {
-#if 0
-            switch (parser->e.type)
-            {
-                case TEXT:
-                    printf("%d achei texto\n", parser->nl);
-                break;
-                case HEADING:
-                    printf("%d achei heading\n", parser->nl);
-                break;
-                case PP:
-                    printf("%d achei parágrafo\n", parser->nl);
-                break;
-                case MOV:
-                    printf("%d achei filme\n", parser->nl);
-                break;
-                default:
-                    assert(!"Não sei");
-                break;
-            }
-#endif
             assert(0 == parser->len && '\0' == parser->buf[0]);
 
             struct element *novo = malloc(sizeof (*novo));
@@ -190,13 +130,11 @@ enum code parse(struct parser *parser, unsigned char *p, int len, struct movies 
                 fhold; fbreak;
             }
 
-            // TODO
+            *novo = parser->e;
+            memset(&parser->e, 0, sizeof (parser->e));
+
             *(movies->last) = novo;
             *(movies->last = &novo->next) = NULL;
-#if 0
-            *(**last = novo) = it;
-            *(*last = &novo->next) = NULL;
-#endif
         }
 
         action add_title {
@@ -293,14 +231,25 @@ enum code parse(struct parser *parser, unsigned char *p, int len, struct movies 
                 fhold; fbreak;
             }
         }
+        action movie_ensure_undefined {
+            if (parser->e.movie->defined)
+            {
+                code = CODE_ERROR_MOVIE_ALREADY_DEFINED;
+                fhold; fbreak;
+            }
+        }
+        action movie_define { parser->e.movie->defined = true; }
         # this looks similar
         movie = (
             "MOV" %type_movie @!type_invalid
             (RWS symbol) $!error_no_symbol %movie_retrieve %zero OWS
             (
-                (RWS "tt" [0-9]{7,} $movie_aut ) @!error_no_authority
+                (
+                    RWS "tt" >movie_ensure_undefined
+                    [0-9]{7,} $movie_aut
+                ) @!error_no_authority
                 (RWS [0-9]{4}       $movie_year) @!error_no_year
-                (RWS rest)          %movie_name %zero $!error_no_name
+                (RWS rest)          %movie_name %zero $!error_no_name %movie_define
             )?
         ) %add;
         # XXX review position of errors
@@ -317,8 +266,3 @@ enum code parse(struct parser *parser, unsigned char *p, int len, struct movies 
 
     return code;
 }
-
-#ifndef NOMAIN
-#include "code.c"
-#include "movie.c"
-#endif

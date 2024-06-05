@@ -16,14 +16,22 @@ int pfprintf(void *data, char const *fmt, ...);
 
 enum code vomit(struct printer p, struct movies *movies);
 
-struct line_builder
+struct parser
 {
-    char *line;
+    int cs;
+    int nl;
+
+    char *buf;
     int len;
-    int capacity;
-    bool found_newline;
+    int cap;
+
+    char *title;
+
+    struct element e;
 };
 
-enum code line_builder_add(struct movies *movies, struct line_builder *lb, char *buffer, int len);
+struct parser parser_init(void);
+void parser_del(struct parser *parser);
+enum code parse(struct parser *parser, unsigned char *buffer, int len, struct movies *movies);
 
 #endif

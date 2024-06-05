@@ -7,13 +7,18 @@
 #define NOMAIN
 #include "parse2.c"
 
-int main(void)
+int main(int argc, char *argv[])
 {
+    char *category = setlocale(LC_ALL, ".UTF8");
+    assert(category != NULL);
+
+    FILE *f = argc >= 2 ? fopen(argv[1], "rb") : stdin;
+
     struct parser parser = parser_init();
     struct movies movies = {.last = &movies.elements};
     int c;
     enum code code;
-    while ((c = getchar()) != EOF)
+    while ((c = fgetc(f)) != EOF)
         if ((code = parse(&parser, &(unsigned char){c}, 1, &movies)) != CODE_OKAY)
 	{
             fprintf(stderr, "stdin: %s\n", code_msg(code));

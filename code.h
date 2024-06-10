@@ -21,7 +21,11 @@ X(CODE_ERROR_NO_QUOTED      , "error incomplete quot") \
 X(CODE_EMPTY_STRING         , "string is empty"      ) \
 X(CODE_OLD                  , "tried to add old file") \
 X(CODE_ERROR_TRAILING       , "error trailing"       ) \
-X(CODE_ERROR_INVALID_CMD    , "error unknown cmd"    )
+X(CODE_ERROR_INVALID_CMD    , "error unknown cmd"    ) \
+\
+X(CODE_NO_HTTP2       , "bro I don't even have TLS"   ) \
+X(CODE_BAD_REQUEST    , "bro..."                      ) \
+X(CODE_NOT_IMPLEMENTED, "I don't know how to proceed.")
 
 #include "expand.h"
 

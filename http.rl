@@ -35,7 +35,7 @@
 
     action error_not_implemented { } # answer 501 
 
-    scheme = "http";
+    scheme = "http"i;
 
     hier_part = 
     absolute_URI = scheme ":" hier_part ("?" query)?;
@@ -43,14 +43,25 @@
     action host_loopback  { parser->host = HTTP_HOST_LOOPBACK;  }
     action host_localhost { parser->host = HTTP_HOST_LOCALHOST; }
     action host_public    { parser->host = HTTP_HOST_PUBLIC;    }
-    host = "127.0.0.1"       %host_loopback
-         | "localhost"       %host_localhost
-         | "191.252.220.165" %host_public;
-    port = (":80")?
+    host = "127.0.0.1"        %host_loopback
+         | "localhost"i       %host_localhost
+         | "191.252.220.165"  %host_public;
+    port = (":" "80"?)?
 
     authority = scheme host port;
 
-    pages = "movies" (".html" | "/")?;
+    _m   = 'm' | "%6D"i;
+    _o   = 'o' | "%6F"i;
+    _v   = 'v' | "%76";
+    _i   = 'i' | "%69";
+    _e   = 'e' | "%65";
+    _s   = 's' | "%73";
+    _dot = '.' | "%2E"i;
+    _h   = 'h' | "%68";
+    _t   = 't' | "%74";
+    _l   = 'l' | "%6C"i;
+
+    pages = _m _o _v _i _e _s (_dot _h _t _m _l | '/')?;
     method         = ("GET" | "HEAD") !$error_not_implemented; # TODO PRI * from http2
     request_target = origin_form
                    | absolute_form;

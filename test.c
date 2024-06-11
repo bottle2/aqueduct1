@@ -5,7 +5,7 @@
 // TODO how do we test OOM?
 // test adjacent errors
 
-#define PARSE_TEST_XS(X) \
+#define TEST_MOVIE_PARSE_XS(X) \
 X(CODE_ERROR_NO_TITLE   , ""                       ) \
 X(CODE_ERROR_NO_QUOTED  , ".TITLE"                 ) \
 X(CODE_ERROR_NO_QUOTED  , ".TITLE     "            ) \
@@ -30,5 +30,21 @@ X(CODE_ERROR_INVALID_CMD, ".PP\""               ) \
 X(CODE_ERROR_TRAILING   , ".PP    a"            ) \
 \
 
-#if 0
-#endif
+#define TEST_HOST "Host: XXX\r\n\r\n"
+// Maybe we could use some evil Boost::Preprocessor to generate test cases LOL
+
+#define TEST_HTTP_PARSE_XS(X) \
+X(CODE_NO_UPGRADE      , "PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n") \
+X(CODE_OKAY            , "GET /movies HTTP/1.1\r\n"       TEST_HOST) \
+X(CODE_OKAY            , "GET /movies.html HTTP/1.1\r\n"  TEST_HOST) \
+X(CODE_OKAY            , "GET /movies/ HTTP/1.1\r\n"      TEST_HOST) \
+X(CODE_OKAY            , "HEAD /movies HTTP/1.1\r\n"      TEST_HOST) \
+X(CODE_OKAY            , "HEAD /movies.html HTTP/1.1\r\n" TEST_HOST) \
+X(CODE_OKAY            , "HEAD /movies/ HTTP/1.1\r\n"     TEST_HOST) \
+X(CODE_NOT_FOUND       , "GET / HTTP/1.1\r\n" TEST_HOST) \
+X(CODE_NOT_IMPLEMENTED , "OPTIONS * HTTP/1.1\r\n" TEST_HOST) \
+X(CODE_NOT_IMPLEMENTED , "OPTIONS /movies.html HTTP/1.1\r\n" TEST_HOST) \
+X(CODE_NOT_IMPLEMENTED , "POST /fakeform/ HTTP/1.1\r\n" TEST_HOST) \
+X(CODE_NOT_IMPLEMENTED , "PUT  /fakeform/ HTTP/1.1\r\n" TEST_HOST) \
+X(CODE_NOT_IMPLEMENTED , "DELETE  /movies.html HTTP/1.1\r\n" TEST_HOST) \
+X(CODE_NOT_IMPLEMENTED , "TRACE  /movies.html HTTP/1.1\r\n" TEST_HOST) \

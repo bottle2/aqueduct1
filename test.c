@@ -22,9 +22,9 @@ X(CODE_OKAY             , ".TITLE \"Çöœï🙂‍↔ã™®©\"") \
 X(CODE_OKAY             , ".TITLE \"\\\\\\\"\""    ) \
 X(CODE_ERROR_TRAILING   , ".TITLE \"Movies\"     a") \
 \
-X(CODE_OKAY             , ".PP"                 ) \
-X(CODE_OKAY             , ".PP   \t\f\v\r\n\r\n") \
-X(CODE_OKAY             , ".PP\n"               ) \
+X(CODE_ERROR_NO_TITLE   , ".PP"                 ) \
+X(CODE_ERROR_NO_TITLE   , ".PP   \t\f\v\r\n\r\n") \
+X(CODE_ERROR_NO_TITLE   , ".PP\n"               ) \
 X(CODE_ERROR_INVALID_CMD, ".PP\a"               ) \
 X(CODE_ERROR_INVALID_CMD, ".PP\""               ) \
 X(CODE_ERROR_TRAILING   , ".PP    a"            ) \
@@ -48,3 +48,24 @@ X(CODE_NOT_IMPLEMENTED , "POST /fakeform/ HTTP/1.1\r\n" TEST_HOST) \
 X(CODE_NOT_IMPLEMENTED , "PUT  /fakeform/ HTTP/1.1\r\n" TEST_HOST) \
 X(CODE_NOT_IMPLEMENTED , "DELETE  /movies.html HTTP/1.1\r\n" TEST_HOST) \
 X(CODE_NOT_IMPLEMENTED , "TRACE  /movies.html HTTP/1.1\r\n" TEST_HOST) \
+
+#if 0
+".HEADING"
+".HEADING   "
+".HEADING   -7"
+".HEADING 0"
+".HEADING 1"
+".HEADING 6"
+".HEADING 7"
+".HEADING 7"
+".HEADING 19"
+".HEADING 69"
+".HEADING 0x4"
+".HEADING 1    "
+".HEADING 1 \""
+".HEADING 1 \"\""
+".HEADING 1 \"Movies\""
+".HEADING 1 \"Movies\""
+".HEADING 1 \"Movies\" \""
+".HEADING \"Movies\""
+#endif

@@ -100,6 +100,10 @@ static void on_read(uv_stream_t *client, ssize_t nread, uv_buf_t const *buf)
         }
     }
 
+    // TODO the godamn graceful uv_shutdown
+
+    // check if must free buffer.
+
     free(buf->base);
 }
 

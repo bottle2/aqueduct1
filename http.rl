@@ -51,6 +51,7 @@
     authority = scheme host port;
 
     _m   = 'm' | "%6D"i;
+    _n   = 'n' | "%6E"i;
     _o   = 'o' | "%6F"i;
     _v   = 'v' | "%76";
     _i   = 'i' | "%69";
@@ -60,12 +61,22 @@
     _h   = 'h' | "%68";
     _t   = 't' | "%74";
     _l   = 'l' | "%6C"i;
+    _d   = 'd' | "%64";
+    _x   = 'x' | "%78";
 
-    pages = _m _o _v _i _e _s (_dot _h _t _m _l | '/')?;
+    _html = _dot _h _t _m _l;
+    _index = _i _n _d _e _x _html;
+
+    # index.html is common, but no RFC details it at all.
+    # we don't normalize /../, because it implies non-existent resources.
+    # we wouldn't need a stack or counter machine, because resources are clearly hierarchical.
+    # let's 404 on query
+    pages = _m _o _v _i _e _s (_html | ('/' _index?))?;
     method         = ("GET" | "HEAD") !$error_not_implemented; # TODO PRI * from http2
     request_target = origin_form
                    | absolute_form;
                    # | authority_form | asterisk_form; // We ain't proxy and we don't know OPTIONS
+                   # Fragment is never on the wire, it is client-side
     HTTP_version   = "HTTP/1.1";
 
     action error_invalid_request_line { } # SHOULD reject with 400 or redirect with 301

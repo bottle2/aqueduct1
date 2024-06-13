@@ -2,8 +2,7 @@
 
 %%{
 # some thoughts... I think we don't have to be lenient...
-# e.g. if we don't expect a query in URL, just answer 40X
-#      if we don't expect a body (Content-Length or Transfer-Encoding, just answer 40X
+# e.g. if we don't expect a body (Content-Length or Transfer-Encoding, just answer 40X
 # in a way, we are being useful to client? since we error against user assumptions...
 # why would you do things that have no effect? prohibit ban ban
 # https://en.wikipedia.org/wiki/Robustness_principle hmmmmmmmmmmm
@@ -24,31 +23,22 @@
                    # Let's just error ffs
     SP = ' ';
 
-    absolute_path = '/' | # TODO
-
-    origin_form    = absolute_path ('?' query)?;
-    absolute_form  = absolute_URI; # hurrrrrrrrrr MUST ignore Host: 
-
-# I don't really understand the whole URI ordeal! :(
-
-    # what do with fragment???
-
     action error_not_implemented { } # answer 501 
 
     scheme = "http"i;
 
-    hier_part = 
-    absolute_URI = scheme ":" hier_part ("?" query)?;
-
     action host_loopback  { parser->host = HTTP_HOST_LOOPBACK;  }
     action host_localhost { parser->host = HTTP_HOST_LOCALHOST; }
     action host_public    { parser->host = HTTP_HOST_PUBLIC;    }
+    action host_is_absolute { parser->is_absolute = true; }
+
     host = "127.0.0.1"        %host_loopback
          | "localhost"i       %host_localhost
          | "191.252.220.165"  %host_public;
+
     port = (":" "80"?)?
 
-    authority = scheme host port;
+    authority = scheme ':' host port;
 
     _m   = 'm' | "%6D"i;
     _n   = 'n' | "%6E"i;
@@ -67,24 +57,23 @@
     _html = _dot _h _t _m _l;
     _index = _i _n _d _e _x _html;
 
-    # index.html is common, but no RFC details it at all.
-    # we don't normalize /../, because it implies non-existent resources.
-    # we wouldn't need a stack or counter machine, because resources are clearly hierarchical.
-    # let's 404 on query
-    pages = _m _o _v _i _e _s (_html | ('/' _index?))?;
-    method         = ("GET" | "HEAD") !$error_not_implemented; # TODO PRI * from http2
-    request_target = origin_form
-                   | absolute_form;
-                   # | authority_form | asterisk_form; // We ain't proxy and we don't know OPTIONS
-                   # Fragment is never on the wire, it is client-side
-    HTTP_version   = "HTTP/1.1";
+    # index.html is common, but no RFC specifies it.
+    # we will normalize /../ when a hierarchy exists, using fgoto probably
+    pages = _m _o _v _i _e _s (_html | ('/' "./"* _index?))?;
+    path = '/' "./"* pages;
+
+    # Comprises both origin-form and absolute-form, we don't use authority and asterisk form.
+    request_target = (authority %host_is_absolute)? path;
+
+    HTTP_version = "HTTP/1.1";
 
     action error_invalid_request_line { } # SHOULD reject with 400 or redirect with 301
 
-    # could accept other whitespace but WHY would client do it?? at all. so NO.
-    request_line = (method SP request_target SP HTTP_version) !$error_invalid_request_line;
+    method = ("GET" | "HEAD") !$error_not_implemented;
 
-# prohibit userinfo subcomponent and its '@' delimiter.
+    # could accept other whitespace but WHY would client do it?? at all. so NO.
+    request_line = method SP request_target SP HTTP_version;
+
 # answer with 400 when no Host: header field or two or more or "invalid" value.
 
     action error_no_body_wanted { } # We don't expect body, so we answer 400.
@@ -103,7 +92,7 @@
     # no content-length neither chunked transfer, then complete upon closure, unless TLS incomplete close!!
 
     # Let's default to no keep-alive, that is CLOSE, because we'd need to parse Connect: until
-    # We will suffer with DoS...
+    # We will suffer with DoS...?
 
     # first shutdown, then wait for graceful close
 
@@ -114,7 +103,7 @@
 
     # https://datatracker.ietf.org/doc/html/rfc9112#section-2.1-2
     HTTP_message = (CRLF* # https://datatracker.ietf.org/doc/html/rfc9112#section-2.2-6
-                   request_line CRLF
+                   request_line !$error_invalid_request_line CRLF
                    (field_line CRLF)*
                    CRLF
                    ) $!error_bad_request | HTTP2_preface; # We never expect a message-body.

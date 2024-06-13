@@ -1,6 +1,8 @@
 #ifndef HTTP_H
 #define HTTP_H
 
+#include <stdbool.h>
+
 #include <libuv.h>
 
 // Maybe use code enum?
@@ -15,6 +17,7 @@ struct http
     uv_tcp_t tcp;
 
     int cs;
+    bool is_absolute;
 
     enum http_method { HTTP_METHOD_NONE, HTTP_METHOD_GET, HTTP_METHOD_HEAD, } method;
     enum http_host { HTTP_HOST_NONE, HTTP_HOST_LOOPBACK, HTTP_HOST_LOCALHOST, HTTP_HOST_PUBLIC, } host;

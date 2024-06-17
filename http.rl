@@ -14,29 +14,32 @@
 # TODO torture tests, fuzzers, benchmarking etc.
 # let's keep an eye at whatever is Barracuda
     machine http;
+    alphtype unsigned char;
 
     action shutdown { uv_shutdown(http->handle, &http->tcp, NULL); }
 
-    OWS = (space -- '\n')*;
     CRLF = "\r\n"; # MAY be a bare a \n, but MUST NOT a bare \r
                    # if bare \r received, consider invalid or replace with SP
                    # Let's just error ffs
     SP = ' ';
+    HTAB = '\t';
+    OWS = (SP | HTAB)*;
+    RWS = (SP | HTAB)+;
 
     action error_not_implemented { } # answer 501 
 
     scheme = "http"i;
 
-    action host_loopback  { parser->host = HTTP_HOST_LOOPBACK;  }
-    action host_localhost { parser->host = HTTP_HOST_LOCALHOST; }
-    action host_public    { parser->host = HTTP_HOST_PUBLIC;    }
+    action host_loopback  { if (HTTP_HOST_NONE == parser->host) parser->host = HTTP_HOST_LOOPBACK;  }
+    action host_localhost { if (HTTP_HOST_NONE == parser->host) parser->host = HTTP_HOST_LOCALHOST; }
+    action host_public    { if (HTTP_HOST_NONE == parser->host) parser->host = HTTP_HOST_PUBLIC;    }
     action host_is_absolute { parser->is_absolute = true; }
 
     host = "127.0.0.1"        %host_loopback
          | "localhost"i       %host_localhost
          | "191.252.220.165"  %host_public;
 
-    port = (":" "80"?)?
+    port = (":" "80"?)?;
 
     authority = scheme ':' host port;
 
@@ -67,9 +70,10 @@
 
     HTTP_version = "HTTP/1.1";
 
-    action error_invalid_request_line { } # SHOULD reject with 400 or redirect with 301
+    action method_get  { parser->method = HTTP_METHOD_GET;  }
+    action method_head { parser->method = HTTP_METHOD_HEAD; }
 
-    method = ("GET" | "HEAD") !$error_not_implemented;
+    method = ("GET" %method_get | "HEAD" %method_head) $!error_not_implemented;
 
     # could accept other whitespace but WHY would client do it?? at all. so NO.
     request_line = method SP request_target SP HTTP_version;
@@ -78,11 +82,38 @@
 
     action error_no_body_wanted { } # We don't expect body, so we answer 400.
 
-    field_line = ("content-length"i | "transfer-encoding"i) ":" %error_no_body_wanted
-               | field_name ":" OWS field_value OWS;
+    tchar = [!#$%&'*+-.^_`|~] | digit | alpha;
+    token = tchar+;
+    # See https://www.rfc-editor.org/rfc/rfc9110#section-5.6.2-2
+
+    VCHAR = graph;
+
+    field_name = token; # See https://www.rfc-editor.org/rfc/rfc9110#section-5.1-2
+    obs_text = 0x80..0xFF;
+    field_vchar = VCHAR | obs_text;
+    field_content = field_vchar ((SP | HTAB | field_vchar)+)?;
+    field_value = field_content*; # See https://www.rfc-editor.org/rfc/rfc9110#section-5.5-2
+
+    action host_check {
+        if (!parser->is_absolute && parser->host != HTTP_HOST_NONE)
+        {
+            fhold; fbreak;
+            answer(BAD_REQUEST 400);
+            uv_close(lala);
+        }
+    } 
+
+    host_field = 'host:'i OWS host;
+    any_field = field_name ":" OWS field_value;
+
+    field_line = (host_field # TODO check absolute URI on request_line, duplicate host etc. 
+               | any_field) OWS; #("content-length"i | "transfer-encoding"i)
     # MUST reject with 400 when space between field_name and colon :
     # greedy parse, exclude trailing and ending white
     # prohibit obs-fold
+    # We should parse content-length and transfer-encoding... but is very
+    # complex and we close immediately upon receiving request-line. we will
+    # properly parse when we implement keep-alive.
 
     # wow closing is very fatal... misbehaving client...
 
@@ -96,18 +127,18 @@
 
     # first shutdown, then wait for graceful close
 
-    action error_bad_request { } # SHOULD answer 400 and close connection.
-
+    action error_bad_request { } # SHOULD answer 400 and close connection. or 301 if line-request error, but idc
     action error_no_upgrade { } # also https://datatracker.ietf.org/doc/html/rfc9113#appendix-B-2.3
+
     HTTP2_preface = "PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n" %error_no_upgrade; # https://datatracker.ietf.org/doc/html/rfc9113#section-3.4-4
 
     # https://datatracker.ietf.org/doc/html/rfc9112#section-2.1-2
-    HTTP_message = (CRLF* # https://datatracker.ietf.org/doc/html/rfc9112#section-2.2-6
-                   request_line !$error_invalid_request_line CRLF
+    HTTP_message = CRLF* # https://datatracker.ietf.org/doc/html/rfc9112#section-2.2-6
+                   request_line CRLF
                    (field_line CRLF)*
-                   CRLF
-                   ) $!error_bad_request | HTTP2_preface; # We never expect a message-body.
+                   CRLF; # We never expect a message-body.
 
+    main := (HTTP2_preface | HTTP_message) $!error_bad_request any*;
     #action close    { uv_close(&http->handle2
 
     # NOTES FOR FUTURE (not relevant for now):
@@ -142,7 +173,6 @@ struct http http_init(void)
 
 void http_parse(struct http *http, unsigned char *buffer, int len)
 {
-    %% alphtype unsigned char;
     %% access http->;
     %% write exec;
 }

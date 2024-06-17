@@ -173,6 +173,9 @@ struct http http_init(void)
 
 void http_parse(struct http *http, unsigned char *buffer, int len)
 {
+    unsigned char *p = buffer;
+    unsigned char *pe = ???
+
     %% access http->;
     %% write exec;
 }

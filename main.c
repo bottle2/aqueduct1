@@ -8,6 +8,7 @@
 #include <llhttp.h>
 
 #include "doc.h"
+#include "http.h"
 #include "parse.h"
 
 #ifdef __STDC_NO_ATOMICS__
@@ -23,8 +24,11 @@ _Static_assert(2 == ATOMIC_POINTER_LOCK_FREE, "bro we are fucked pointers");
 #define DEFAULT_BACKLOG 128
 
 uv_loop_t *loop = NULL;
+#if 0
 llhttp_settings_t settings;
+#endif
 
+#if 0
 struct client
 {
     uint8_t superclass[sizeof (uv_tcp_t)];
@@ -35,6 +39,7 @@ struct client
     } write_doc_req;
     bool did_headers;
 };
+#endif
 
 #define RESPONSE \
   "HTTP/1.1 503 Service Unavailable\r\n" \
@@ -63,6 +68,8 @@ static void on_close(uv_handle_t *handle) { free(handle); }
 
 static void on_read(uv_stream_t *client, ssize_t nread, uv_buf_t const *buf)
 {
+    if (nread > 0)
+        http_parse((struct http *)client, buf->base, nread);
     if (nread < 0)
     {
         if (nread != UV_EOF)
@@ -70,37 +77,6 @@ static void on_read(uv_stream_t *client, ssize_t nread, uv_buf_t const *buf)
 
         uv_close((uv_handle_t *)client, on_close);
     }
-    else if (nread > 0)
-    {
-        llhttp_t *parser = &((struct client *)client)->parser;
-        llhttp_errno_t err = llhttp_execute(parser, buf->base, nread);
-
-        // Really hard to wrap my head around this shit library.
-        // also picohttpparser is just as bad
-        // "performance" "efficiency" KYS KYS KYS KYS KYS KYS KYS
-        // yeah let's obsess with AAAAAAAAAAAAAAAAA instead of writing USABLE DOCUMENTED libraries.
-        // Might as well rewrite using Ragel, I bet HTTP is entirely regular and these guys obsessing with aaaaaaaaaaaaaaaaaaaaaaaaa.
-        // Look at the horrible kludges I have to write because REEEEEEEEEEEEEEEEEEEEEE
-        switch (err)
-        {
-            case HPE_PAUSED: assert(!"I never pause");     break;
-            case HPE_USER:   assert(!"I never HPE_USER?"); break;
-
-            case HPE_PAUSED_UPGRADE: // Fall through.
-            case HPE_OK:
-                assert(((struct client *)client)->did_headers);
-            break;
-
-            case HPE_PAUSED_H2_UPGRADE: // Fall through.
-            default:
-                assert(!((struct client *)client)->did_headers);
-                fprintf(stderr, "Parse error %s: %s\n", llhttp_errno_name(err), parser->reason);
-                uv_close((uv_handle_t *)client, on_close);
-            break;
-        }
-    }
-
-    // TODO the godamn graceful uv_shutdown
 
     // check if must free buffer.
 

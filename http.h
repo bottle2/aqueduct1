@@ -5,25 +5,42 @@
 
 #include <libuv.h>
 
-// Maybe use code enum?
-#define HTTP_ANSWER_XS(X) \
-X(NO_HTTP2       ) \
-X(BAD_REQUEST    ) \
-X(NOT_IMPLEMENTED) \
-X(OKAY           )
-
 struct http
 {
     uv_tcp_t tcp;
 
-    int cs;
-    bool is_absolute;
+    union // Either parsing or tearing down.
+    {
+        struct
+        {
+            int cs;
+            bool is_absolute;
 
-    enum http_method { HTTP_METHOD_NONE, HTTP_METHOD_GET, HTTP_METHOD_HEAD, } method;
-    enum http_host { HTTP_HOST_NONE, HTTP_HOST_LOOPBACK, HTTP_HOST_LOCALHOST, HTTP_HOST_PUBLIC, } host;
+            enum http_method
+            {
+                HTTP_METHOD_NONE,
+                HTTP_METHOD_GET,
+                HTTP_METHOD_HEAD,
+            } method;
+            enum http_host
+            {
+                HTTP_HOST_NONE,
+                HTTP_HOST_LOOPBACK,
+                HTTP_HOST_LOCALHOST,
+                HTTP_HOST_PUBLIC,
+            } host;
+        }; // HTTP parsing.
 
-    uv_shutdown_t handle1;
-    uv_handle_t handle2; // little thoughts given.
+        struct
+        {
+            struct write_doc_req
+            {
+                uv_write_t write;
+                struct doc *doc_used;
+            } write_doc_req;
+            uv_shutdown_t handle_st;
+        }; // Callback hell.
+    };
 };
 
 struct http http_init(void);

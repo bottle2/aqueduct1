@@ -5,7 +5,9 @@
 #include <string.h>
 #include <uv.h>
 
+#if 0
 #include <llhttp.h>
+#endif
 
 #include "doc.h"
 #include "http.h"
@@ -39,7 +41,6 @@ struct client
     } write_doc_req;
     bool did_headers;
 };
-#endif
 
 #define RESPONSE \
   "HTTP/1.1 503 Service Unavailable\r\n" \
@@ -49,14 +50,9 @@ struct client
   "document unavailable\n"
 
 static uv_buf_t standard = {.base = RESPONSE, .len = sizeof(RESPONSE)};
+#endif
 
 struct doc *latest = NULL;
-
-struct write_req
-{
-    uv_write_t req;
-    uv_buf_t buf;
-};
 
 static void alloc_buffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf)
 {
@@ -64,25 +60,26 @@ static void alloc_buffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *b
     buf->base = malloc(buf->len = suggested_size);
 }
 
-static void on_close(uv_handle_t *handle) { free(handle); }
+void on_close(uv_handle_t *handle) { free(handle); }
 
+// This approach is currently shit.
+// Alternatives:
+// - Some timer that closes connection.
+// - Some priority queue that closes oldest least active connections.
+// Future directions:
+// - Implement shutdown to have graceful HTTP close.
 static void on_read(uv_stream_t *client, ssize_t nread, uv_buf_t const *buf)
 {
     if (nread > 0)
         http_parse((struct http *)client, buf->base, nread);
-    if (nread < 0)
-    {
-        if (nread != UV_EOF)
-            fprintf(stderr, "Read error %s\n", uv_err_name(nread));
-
+    else if (nread < 0)
         uv_close((uv_handle_t *)client, on_close);
-    }
 
-    // check if must free buffer.
-
-    free(buf->base);
+    if (buf->len > 0 || buf->base)
+        free(buf->base);
 }
 
+#if 0
 static void on_write_doc(uv_write_t *req, int status)
 {
     struct write_doc_req *doc_req = (struct write_doc_req *)req;
@@ -132,6 +129,7 @@ static int on_headers_complete(llhttp_t *parser)
 
     return 0;
 }
+#endif
 
 static void on_new_connection(uv_stream_t *server, int status)
 {
@@ -141,21 +139,31 @@ static void on_new_connection(uv_stream_t *server, int status)
         return;
     }
 
+#if 0
     struct client *client = malloc(sizeof (*client));
 
     if (!client)
+#else
+    struct http *client = malloc(sizeof (*client));
+#endif
     {
         fprintf(stderr, "OOM for client\n");
         return;
     }
+#if 0
     client->did_headers = false;
+#endif
 
     uv_tcp_init(loop, (uv_tcp_t *)client);
 
     if (0 == uv_accept(server, (uv_stream_t *)client))
     {
+#if 0
         llhttp_init(&client->parser, HTTP_REQUEST, &settings);
         client->parser.data = client;
+#else
+        http_init(client);
+#endif
         uv_read_start((uv_stream_t *)client, alloc_buffer, on_read);
     }
     else
@@ -447,8 +455,10 @@ int main(int argc, char *argv[])
     uv_tcp_t server;
     uv_tcp_init(loop, &server);
 
+#if 0
     llhttp_settings_init(&settings);
     settings.on_message_complete = on_headers_complete;
+#endif
 
     struct sockaddr_in addr;
 

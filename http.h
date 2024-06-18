@@ -9,38 +9,30 @@ struct http
 {
     uv_tcp_t tcp;
 
-    union // Either parsing or tearing down.
+    struct
     {
-        struct
-        {
-            int cs;
-            bool is_absolute;
+        int cs;
 
-            enum http_method
-            {
-                HTTP_METHOD_NONE,
-                HTTP_METHOD_GET,
-                HTTP_METHOD_HEAD,
-            } method;
-            enum http_host
-            {
-                HTTP_HOST_NONE,
-                HTTP_HOST_LOOPBACK,
-                HTTP_HOST_LOCALHOST,
-                HTTP_HOST_PUBLIC,
-            } host;
-        }; // HTTP parsing.
-
-        struct
+        enum http_method
         {
-            struct write_doc_req
-            {
-                uv_write_t write;
-                struct doc *doc_used;
-            } write_doc_req;
-            uv_shutdown_t handle_st;
-        }; // Callback hell.
-    };
+            HTTP_METHOD_NONE,
+            HTTP_METHOD_GET,
+            HTTP_METHOD_HEAD,
+        } method;
+
+        enum http_host
+        {
+            HTTP_HOST_NONE,
+            HTTP_HOST_ABSOLUTE = 1,
+            HTTP_HOST_FIELD = 2,
+        } host;
+    }; // HTTP parsing.
+
+    struct write_doc_req
+    {
+        uv_write_t write;
+        struct doc *doc_used;
+    } write_doc_req;
 };
 
 struct http http_init(void);

@@ -22,6 +22,7 @@ struct doc
 
 #define HEADERS \
   "HTTP/1.1 200 OK\r\n" \
+  "Connection: close\r\n" \
   "Content-Type: text/html\r\n" \
   "Content-Length: "
 

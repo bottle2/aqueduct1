@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#include <libuv.h>
+#include <uv.h>
 
 struct http
 {
@@ -35,7 +35,8 @@ struct http
     } write_doc_req;
 };
 
-struct http http_init(void);
+void http_init(struct http *http);
 void http_parse(struct http *http, unsigned char *buffer, int len);
+// XXX honestly why are going on with this unsigner char * ordeal at all? why??
 
 #endif

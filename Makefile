@@ -1,7 +1,7 @@
 # XXX This is a mess OMG
 PAGES=bookmarks.html vehicle-building-games.html
 
-TARGET=site batch batch2
+TARGET=site batch #batch2
 
 all:$(TARGET) $(PAGES)
 
@@ -23,7 +23,7 @@ LLHTTP_SOURCE=llhttp/api.c llhttp/http.c llhttp/llhttp.c llhttp/llhttp.h
 LLHTTP_URL=https://raw.githubusercontent.com/nodejs/node/main/deps/llhttp
 LLHTTP_RECIPE=$(CC) -g3 -Wall -Wextra -Wno-unused-parameter -o $@ -c $*.c
 
-SOURCE=main.c parse.c code.c movie.c doc.c parse2.c
+SOURCE=main.c parse.c code.c movie.c doc.c parse2.c http.c
 
 site:$(SOURCE) $(LLHTTP)
 	$(CC) $(CFLAGS) -o $@ $(SOURCE) $(LLHTTP) $(LDLIBS)
@@ -32,8 +32,8 @@ site:$(SOURCE) $(LLHTTP)
 batch:batch.c parse.c code.c parse2.c
 	$(CC) $(CFLAGS) -o $@ batch.c parse.c code.c movie.c $(LDLIBS)
 
-batch2:batch2.c parse.c code.c
-	$(CC) $(CFLAGS) -o $@ batch2.c parse.c code.c movie.c $(LDLIBS)
+#batch2:batch2.c parse.c code.c
+#	$(CC) $(CFLAGS) -o $@ batch2.c parse.c code.c movie.c $(LDLIBS)
 
 clean:
 	rm -f $(LLHTTP) $(TARGET)

@@ -1,6 +1,8 @@
-#include <libuv.h>
+#include <assert.h>
+#include <uv.h>
 
 #include "doc.h"
+#include "http.h"
 
 // CURRENT STATE OF IMPLEMENTATION
 // - We do not have persistent connections, i.e. not keep-alive.
@@ -58,7 +60,23 @@ static uv_buf_t response_404 = {.base = RESPONSE_404, .len = sizeof (RESPONSE_40
 static uv_buf_t response_501 = {.base = RESPONSE_501, .len = sizeof (RESPONSE_501) - 1};
 static uv_buf_t response_505 = {.base = RESPONSE_505, .len = sizeof (RESPONSE_505) - 1};
 
+#define RESPONSE_BUF(MESSAGE) \
+{.base = (MESSAGE), .len = sizeof (MESSAGE) - 1}
+
+#define RESPONSE_DECL(CODE, REASON, LENGTH, EXPLANATION) \
+_Static_assert((LENGTH) == sizeof (EXPLANATION) - 1, "duh"); \
+static uv_buf_t response_ ## CODE = RESPONSE_BUF( \
+"HTTP/1.1 " #CODE " " REASON "\r\n" \
+"Connection: close\r\n" \
+"Content-Type: text/plain\r\n" \
+"Content-Length: " #LENGTH "\r\n" \
+"\r\n" EXPLANATION);
+
+#undef RESPONSE_DECL
+#undef RESPONSE_BUF
+
 // I think we are in desperate need of some evil M4.
+// Do we benefit to mix M4 and CPP to solve this?
 
 static void on_write_doc(uv_write_t *req, int status)
 {
@@ -96,22 +114,22 @@ static void on_write(uv_write_t *req, int status)
 
     action error_bad_request
     {
-        uv_write(http->write_doc_req.write, (uv_stream_t *)http->tcp, &response_400, 1, on_write);
+        uv_write(&http->write_doc_req.write, (uv_stream_t *)&http->tcp, &response_400, 1, on_write);
     } # SHOULD answer 400 and close connection. or 301 if line-request error, but idc
 
     action error_no_upgrade
     {
-        uv_write(http->write_doc_req.write, (uv_stream_t *)http->tcp, &response_501, 1, on_write);
+        uv_write(&http->write_doc_req.write, (uv_stream_t *)&http->tcp, &response_501, 1, on_write);
     } # also https://datatracker.ietf.org/doc/html/rfc9113#appendix-B-2.3
 
     action error_not_found
     {
-        uv_write(http->write_doc_req.write, (uv_stream_t *)http->tcp, &response_404, 1, on_write);
+        uv_write(&http->write_doc_req.write, (uv_stream_t *)&http->tcp, &response_404, 1, on_write);
     }
 
     action error_not_implemented
     {
-        uv_write(http->write_doc_req.write, (uv_stream_t *)http->tcp, &response_505, 1, on_write);
+        uv_write(&http->write_doc_req.write, (uv_stream_t *)&http->tcp, &response_505, 1, on_write);
     }
 
     action answer
@@ -128,24 +146,24 @@ static void on_write(uv_write_t *req, int status)
             bufs = &response_503;
         else
         {
-            bufs = doc_get(client->write_doc_req.doc_used = latest);
+            bufs = doc_get(http->write_doc_req.doc_used = latest);
             on_write_cb = on_write_doc;
 
             switch (http->method)
             {
                 case HTTP_METHOD_GET:  n_buf = 4; break;
                 case HTTP_METHOD_HEAD: n_buf = 3; break;
-                case HTTO_METHOD_NONE: // Fall through.
+                case HTTP_METHOD_NONE: // Fall through.
                 default:
-                    assert(!"Should have a known method at this point!);
+                    assert(!"Should have a known method at this point!");
                 break;
             }
         }
 
         // XXX how about checking return value??
         uv_write(
-            (uv_write_t *)&client->write_doc_req,
-            (uv_stream_t *)parser->data,
+            &http->write_doc_req.write,
+            (uv_stream_t *)&http->tcp,
             bufs, n_buf, on_write_cb
         );
 
@@ -162,7 +180,7 @@ static void on_write(uv_write_t *req, int status)
 
     scheme = "http"i;
 
-    action host_absolute { assert(HTTP_HOST_NONE == parser->host); parser->host = HTTP_HOST_ABSOLUTE; }
+    action host_absolute { assert(HTTP_HOST_NONE == http->host); http->host = HTTP_HOST_ABSOLUTE; }
 
     host = zlen | "127.0.0.1" | "localhost"i | "191.252.220.165";
 
@@ -198,13 +216,15 @@ static void on_write(uv_write_t *req, int status)
 
     HTTP_version = "HTTP/1.1";
 
-    action method_get  { assert(HTTP_METHOD_NONE == parser->method); parser->method = HTTP_METHOD_GET;  }
-    action method_head { assert(HTTP_METHOD_NONE == parser->method); parser->method = HTTP_METHOD_HEAD; }
+    action method_get  { assert(HTTP_METHOD_NONE == http->method); http->method = HTTP_METHOD_GET;  }
+    action method_head { assert(HTTP_METHOD_NONE == http->method); http->method = HTTP_METHOD_HEAD; }
 
     method = ("GET" %method_get | "HEAD" %method_head) $!error_not_implemented;
 
     # could accept other whitespace but WHY would client do it?? at all. so NO.
-    request_line = method SP request_target SP HTTP_version;
+    request_line = method
+                SP request_target $!error_not_found
+                SP HTTP_version;
 
     # answer with 400 when no Host: header field or two or more or "invalid" value.
 
@@ -222,15 +242,14 @@ static void on_write(uv_write_t *req, int status)
 
     action host_field
     {
-        if (parser->host | HTTP_HOST_FIELD)
+        if (http->host & HTTP_HOST_FIELD)
         {
-            #// Go Horse copied from above
-            #uv_write(http->write_doc_req.write, (uv_stream_t *)http->tcp, &response_400, 1, on_write);
+            // Go Horse copied from above
+            uv_write(&http->write_doc_req.write, (uv_stream_t *)&http->tcp, &response_400, 1, on_write);
 
-            #fhold; fbreak;
-            #fgoto error;
+            fhold; fbreak;
         }
-        parser->host |= HTTP_HOST_FIELD;
+        http->host |= HTTP_HOST_FIELD;
     }
 
     action host_is_absolute { http->host & HTTP_HOST_ABSOLUTE }
@@ -238,8 +257,7 @@ static void on_write(uv_write_t *req, int status)
     host_field = 'host:'i %host_field OWS (field_value when host_is_absolute | host);
     any_field = field_name ":" OWS field_value;
 
-    field_line = (host_field # TODO check absolute URI on request_line, duplicate host etc. 
-               | any_field) OWS; #("content-length"i | "transfer-encoding"i)
+    field_line = (host_field | any_field) OWS; #("content-length"i | "transfer-encoding"i)
 
     # We should parse content-length and transfer-encoding... but is very
     # complex and we close immediately upon receiving request-line. we will
@@ -249,7 +267,7 @@ static void on_write(uv_write_t *req, int status)
 
     # we MAY send response before closing
 
-    # do not answer unless empty line (where is this said?)
+    # do not answer unless empty line (where is this said in the RFC again?)
     # no content-length neither chunked transfer, then complete upon closure, unless TLS incomplete close!!
 
     # Let's default to no keep-alive, that is CLOSE, because we'd need to parse Connect: until
@@ -281,16 +299,18 @@ static void on_write(uv_write_t *req, int status)
 
 %% write data noerror nofinal noentry;
 
-void http_init(struct http *parser)
+void http_init(struct http *http)
 {
     %% write init;
-    parser->method = HTTP_METHOD_NONE;
-    parser->host   = HTTP_HOST_NONE;
+    http->method = HTTP_METHOD_NONE;
+    http->host   = HTTP_HOST_NONE;
 }
 
 void http_parse(struct http *http, unsigned char *buffer, int len)
 {
     unsigned char *p = buffer;
+    unsigned char *pe = buffer + len;
+    unsigned char *eof = NULL;
 
     %% access http->;
     %% write exec;

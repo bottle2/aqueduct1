@@ -71,7 +71,7 @@ void on_close(uv_handle_t *handle) { free(handle); }
 static void on_read(uv_stream_t *client, ssize_t nread, uv_buf_t const *buf)
 {
     if (nread > 0)
-        http_parse((struct http *)client, buf->base, nread);
+        http_parse((struct http *)client, (unsigned char *)buf->base, nread);
     else if (nread < 0)
         uv_close((uv_handle_t *)client, on_close);
 
@@ -144,6 +144,7 @@ static void on_new_connection(uv_stream_t *server, int status)
 
     if (!client)
 #else
+    puts("new conn?");
     struct http *client = malloc(sizeof (*client));
 #endif
     {
@@ -349,7 +350,7 @@ void read_cb_movie(uv_fs_t *fil)
     else
     {
         int code;
-        if ((code = parse(&req->parser, req->base, fil->result, &req->movies)) != CODE_OKAY)
+        if ((code = parse(&req->parser, (unsigned char *)req->base, fil->result, &req->movies)) != CODE_OKAY)
         {
             fprintf(stderr, "error %d: %s\n", code, code_msg(code));
             uv_fs_req_cleanup(fil);
@@ -454,6 +455,8 @@ int main(int argc, char *argv[])
     loop = uv_default_loop();
     uv_tcp_t server;
     uv_tcp_init(loop, &server);
+
+    printf("%zu\n", sizeof (struct http));
 
 #if 0
     llhttp_settings_init(&settings);

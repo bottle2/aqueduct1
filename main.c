@@ -5,10 +5,6 @@
 #include <string.h>
 #include <uv.h>
 
-#if 0
-#include <llhttp.h>
-#endif
-
 #include "doc.h"
 #include "http.h"
 #include "parse.h"
@@ -26,31 +22,6 @@ _Static_assert(2 == ATOMIC_POINTER_LOCK_FREE, "bro we are fucked pointers");
 #define DEFAULT_BACKLOG 128
 
 uv_loop_t *loop = NULL;
-#if 0
-llhttp_settings_t settings;
-#endif
-
-#if 0
-struct client
-{
-    uint8_t superclass[sizeof (uv_tcp_t)];
-    llhttp_t parser;
-    struct write_doc_req {
-        uint8_t superclass[sizeof (uv_write_t)];
-        struct doc *doc_used;
-    } write_doc_req;
-    bool did_headers;
-};
-
-#define RESPONSE \
-  "HTTP/1.1 503 Service Unavailable\r\n" \
-  "Content-Type: text/plain\r\n" \
-  "Content-Length: 21\r\n" \
-  "\r\n" \
-  "document unavailable\n"
-
-static uv_buf_t standard = {.base = RESPONSE, .len = sizeof(RESPONSE)};
-#endif
 
 struct doc *latest = NULL;
 
@@ -79,58 +50,6 @@ static void on_read(uv_stream_t *client, ssize_t nread, uv_buf_t const *buf)
         free(buf->base);
 }
 
-#if 0
-static void on_write_doc(uv_write_t *req, int status)
-{
-    struct write_doc_req *doc_req = (struct write_doc_req *)req;
-
-    if (status < 0)
-        fprintf(stderr, "Error writing doc: %s\n", uv_strerror(status));
-
-    uv_close((uv_handle_t *)req->handle, on_close);
-    doc_free(doc_req->doc_used);
-}
-
-static void on_write_default(uv_write_t *req, int status)
-{
-    if (status < 0)
-        fprintf(stderr, "Error writing default: %s\n", uv_strerror(status));
-    uv_close((uv_handle_t *)req->handle, on_close);
-}
-
-static int on_headers_complete(llhttp_t *parser)
-{
-    struct client *client = parser->data;
-
-    uv_buf_t *bufs;
-    void (*on_write)(uv_write_t *, int);
-    int n_buf;
-
-    if (NULL == latest)
-    {
-        bufs     = &standard;
-        on_write = on_write_default;
-        n_buf    = 1;
-    }
-    else
-    {
-        bufs = doc_get(client->write_doc_req.doc_used = latest);
-        on_write = on_write_doc;
-        n_buf = 4;
-    }
-
-    uv_write(
-        (uv_write_t *)&client->write_doc_req,
-        (uv_stream_t *)parser->data,
-        bufs, n_buf, on_write
-    );
-
-    client->did_headers = true;
-
-    return 0;
-}
-#endif
-
 static void on_new_connection(uv_stream_t *server, int status)
 {
     if (status < 0)
@@ -139,32 +58,19 @@ static void on_new_connection(uv_stream_t *server, int status)
         return;
     }
 
-#if 0
-    struct client *client = malloc(sizeof (*client));
-
-    if (!client)
-#else
     struct http *client = malloc(sizeof (*client));
-#endif
+
     if (!client)
     {
         fprintf(stderr, "OOM for client\n");
         return;
     }
-#if 0
-    client->did_headers = false;
-#endif
 
     uv_tcp_init(loop, (uv_tcp_t *)client);
 
     if (0 == uv_accept(server, (uv_stream_t *)client))
     {
-#if 0
-        llhttp_init(&client->parser, HTTP_REQUEST, &settings);
-        client->parser.data = client;
-#else
         http_init(client);
-#endif
         uv_read_start((uv_stream_t *)client, alloc_buffer, on_read);
     }
     else
@@ -455,11 +361,6 @@ int main(int argc, char *argv[])
     loop = uv_default_loop();
     uv_tcp_t server;
     uv_tcp_init(loop, &server);
-
-#if 0
-    llhttp_settings_init(&settings);
-    settings.on_message_complete = on_headers_complete;
-#endif
 
     struct sockaddr_in addr;
 

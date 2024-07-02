@@ -18,41 +18,41 @@ void on_close(uv_handle_t *handle); // HACK HACK HACK HACK HACK HACK HACK
   "HTTP/1.1 503 Service Unavailable\r\n" \
   "Connection: close\r\n" \
   "Content-Type: text/plain\r\n" \
-  "Content-Length: 21\r\n" \
+  "Content-Length: 25\r\n" \
   "\r\n" \
-  "document unavailable\n"
+  "503 document unavailable\n"
 
 #define RESPONSE_404 \
   "HTTP/1.1 404 Not Found\r\n" \
   "Connection: close\r\n" \
   "Content-Type: text/plain\r\n" \
-  "Content-Length: 24\r\n" \
+  "Content-Length: 28\r\n" \
   "\r\n" \
-  "resource does not exist\n"
+  "404 resource does not exist\n"
 
 #define RESPONSE_400 \
   "HTTP/1.1 400 Bad Request\r\n" \
   "Connection: close\r\n" \
   "Content-Type: text/plain\r\n" \
-  "Content-Length: 22\r\n" \
+  "Content-Length: 26\r\n" \
   "\r\n" \
-  "your request is balls\n"
+  "400 your request is balls\n"
 
 #define RESPONSE_501 \
   "HTTP/1.1 501 Not Implemented\r\n" \
   "Connection: close\r\n" \
   "Content-Type: text/plain\r\n" \
-  "Content-Length: 26\r\n" \
+  "Content-Length: 30\r\n" \
   "\r\n" \
-  "bro I don't even have TLS\n"
+  "501 bro I don't even have TLS\n"
 
 #define RESPONSE_505 \
   "HTTP/1.1 505 HTTP Version Not Supported\r\n" \
   "Connection: close\r\n" \
   "Content-Type: text/plain\r\n" \
-  "Content-Length: 45\r\n" \
+  "Content-Length: 49\r\n" \
   "\r\n" \
-  "bro I don't even have persistent connections\n"
+  "505 bro I don't even have persistent connections\n"
 
 static uv_buf_t response_503 = {.base = RESPONSE_503, .len = sizeof (RESPONSE_503) - 1};
 static uv_buf_t response_400 = {.base = RESPONSE_400, .len = sizeof (RESPONSE_400) - 1};
@@ -140,7 +140,7 @@ static void on_write(uv_write_t *req, int status)
 
         extern struct doc *latest; // HACK HACK HACK HACK HACK HACK HACK HACK
 
-        if (HTTP_HOST_NONE == http->host)
+        if (HTTP_HOST_NONE == http->host || HTTP_HOST_ABSOLUTE == http->host)
             bufs = &response_400;
         if (NULL == latest)
             bufs = &response_503;
@@ -282,7 +282,7 @@ static void on_write(uv_write_t *req, int status)
     HTTP_message = CRLF* # https://datatracker.ietf.org/doc/html/rfc9112#section-2.2-6
                    request_line CRLF
                    (field_line CRLF)*
-                   CRLF %answer; # We never expect a message-body.
+                   CRLF @answer; # We never expect a message-body.
 
     main := (HTTP2_preface | HTTP_message) $!error_bad_request any*;
 

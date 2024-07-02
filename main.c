@@ -144,9 +144,9 @@ static void on_new_connection(uv_stream_t *server, int status)
 
     if (!client)
 #else
-    puts("new conn?");
     struct http *client = malloc(sizeof (*client));
 #endif
+    if (!client)
     {
         fprintf(stderr, "OOM for client\n");
         return;
@@ -455,8 +455,6 @@ int main(int argc, char *argv[])
     loop = uv_default_loop();
     uv_tcp_t server;
     uv_tcp_init(loop, &server);
-
-    printf("%zu\n", sizeof (struct http));
 
 #if 0
     llhttp_settings_init(&settings);

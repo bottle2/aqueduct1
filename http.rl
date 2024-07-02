@@ -117,25 +117,25 @@ static void on_write(uv_write_t *req, int status)
     action error_bad_request
     {
         uv_write(&http->write_doc_req.write, (uv_stream_t *)&http->tcp, &response_400, 1, on_write);
-	hold; fbreak;
+	fhold; fbreak;
     } # SHOULD answer 400 and close connection. or 301 if line-request error, but idc
 
     action error_no_upgrade
     {
         uv_write(&http->write_doc_req.write, (uv_stream_t *)&http->tcp, &response_501, 1, on_write);
-	hold; fbreak;
+	fhold; fbreak;
     } # also https://datatracker.ietf.org/doc/html/rfc9113#appendix-B-2.3
 
     action error_not_found
     {
         uv_write(&http->write_doc_req.write, (uv_stream_t *)&http->tcp, &response_404, 1, on_write);
-	hold; fbreak;
+	fhold; fbreak;
     }
 
     action error_not_implemented
     {
         uv_write(&http->write_doc_req.write, (uv_stream_t *)&http->tcp, &response_505, 1, on_write);
-	hold; fbreak;
+	fhold; fbreak;
     }
 
     action answer

@@ -66,7 +66,7 @@ static void on_new_connection(uv_stream_t *server, int status)
         return;
     }
 
-    uv_tcp_init(loop, &client.tcp);
+    uv_tcp_init(loop, &client->tcp);
 
     client->write_doc_req.outer = client;
 

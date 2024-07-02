@@ -32,6 +32,7 @@ struct http
     {
         uv_write_t write;
         struct doc *doc_used;
+	struct http *outer;
     } write_doc_req;
 };
 

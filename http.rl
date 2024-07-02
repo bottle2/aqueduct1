@@ -85,8 +85,10 @@ static void on_write_doc(uv_write_t *req, int status)
     if (status < 0)
         fprintf(stderr, "Error writing doc: %s\n", uv_strerror(status));
 
-    uv_close((uv_handle_t *)req->handle, on_close);
+    assert((void *)req->handle == (void *)doc_req->outer);
+
     doc_free(doc_req->doc_used);
+    uv_close((uv_handle_t *)req->handle, on_close);
 }
 
 static void on_write(uv_write_t *req, int status)
@@ -163,7 +165,7 @@ static void on_write(uv_write_t *req, int status)
         // XXX how about checking return value??
         uv_write(
             &http->write_doc_req.write,
-            (uv_stream_t *)&http->tcp,
+            (uv_stream_t *)http,
             bufs, n_buf, on_write_cb
         );
 

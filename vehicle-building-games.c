@@ -3,6 +3,7 @@
 #include <limits.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "expands.h"
 #include "html.h"
@@ -116,7 +117,7 @@ static char const *footnotes[] = {
 	#undef   GAME_X
 };
 
-static enum location const *game_locations[] = {
+static enum location const *games_locations[] = {
 	#define  GAME_X(NAME, NOTE, FOOTNOTE, LOCATION_XS) (enum location const []){LOCATION_XS},
 	#define  LOCATION_X(LOCATION, RESOURCES_XS) LOCATION,
 	#define  NIL NO_LOCATION
@@ -168,12 +169,6 @@ static int const n_game =
 	#undef   GAME_X
 ;
 
-static int const n_footnote =
-	#define  GAME_X(NAME, NOTE, FOOTNOTE, ...) + (FOOTNOTE != NULL)
-	#include "vehicle-building-games.inc"
-	#undef   GAME_X
-;
-
 static int const n_location_per_game[] = {
 	#define  GAME_X(NAME, NOTE, FOOTNOTE, LOCATION_XS) LOCATION_XS,
 	#define  LOCATION_X(...) + 1
@@ -199,8 +194,8 @@ static int const *n_resource_per_location_per_game[] = {
 static void print_str_as_html_id(char const *str);
 
 static int print_footnotes(
+	int         footnote_i,
 	int         n_footnote,
-	char const *footnotes[],
 	char const *ids[],
 	bool        is_only_flag,
 	char const  prefix[],
@@ -241,16 +236,32 @@ static void print_other_resources(
 	enum attribute const  resource_attributes[]
 );
 
-int main(void)
+static void print_troff(void);
+
+int main(int argc, char *argv[])
 {
+	(void)argv;
+
+	if (argc > 1)
+	{
+		print_troff();
+		return EXIT_SUCCESS;
+	}
+
 	printf("%s%s%s", HTML_OPEN, HEAD, BODY_OPEN);
 	
 	print_games();
 
 	printf("%s", REFERENCES);
 
+	static int const n_footnote =
+		#define  GAME_X(NAME, NOTE, FOOTNOTE, ...) + (FOOTNOTE != NULL)
+		#include "vehicle-building-games.inc"
+		#undef   GAME_X
+	;
+
 	if (n_footnote > 0) printf(INDENT "<hr />\n");
-	print_footnotes(n_game, footnotes, names, false, "\t\t", 0);
+	print_footnotes(0, n_game, names, false, "\t\t", 0);
 
 	printf("%s%s", BODY_CLOSE, HTML_CLOSE);
 
@@ -272,8 +283,8 @@ static void print_str_as_html_id(char const *str)
 }
 
 static int print_footnotes(
+	int         footnote_i,
 	int         n_footnote,
-	char const *footnotes[],
 	char const *ids[],
 	bool        is_only_flag,
 	char const  prefix[],
@@ -281,7 +292,7 @@ static int print_footnotes(
 ) {
 	int footnote_flag = 'a' + starting_flag_i;
 	
-	for (int footnote_i = 0; footnote_i < n_footnote; footnote_i++)
+	for (; footnote_i < n_footnote; footnote_i++)
 	{
 		if (NULL == footnotes[footnote_i]) continue;
 
@@ -314,7 +325,7 @@ static void print_bitfield(
 ) {
 	bool found_flag = false;
 	
-	for (int flag_i = 0; flag_i < (sizeof bitfield) * CHAR_BIT; flag_i++)
+	for (size_t flag_i = 0; flag_i < (sizeof bitfield) * CHAR_BIT; flag_i++)
 	{
 		if (bitfield & 1 << flag_i)
 		{
@@ -341,7 +352,7 @@ static void print_games(void)
 			n_location_per_game[game_i],
 			n_resource_per_location_per_game[game_i],
 			game_location_resource_urls[game_i],
-			game_locations[game_i],
+			games_locations[game_i],
 			game_location_resource_indexes[game_i],
 			game_location_resource_attributes[game_i]
 		);
@@ -350,9 +361,9 @@ static void print_games(void)
 		{
 			printf("\t\t\t\t(%s", notes[game_i]);
 			footnote_i += print_footnotes(
-				1,
-				footnotes + game_i,
-				names + game_i,
+				game_i,
+				game_i + 1,
+				names,
 				true,
 				" ",
 				footnote_i
@@ -446,3 +457,55 @@ static void print_other_resources(
 		printf("</sup>");
 	}
 }
+
+#define AS_COMMA_FIRST_STRINGIFY(A, ...) #A,
+static char const *location_lits[] = {
+    LOCATION_XS(AS_COMMA_FIRST_STRINGIFY)
+};
+
+static void print_troff(void)
+{
+    puts(".TITLE \"" TITLE "\"\n.HEADING 1 \"" TITLE "\"");
+
+    for (int i = 0; i < n_game; i++)
+    {
+        printf(".GAME %s\n", names[i]);
+
+        int widest = 0;
+
+        for (int j = 0; j < n_location_per_game[i]; j++)
+        {
+            int len = strlen(location_lits[games_locations[i][j]]);
+
+            if (len > widest)
+                widest = len;
+        }
+
+        for (int j = 0; j < n_location_per_game[i]; j++)
+        {
+            char const *location = location_lits[games_locations[i][j]];
+
+            for (int k = 0; k < n_resource_per_location_per_game[i][j]; k++)
+            {
+                unsigned attr = game_location_resource_attributes[i][j][k];
+                // XXX hardcoded PoS
+                if (attr >= 2)
+                    puts(".MENTION");
+                if (1 == attr || 3 == attr)
+                    puts(".ARCHIVE"); // XXX Improve in the future!
+
+                printf(".LOC %-*s %s\n", widest, location,
+                    game_location_resource_urls[i][j][k]);
+
+                // XXX Opinion. For consistency, all characteristics should be added after our before, no mixture!!!!
+                // Or not! What feels more natural? What feels more natural.
+            }
+        }
+    }
+    puts(".PP\nPrevious efforts to list many vehicle building games:");
+}
+
+// TODO check for troff macros
+// - Custom counter for alt locations
+// - Note and footnotes
+// - Text after everything

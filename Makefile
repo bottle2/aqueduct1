@@ -1,5 +1,5 @@
 # XXX This is a mess OMG
-PAGES=bookmarks.html vehicle-building-games.html
+PAGES=bookmarks.html vehicle-building-games.html vehicle-building-games.txt
 
 TARGET=site batch #batch2
 
@@ -9,10 +9,12 @@ bookmarks.html:bookmarks
 	./$? > $@
 vehicle-building-games.html:vehicle-building-games
 	./$? > $@
+vehicle-building-games.txt:vehicle-building-games
+	./$? '' > $@
 
 DEPS=libuv
 
-CFLAGS=-g3 \
+CFLAGS=-g3 -fsanitize=address \
 -Wpedantic -Wall -Wextra -Wshadow \
 -fno-strict-aliasing \
 $$(pkg-config --cflags $(DEPS))

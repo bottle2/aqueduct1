@@ -7,3 +7,5 @@ vehicle-building-games.html
 tags
 *.o
 *.svg
+http.c
+parse2.c

@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "expands.h"
 #include "html.h"
@@ -465,6 +466,8 @@ static char const *location_lits[] = {
 
 static void print_troff(void)
 {
+    puts(".\\\"Very little effort to match classic groff syntax... we should converge.");
+    puts(".\\\"Also some lazy HTML injection am I right?");
     puts(".TITLE \"" TITLE "\"\n.HEADING 1 \"" TITLE "\"");
 
     for (int i = 0; i < n_game; i++)
@@ -494,18 +497,34 @@ static void print_troff(void)
                 if (1 == attr || 3 == attr)
                     puts(".ARCHIVE"); // XXX Improve in the future!
 
+                char const *index = game_location_resource_indexes[i][j][k];
+
+                if (index)
+                    printf(".LABEL %s\n", index);
+
                 printf(".LOC %-*s %s\n", widest, location,
                     game_location_resource_urls[i][j][k]);
 
                 // XXX Opinion. For consistency, all characteristics should be added after our before, no mixture!!!!
                 // Or not! What feels more natural? What feels more natural.
+                // XXX Further insight. If comes before, state machine could
+                // enforce next command, but coming after, we can modify object
+                // directly.
+            }
+        }
+
+        if (notes[i])
+        {
+            puts(".NOTE");
+            puts(notes[i]);
+            if (footnotes[i])
+            {
+                puts(".FS"); // syntax from memorandum macros
+                puts(footnotes[i]); // XXX hardcoded href, should replace with commands
+                puts(".FE");
             }
         }
     }
     puts(".PP\nPrevious efforts to list many vehicle building games:");
+    puts(REFERENCES); // XXX wow what a lazy move
 }
-
-// TODO check for troff macros
-// - Custom counter for alt locations
-// - Note and footnotes
-// - Text after everything

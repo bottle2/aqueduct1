@@ -255,7 +255,9 @@ enum code parse(struct parser *parser, unsigned char *p, int len, struct movies 
         # XXX review position of errors
         # XXX conflicting error between aut and year. what do???
 
-        command = '.' (comment | title | heading | paragraph | movie);
+        game = ("GAME" RWS rest);
+
+        command = '.' (comment | title | heading | paragraph | movie | game);
         text    = ([^.\n][^\n]*) $buf %type_text %zero %add;
         line = command | text;
 

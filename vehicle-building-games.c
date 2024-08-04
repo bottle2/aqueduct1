@@ -468,6 +468,7 @@ static void print_troff(void)
 {
     puts(".\\\"Very little effort to match classic groff syntax... we should converge.");
     puts(".\\\"Also some lazy HTML injection am I right?");
+    puts(".\\\"And... how about those URLs, eh? should we allow UTF-8 or only percent-encoding? we can't mix, otherwise we will encode the percents themselves");
     puts(".TITLE \"" TITLE "\"\n.HEADING 1 \"" TITLE "\"");
 
     for (int i = 0; i < n_game; i++)

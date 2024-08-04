@@ -1,3 +1,4 @@
+# TODO Generate the .gitignore: we know which .c files and executables are generated.
 # XXX This is a mess OMG
 PAGES=bookmarks.html vehicle-building-games.html vehicle-building-games.txt
 

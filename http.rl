@@ -363,6 +363,7 @@ void http_init(struct http *http)
     %% write init;
     http->method = HTTP_METHOD_NONE;
     http->host   = HTTP_HOST_NONE;
+    http->is_movies = false;
 }
 
 void http_parse(struct http *http, unsigned char *buffer, int len)

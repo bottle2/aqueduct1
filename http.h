@@ -13,6 +13,8 @@ struct http
     {
         int cs;
 
+	bool is_movies;
+
         enum http_method
         {
             HTTP_METHOD_NONE,

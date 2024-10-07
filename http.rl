@@ -54,11 +54,58 @@ void on_close(uv_handle_t *handle); // HACK HACK HACK HACK HACK HACK HACK
   "\r\n" \
   "505 bro I don't even have persistent connections\n"
 
+#define RESPONSE_MAIN \
+  "HTTP/1.1 200 OK\r\n" \
+  "Connection: close\r\n" \
+  "Content-Type: text/html\r\n" \
+  "Content-Length: 714\r\n" \
+  "\r\n" RESPONSE_MAIN_MAIN
+
+#define RESPONSE_MAIN_MAIN \
+  "<!DOCTYPE html>\n" \
+  "<html lang=\"en\">\n" \
+  "<head>\n" \
+  "  <meta charset=\"UTF-8\">\n" \
+  "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n" \
+  "  <title>Home - aqueduct1</title>\n" \
+  "</head>\n" \
+  "<body>\n" \
+  "  <h1>Home</h1>\n" \
+  "  <p>Hi.</p>\n" \
+  "  <ul>\n" \
+  "    <li><a href=\"./movies\">A list of movies</a></li>\n" \
+  "  </ul>\n" \
+  "  <p>This website is written in C, Ragel and libuv.</p>\n" \
+  "  <p>Future directions:</p>\n" \
+  "  <ul>\n" \
+  "    <li>A domain name</li>\n" \
+  "    <li>TLS</li>\n" \
+  "    <li>Brotli compression</li>\n" \
+  "    <li>Bookmarks</li>\n" \
+  "    <li>List of vehicle building games</li>\n" \
+  "    <li>Translation of sacred GH texts</li>\n" \
+  "    <li>C stronghold</li>\n" \
+  "    <li>Tables</li>\n" \
+  "    <li>Unity and C# hacks</li>\n" \
+  "    <li>Introduction to C# for C programmers</li>\n" \
+  "  </ul>\n" \
+  "</body>\n" \
+  "</html>\n"
+
+#if IS_MAIN
+int main(void)
+{
+    printf("%zu\n", sizeof (RESPONSE_MAIN_MAIN));
+    return 0;
+}
+#endif
+
 static uv_buf_t response_503 = {.base = RESPONSE_503, .len = sizeof (RESPONSE_503) - 1};
 static uv_buf_t response_400 = {.base = RESPONSE_400, .len = sizeof (RESPONSE_400) - 1};
 static uv_buf_t response_404 = {.base = RESPONSE_404, .len = sizeof (RESPONSE_404) - 1};
 static uv_buf_t response_501 = {.base = RESPONSE_501, .len = sizeof (RESPONSE_501) - 1};
 static uv_buf_t response_505 = {.base = RESPONSE_505, .len = sizeof (RESPONSE_505) - 1};
+static uv_buf_t response_main = {.base = RESPONSE_MAIN, .len = sizeof (RESPONSE_MAIN) - 1};
 
 #define RESPONSE_BUF(MESSAGE) \
 {.base = (MESSAGE), .len = sizeof (MESSAGE) - 1}
@@ -138,6 +185,11 @@ static void on_write(uv_write_t *req, int status)
 	fhold; fbreak;
     }
 
+    action set_movie
+    {
+    	http->is_movies = true;
+    }
+
     action answer
     {
         uv_buf_t *bufs = NULL;
@@ -150,7 +202,9 @@ static void on_write(uv_write_t *req, int status)
             bufs = &response_400;
         if (NULL == latest)
             bufs = &response_503;
-        else
+        else if (!http->is_movies)
+	    bufs = &response_main;
+	else
         {
             bufs = doc_get(http->write_doc_req.doc_used = latest);
             on_write_cb = on_write_doc;
@@ -214,11 +268,10 @@ static void on_write(uv_write_t *req, int status)
     # index.html is common, but no RFC specifies it.
     # we will normalize /../ when a hierarchy exists, using fgoto probably
     pages = _m _o _v _i _e _s (_html | ('/' "./"* _index?))?;
-    path = '/' "./"* pages;
-    # for now we assume that no parse error implies user wants movies page LOL
+    path = '/' "./"* (pages %set_movie | _index)?;
 
     # Comprises both origin-form and absolute-form, we don't use authority and asterisk form.
-    request_target = (authority %host_absolute)? path;
+    request_target = (authority %host_absolute)? path?;
 
     HTTP_version = "HTTP/1.1";
 

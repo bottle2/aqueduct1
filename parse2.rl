@@ -87,8 +87,6 @@ enum code parse(struct parser *parser, unsigned char *p, int len, struct movies 
     enum code code = CODE_OKAY;
 
     %%{
-        # XXX This is getting ugly... refactor would improve a lot, ultimately m4.
-
         alphtype unsigned char;
         access parser->;
         write exec;
@@ -117,15 +115,6 @@ enum code parse(struct parser *parser, unsigned char *p, int len, struct movies 
         action type_paragraph { parser->e.type = PP;      }
         action type_movie     { parser->e.type = MOV;     }
         action type_invalid   { parser->e.type = INVALID; puts("achei inválido"); }
-
-        action type_note { parser->e.type = NOTE; }
-        action type_footnote_start { parser->e.type = FOOTNOTE_START; }
-        action type_footnote_end { parser->e.type = FOOTNOTE_END; }
-        action type_game { parser->e.type = GAME; }
-        action type_loc { parser->e.type = LOC; }
-        action type_label { parser->e.type = LABEL; }
-        action type_mention { parser->e.type = MENTION; }
-        action type_archive { parser->e.type = ARCHIVE; }
 
         action add {
             assert(0 == parser->len && '\0' == parser->buf[0]);
@@ -266,19 +255,7 @@ enum code parse(struct parser *parser, unsigned char *p, int len, struct movies 
         # XXX review position of errors
         # XXX conflicting error between aut and year. what do???
 
-        game    = ("GAME"    %type_game    @!type_invalid RWS rest) %zero %add;
-        loc     = ("LOC"     %type_loc     @!type_invalid RWS rest) %zero %add;
-        label   = ("LABEL"   %type_label   @!type_invalid RWS rest) %zero %add;
-        note    =  "NOTE"    %type_note    @!type_invalid OWS $!error_trailing %add;
-        archive =  "ARCHIVE" %type_archive @!type_invalid OWS $!error_trailing %add;
-        mention =  "MENTION" %type_mention @!type_invalid OWS $!error_trailing %add;
-
-        footnote_start = "FS" %type_footnote_start @!type_invalid OWS $!error_trailing %add;
-        footnote_end   = "FE" %type_footnote_end   @!type_invalid OWS $!error_trailing %add;
-        # XXX We should recognize \*F to know where to place the footnote.
-        # For now we try to be "smart", which is meh. mm syntax.
-
-        command = '.' (comment | title | heading | paragraph | movie | game | loc | note | label | archive | mention | footnote_start | footnote_end);
+        command = '.' (comment | title | heading | paragraph | movie);
         text    = ([^.\n][^\n]*) $buf %type_text %zero %add;
         line = command | text;
 

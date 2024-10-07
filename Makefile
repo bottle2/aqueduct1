@@ -1,6 +1,5 @@
-# TODO Generate the .gitignore: we know which .c files and executables are generated.
 # XXX This is a mess OMG
-PAGES=bookmarks.html vehicle-building-games.html vehicle-building-games.txt
+PAGES=bookmarks.html vehicle-building-games.html
 
 TARGET=site batch #batch2
 
@@ -10,12 +9,10 @@ bookmarks.html:bookmarks
 	./$? > $@
 vehicle-building-games.html:vehicle-building-games
 	./$? > $@
-vehicle-building-games.txt:vehicle-building-games
-	./$? '' > $@
 
 DEPS=libuv
 
-CFLAGS=-g3 -fsanitize=address \
+CFLAGS=-g3 \
 -Wpedantic -Wall -Wextra -Wshadow \
 -fno-strict-aliasing \
 $$(pkg-config --cflags $(DEPS))

@@ -26,12 +26,7 @@ X(CODE_ERROR_INVALID_CMD    , "error unknown cmd"    ) \
 X(CODE_NO_UPGRADE     , "bro I don't even have TLS"   ) \
 X(CODE_BAD_REQUEST    , "bro..."                      ) \
 X(CODE_NOT_IMPLEMENTED, "I don't know how to proceed.") \
-X(CODE_NOT_FOUND      , "no such page (yet?)"         ) \
-\
-X(CODE_ERROR_REPEATED_MENTION      , "error mention twice"         ) \
-X(CODE_ERROR_REPEATED_ARCHIVE      , "error archive twice"         ) \
-X(CODE_ERROR_NO_FOOTNOTE_TO_CLOSE  , "error no footnote to close"  ) \
-X(CODE_ERROR_UNEXPECTED_IN_FOOTNOTE, "error unexpected in footnote")
+X(CODE_NOT_FOUND      , "no such page (yet?)"         )
 
 #include "expand.h"
 

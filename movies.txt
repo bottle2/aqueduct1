@@ -29,8 +29,6 @@ Movies that.
 .MOV PLATOON            tt0091763 1986 Platoon
 .MOV NASCIDO_PARA_MATAR tt0093058 1987 Full Metal Jacket
 .MOV TROPIC_THUNDER     tt0942385 2008 Tropic Thunder
-.HEADING 2 "America"
-.MOV BONNIE_CLYDE tt0061418 1967 Bonnie and Clyde
 .HEADING 2 "Other watched"
 .PP
 Other movies I watched, but for which I have no remarks.
@@ -57,15 +55,7 @@ million of their 50 million budget in the last 20 minutes, and now I'm hooked.
 .MOV IF____                    tt0063850  1968 If....
 .MOV BLUE_RUIN                 tt2359024  2013 Blue Ruin
 .MOV COWBOYS_ALIENS            tt0409847  2011 Cowboys &amp; Aliens
-.MOV THELMA_LOUISE             tt0103074  1991 Thelma &amp; Louise
 .\" HAHAHAHA no HTML escaping yet
-.MOV DILLINGER                 tt0069976  1973 Dillinger
-.MOV DRACULA                   tt0051554  1958 O Vampiro da Noite
-.MOV DAY_OF_THE_DEAD           tt0088993  1985 Day of the Dead
-.MOV MR_MRS_SMITH              tt0356910  2005 Sr. &amp; Sra. Smith
-.MOV JOAN_OF_ARC               tt0151137  1999 Joana D'Arc
-.MOV WILLOW                    tt0096446  1988 Willow
-.MOV VIRGINIA_WOOLF            tt0061184  1966 Quem Tem Medo de Virginia Woolf?
 .HEADING 2 "Movies I watched ages ago"
 .MOV QUE_ISSO_COMPANHEIRO tt0119815 1997 O Que é Isso, Companheiro?
 .MOV ALIENS               tt0090605 1986 Aliens

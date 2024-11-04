@@ -1,0 +1,49 @@
+.TS
+c s
+cip-2 s
+l n
+a n.
+Some London Transport Statistics
+(Year 1964)
+Railway route miles	244
+Tube	66
+Sub-surface	22
+Surface	156
+.sp .5
+.T&
+l r
+a r.
+Passenger traffic \- railway
+Journeys	674 million
+Average length	4.55 miles
+Passenger miles	3,066 million
+.T&
+l r
+a r.
+Passenger traffic \- road
+Journeys	2,252 million
+Average length	2.26 miles
+Passenger miles	5,094 million
+.T&
+l n
+a n.
+.sp .5
+Vehicles	12,521
+Railway motor cars	2,905
+Railway trailer cars	1,269
+Total railway	4,174
+Omnibuses	8,347
+.T&
+l n
+a n.
+.sp .5
+Staff	73,739
+Administrative, etc.	5,582
+Civil engineering	5,134
+Electrical eng.	1,714
+Mech. eng. \- railway	4,310
+Mech. eng. \- road	9,152
+Railway operations	8,930
+Road operations	35,946
+Other	2,971
+.TE

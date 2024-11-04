@@ -1,0 +1,40 @@
+.TS
+cI cI cI
+l l n.
+Command	Meaning	Section
+a A	Alphabetic subcolumn	2.2
+allbox	Draw box around all items	2.1
+b B	Boldface item	2.2
+box	Draw box around table	2.1
+c C	Centered column	2.2
+center	Center table in page	2.1
+delim(xy )	Set eqn delimiters	2.1
+doublebox	Doubled box around table	2.1
+e E	Equal width columns	2.2
+expand	Make table full line width	2.1
+f F	Font change	2.2
+i I	Italic item	2.2
+l L	Left adjusted column	2.2
+linesize(n )	Set point size for drawing lines	2.1
+n N	Numerical column	2.2
+nnn	Column separation	2.2
+p P	Point size change	2.2
+r R	Right adjusted column	2.2
+s S	Spanned item	2.2
+t T	Vertical spanning at top	2.2
+tab(x )	Change data separator character	2.1
+T{ T}	Text block	2.3
+u U	Staggered columns	2.2
+v V	Vertical spacing change	2.2
+w W	Minimum width value	2.2
+z Z	Ignore width of data in this column	2.2
+.xx	Included troff command	2.3
+|	Vertical line	2.2
+||	Double vertical line	2.2
+^	Vertical span	2.2
+\^	Vertical span	2.3
+=	Double horizontal line	2.3
+_	Horizontal line	2.3
+\_	Short horizontal line	2.3
+\Rx	Repeat character	2.3
+.TE

@@ -1,0 +1,33 @@
+.TS
+center box;
+cBp+2 s s
+cB s s
+li l lb.
+Crisis and Emergency Numbers
+.sp
+24-Hour Hotlines
+Abuse	Child Abuse Reports	1-800-792-8610
+.sp .5
+Alcohol	Ala-Call	1-800-322-5525
+Alcohol	Overdose	1-800-962-1253
+.sp .5
+Drug	Drug Hotline	1-800-225-0196
+Drug	Overdose	1-800-962-1253
+Drug	Narcotics Anonymous	1-800-992-0401
+.sp .5
+Poison	Poison Hotline	1-800-962-1253
+.sp .5
+Runaways	Hotline	1-800-231-6946
+Runaways	Covenant House	1-800-999-9999
+.sp .5
+.T&
+cB s s
+li l lb.
+Other Hotlines
+AIDS	National AIDS Hotline	1-800-342-AIDS
+AIDS	NJ AIDS Hotline	1-800-624-2377
+Drug	Cocaine	1-800-COCAINE
+Eating	Eating Disorders Hotline	1-800-624-2268
+Support	Support Group Information	1-800-367-6274
+VD	VD Information	1-800-227-8922
+.TE

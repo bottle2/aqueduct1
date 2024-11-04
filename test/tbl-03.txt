@@ -1,0 +1,9 @@
+.TS
+c s s
+l n n .
+Overall title
+Item-a	34.22	9.1
+Item-b	12.65	.02
+Items: c,d,e	23	5.8
+Total	69.87	14.92
+.TE

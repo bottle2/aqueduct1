@@ -1,0 +1,68 @@
+.TS
+box;
+cb s s s
+c | c | c s
+ltiw(1i) | ltw(2i) | lp8 | lw(1.6i)p8.
+Some Interesting Places
+_
+Name	Description	Practical Information
+_
+T{
+American Museum of Natural History
+T}	T{
+The collections fill 11.5 acres (Michelin) or 25 acres (MTA)
+of exhibition halls on four floors. There is a full-sized replica
+of a blue whale and the world's largest star sapphire (stolen in 1964).
+T}	Hours	10-5:45 S M Tu Th, 10-9 W Sat. Sun.
+\^	\^	Location	T{
+Central Park West & 79th St.
+T}
+\^	\^	Admission	Donation: $1.00 asked
+\^	\^	Subway	AA to 81st St.
+\^	\^	Telephone	212-769-5100
+_
+Bronx Zoo	T{
+About a mile long and .6 mile wide, this is the largest zoo in America.
+A lion eats 18 pounds
+of meat a day while a sea lion eats 15 pounds of fish.
+T}	Hours	T{
+10-5 M-Sat, to 5:30 Sun
+T}
+\^	\^	Location	T{
+185th St. & Southern Blvd, the Bronx.
+T}
+\^	\^	Admission	$3.75/1.50 adult/children; Tu,We,Th donation
+\^	\^	Subway	2, 5 to East Tremont Ave.
+\^	\^	Telephone	212-367-1010
+_
+Brooklyn Museum	T{
+Five floors of galleries contain American and ancient art.
+There are American period rooms and architectural ornaments saved
+from wreckers, such as a classical figure from Pennsylvania Station.
+T}	Hours	10-5, closed Tues
+\^	\^	Location	T{
+Eastern Parkway & Washington Ave., Brooklyn.
+T}
+\^	\^	Admission	Free
+\^	\^	Subway	2,3 to Eastern Parkway.
+\^	\^	Telephone	212-367-1010
+_
+T{
+New-York Historical Society
+T}	T{
+All the original paintings for Audubon's
+.I
+Birds of America
+.R
+are here, as are exhibits of American decorative arts, New York history,
+Hudson River school paintings, carriages, and glass paperweights.
+T}	Hours	T{
+Tues-Sun, 10-5
+T}
+\^	\^	Location	T{
+Central Park West & 77th St.
+T}
+\^	\^	Admission	Free
+\^	\^	Subway	AA to 81st St.
+\^	\^	Telephone	212-873-3400
+.TE

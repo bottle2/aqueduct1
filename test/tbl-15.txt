@@ -1,0 +1,32 @@
+.TS
+expand;
+c s s s
+c c c c
+l l n n.
+New Jersey Bell Labs Locations
+Name	Address	Area Code	Phone
+Chester	Chester, NJ 07930	201	879-3400
+Corporate Park III	Somerset, NJ 08873	201	271-2300
+Crawford Hill	Holmdel, NJ 07733	201	888-7000
+ERC	Hopewell Township, NJ 08525	609	639-1234
+Freehold	Freehold, NJ 07728	201	577-5000
+Headquarters Plaza	Morristown, NJ 07960	201	898-6000
+Holmdel	Holmdel, NJ 07733	201	834-1000
+Knightsbridge	Piscataway, NJ 08854	201	457-2000
+Liberty Corner	Warren, NJ 07060	201	580-4000
+Lincroft	Lincroft, NJ 07738	201	576-4000
+MDC	Hopewell Township, NJ 08525	609	639-6100
+Middletown	Middletown, NJ 07748	201	957-2000
+Morris	Morristown, NJ 07960	201	898-1000
+Murray Hill	Murray Hill, NJ 07974	201	582-3000
+Parsippany	Parsippany, NJ 07054	201	299-3000
+Patriots Plaza	Morristown, NJ 07960	201	829-7200
+Red Hill	Middletown, NJ 07748	201	949-3000
+Short Hills	Short Hills, NJ 07078	201	564-2000
+Somerset	Somerset, NJ 08873	201	560-1300
+Summit	Summit, NJ 07901	201	522-6555
+Warren Service Center	Warren, NJ 07060	201	756-1527
+West Long Branch	West Long Branch, NJ 07764	201	870-7000
+Whippany	Whippany, NJ 07981	201	386-3000
+Woodhollow	Parsippany, NJ 07054	201	581-3000
+.TE

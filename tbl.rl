@@ -143,8 +143,9 @@ static int this_long = 0;
 
     #data = (data_line EOL)*;
 
-    data = 
-    start: ( '.'  -> dot
+    part =
+    start: format '.' EOL -> data,
+    data: ( '.'  -> dot
            | [_=] -> fhline
            | EOL  -> start
            | '\\' -> bslash
@@ -156,7 +157,7 @@ static int this_long = 0;
     dott: ( '&' -> dottand
           | 'E' -> dotte
           ) 
-    dottand: ( EOL part -> final
+    dottand: ( EOL -> start
              ),
     dotte: ( EOL -> final
            ),
@@ -174,10 +175,10 @@ static int this_long = 0;
            | !EOL -> item
            ),
     item: empty;
-    #text_block = "T{" EOL "T}" | "T{" EOL any* :>> (EOL "T}");
+    text_block =
+    start: (((any* :>> EOL) - /T}.*/) -> start)? "T}" any when is_sep;
 
 
-    part = format '.' EOL data;
     table = ".TS" (RWS 'H')? EOL (options ';' EOL)? part;
     #(".T&" EOL part) ".TE" EOL;
     main := table;

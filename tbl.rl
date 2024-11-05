@@ -116,35 +116,70 @@ static int this_long = 0;
 
     #action not_sep { fc != tab_separator }
     action is_sep { fc == tab_separator }
-    action end_row { }
+    #action end_row { }
 
-    action buf { }
-    action next { }
+    #action buf { }
+    #action next { }
 
-    text_block = "T{" EOL "T}" | "T{" EOL any* :>> (EOL "T}");
-    special = ("\\^" | "\\_" | ("\\R" any));
+    #text_block = "T{" EOL "T}" | "T{" EOL any* :>> (EOL "T}");
+    #special = ("\\^" | "\\_" | ("\\R" any));
 
-    NEOL = '\\' EOL;
+    #NEOL = '\\' EOL;
 
-    # TODO PITA PITA PITA
-    command = '.' ([^0-9] any*)? - (".T&" | ".TE");
+    ## TODO PITA PITA PITA
+    #command = '.' ([^0-9] any*)? - (".T&" | ".TE");
 
-    penis = any* - (special | text_block | command | [_=] | ".T&" | ".TE");
+    #penis = any* - (special | text_block | command | [_=] | ".T&" | ".TE");
 
-    entry = text_block | special | penis;
-    items = entry ((any when is_sep) entry)*;
-    data_line = [_=] | command | items;
+    #entry = text_block | special | penis;
+    #items = entry ((any when is_sep) entry)*;
+    #data_line = [_=] | command | items;
 
-    #penis = [^\r\n] | ('\\' EOL); 
-    #row =                  penis* when !is_sep
-    #      (/./ when is_sep penis* when !is_sep)* EOL;
-    # TODO PITA
-    # XXX What happens when tab(\)?
+    ##penis = [^\r\n] | ('\\' EOL); 
+    ##row =                  penis* when !is_sep
+    ##      (/./ when is_sep penis* when !is_sep)* EOL;
+    ## TODO PITA
+    ## XXX What happens when tab(\)?
 
-    data = (data_line EOL)*;
+    #data = (data_line EOL)*;
+
+    data = 
+    start: ( '.'  -> dot
+           | [_=] -> fhline
+           | EOL  -> start
+           | '\\' -> bslash
+           | 'T'  -> block1
+           ),
+    dot: ( 'T'   -> dott
+         | [0-9] -> item
+         ),
+    dott: ( '&' -> dottand
+          | 'E' -> dotte
+          ) 
+    dottand: ( EOL part -> final
+             ),
+    dotte: ( EOL -> final
+           ),
+    fhline: ( EOL -> start
+            ),
+    bslash: ( [_^] -> special
+            | ('R' any (any when is_sep)) -> item
+            ),
+    special: ( EOL -> start
+             | (any when is_sep) -> item
+             | empty),
+    block1: ( '{' -> block2
+           ),
+    block2: ( EOL ("T}" | (any* :>> (EOL "T}")) (any when is_sep)) -> item
+           | !EOL -> item
+           ),
+    item: empty;
+    #text_block = "T{" EOL "T}" | "T{" EOL any* :>> (EOL "T}");
+
 
     part = format '.' EOL data;
-    table = ".TS" (RWS 'H')? EOL (options ';' EOL)? part (".T&" EOL part) ".TE" EOL;
+    table = ".TS" (RWS 'H')? EOL (options ';' EOL)? part;
+    #(".T&" EOL part) ".TE" EOL;
     main := table;
     # Just one for now, for the sake of testing
     # It may become part of a larger machine or something!

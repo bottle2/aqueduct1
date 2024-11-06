@@ -128,68 +128,67 @@ static int this_long = 0;
     rest_text_block = ((any* :>> EOL) - /T}.*/)* "T}" SEP when is_sep;
     rest_cmd = ((any+ -- EOL) | ('\\' (EOL | any)))* <: EOL;
 
+    rest_item = ((any+ -- EOL) | ('\\' (EOL | any)))* when !is_sep SEP when is_sep;
+
     break = ('\\' EOL)*;
 
-    # TODO FUCK I read precedence in inverse. How much did I fuckup?
     parts =
-    start: format '.' EOL -> data,
+    start: (format '.' EOL) -> data,
     data:
         ( '.'  -> dot
         | [_=] -> fhline
         | EOL  -> data
         | '\\' -> bslash
         | 'T'  -> block1
-        | [^\\T_=.] - EOL -> itemcont
+        | ([^\\T_=.] - EOL) -> itemcont
         ),
     dot:
        ( 'T'   -> dott
        | [0-9] -> itemcont
        | EOL   -> data
-       | [^T0-9] - EOL -> command
+       | (([^T0-9] - EOL) rest_cmd) -> data
        ),
     dott:
         ( '&' -> dottand
         | 'E' -> dottend
         | EOL -> data
-        | [^&E] - EOL -> command
+        | (([^&E] - EOL) rest_cmd) -> data
         ),
-    dottand: # XXX I want... what do I want??
-           ( EOL | (space rest_cmd) -> start
-           | any - (space | EOL) rest_cmd -> data
+    dottand:
+           ( (EOL | (RWS rest_cmd)) -> start
+           | (graph rest_cmd) -> data
            ),
     dottend:
-           (  space* rest_cmd -> final
-           | (any* - space*) -> command
-           ),
-    command:
-           (  EOL -> data
-             !EOL -> command
+           ( (EOL | (RWS rest_cmd)) -> final
+           | (graph rest_cmd) -> data
            ),
     fhline: ( EOL -> data
-            | SEP when  is_sep -> item # XXX Ambiguity.
-            | SEP when !is_sep -> itemcont
+            | (SEP when  is_sep) -> item
+            | (SEP when !is_sep) -> itemcont
             ),
     bslash: ( [_^] -> special
-            | ('R' any (SEP when is_sep)) -> item
+            | ('R' graph (SEP when is_sep)) -> item
+            | [^_^R] -> itemcont
             ),
     special: ( EOL -> data
              | (SEP when is_sep) -> item
-             | empty),
+             | zlen
+             ),
     block1: ( '{' -> block2
             ),
-    block2: ( EOL rest_text_block -> item
+    block2: ( (EOL rest_text_block) -> item
             | !EOL -> item
             ),
     item: ( '\\' -> bslash
           | 'T'  -> block1
           | [_=] -> hline
           ),
-    hline: ( SEP when  is_sep -> item
-           | SEP when !is_sep -> itemcont
+    hline: ( (SEP when  is_sep) -> item
+           | (SEP when !is_sep) -> itemcont
            ),
     itemcont: ( EOL -> data
-              | SEP when  is_sep -> item
-              | SEP when !is_sep -> itemcont
+              | (SEP when  is_sep) -> item
+              | (SEP when !is_sep) -> itemcont
               );
 
     exp =

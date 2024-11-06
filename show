@@ -1,11 +1,14 @@
 #!/bin/bash
 
-out=~/storage/pictures
+#out=~/storage/pictures
+#open=xdg-open
+out=.
+open=start
 
 if [ $# = 1 ]; then
-    ragel -pV $1 | dot -Tsvg > $out/${1%.*}.svg && xdg-open $out/${1%.*}.svg
+    ragel -pV $1 | dot -Tsvg > $out/${1%.*}.svg && $open $out/${1%.*}.svg
 elif [ $# = 2 ]; then
-    ragel -pVM $2 $1 | dot -Tsvg > $out/${2%.*}.svg && xdg-open $out/${2%.*}.svg
+    ragel -pVM $2 $1 | dot -Tsvg > $out/${2%.*}.svg && $open $out/${2%.*}.svg
 else
     echo 'you dumbass'
 fi

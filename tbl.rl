@@ -47,6 +47,14 @@ static int this_long = 0;
     OWS = [ \t]*;      # Optional whitespace.
     RWS = [ \t]+;      # Required whitespace.
 
+    SEP = [^\r\n];
+    # We can't use EOL for column separator. Rationale:
+    # 1. If separation of column has higher precedence, the user will
+    #    never leave a line to end the table or enter anything else.
+    # 2. If EOL really ends the line or both happen at the same time,
+    #    then the separator is useless, because the second column is
+    #    inaccesible.
+
     action set_centered  { is_centered = true; }
     action set_expanded  { is_expanded = true; }
     action set_box       { box = BOX;        }
@@ -62,7 +70,7 @@ static int this_long = 0;
             | "box"       %set_box
             | "allbox"    %set_allbox
             | "doublebox" %set_doublebox
-            | "tab"      OWS '(' graph  %set_tab             ')'
+            | "tab"      OWS '(' SEP    %set_tab             ')'
             | "linesize" OWS '(' digit+ $set_line_size       ')'
             | "delim"    OWS '(' graph  %set_eqn_delim_left
                                  graph  %set_eqn_delim_right ')';
@@ -112,74 +120,84 @@ static int this_long = 0;
     col   = [_=] | (/[LRCNAS^]/i >set_key_letter column_modifier);
     col_0 = col - /S.*/i;
     line = OWS vbars? OWS col_0 OWS (vbars? OWS col)* OWS vbars? OWS;
-    format = (line -- '^') ((EOL | ',') line)*;
+    #format = (line -- '^') ((EOL | ',') line)*;
+    format = zlen;
 
-    #action not_sep { fc != tab_separator }
     action is_sep { fc == tab_separator }
-    #action end_row { }
 
-    #action buf { }
-    #action next { }
+    rest_text_block = ((any* :>> EOL) - /T}.*/)* "T}" SEP when is_sep;
+    rest_cmd = ((any+ -- EOL) | ('\\' (EOL | any)))* <: EOL;
 
-    #text_block = "T{" EOL "T}" | "T{" EOL any* :>> (EOL "T}");
-    #special = ("\\^" | "\\_" | ("\\R" any));
+    break = ('\\' EOL)*;
 
-    #NEOL = '\\' EOL;
-
-    ## TODO PITA PITA PITA
-    #command = '.' ([^0-9] any*)? - (".T&" | ".TE");
-
-    #penis = any* - (special | text_block | command | [_=] | ".T&" | ".TE");
-
-    #entry = text_block | special | penis;
-    #items = entry ((any when is_sep) entry)*;
-    #data_line = [_=] | command | items;
-
-    ##penis = [^\r\n] | ('\\' EOL); 
-    ##row =                  penis* when !is_sep
-    ##      (/./ when is_sep penis* when !is_sep)* EOL;
-    ## TODO PITA
-    ## XXX What happens when tab(\)?
-
-    #data = (data_line EOL)*;
-
-    part =
+    # TODO FUCK I read precedence in inverse. How much did I fuckup?
+    parts =
     start: format '.' EOL -> data,
-    data: ( '.'  -> dot
-           | [_=] -> fhline
-           | EOL  -> start
-           | '\\' -> bslash
-           | 'T'  -> block1
+    data:
+        ( '.'  -> dot
+        | [_=] -> fhline
+        | EOL  -> data
+        | '\\' -> bslash
+        | 'T'  -> block1
+        | [^\\T_=.] - EOL -> itemcont
+        ),
+    dot:
+       ( 'T'   -> dott
+       | [0-9] -> itemcont
+       | EOL   -> data
+       | [^T0-9] - EOL -> command
+       ),
+    dott:
+        ( '&' -> dottand
+        | 'E' -> dottend
+        | EOL -> data
+        | [^&E] - EOL -> command
+        ),
+    dottand: # XXX I want... what do I want??
+           ( EOL | (space rest_cmd) -> start
+           | any - (space | EOL) rest_cmd -> data
            ),
-    dot: ( 'T'   -> dott
-         | [0-9] -> item
-         ),
-    dott: ( '&' -> dottand
-          | 'E' -> dotte
-          ) 
-    dottand: ( EOL -> start
-             ),
-    dotte: ( EOL -> final
+    dottend:
+           (  space* rest_cmd -> final
+           | (any* - space*) -> command
            ),
-    fhline: ( EOL -> start
+    command:
+           (  EOL -> data
+             !EOL -> command
+           ),
+    fhline: ( EOL -> data
+            | SEP when  is_sep -> item # XXX Ambiguity.
+            | SEP when !is_sep -> itemcont
             ),
     bslash: ( [_^] -> special
-            | ('R' any (any when is_sep)) -> item
+            | ('R' any (SEP when is_sep)) -> item
             ),
-    special: ( EOL -> start
-             | (any when is_sep) -> item
+    special: ( EOL -> data
+             | (SEP when is_sep) -> item
              | empty),
     block1: ( '{' -> block2
+            ),
+    block2: ( EOL rest_text_block -> item
+            | !EOL -> item
+            ),
+    item: ( '\\' -> bslash
+          | 'T'  -> block1
+          | [_=] -> hline
+          ),
+    hline: ( SEP when  is_sep -> item
+           | SEP when !is_sep -> itemcont
            ),
-    block2: ( EOL ("T}" | (any* :>> (EOL "T}")) (any when is_sep)) -> item
-           | !EOL -> item
-           ),
-    item: empty;
-    text_block =
-    start: (((any* :>> EOL) - /T}.*/) -> start)? "T}" any when is_sep;
+    itemcont: ( EOL -> data
+              | SEP when  is_sep -> item
+              | SEP when !is_sep -> itemcont
+              );
 
+    exp =
+    start: ([abcdefghi] -> another)? -> second,
+    another: [xyz] -> start,
+    second: [omn] -> final;
 
-    table = ".TS" (RWS 'H')? EOL (options ';' EOL)? part;
+    table = ".TS" (RWS 'H')? EOL (options ';' EOL)? parts;
     #(".T&" EOL part) ".TE" EOL;
     main := table;
     # Just one for now, for the sake of testing

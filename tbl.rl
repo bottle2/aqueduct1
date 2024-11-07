@@ -128,7 +128,40 @@ static int this_long = 0;
     rest_text_block = ((any* :>> EOL) - /T}.*/)* "T}" SEP when is_sep;
     rest_cmd = ((any+ -- EOL) | ('\\' (EOL | any)))* <: EOL;
 
-    rest_item = ((any+ -- EOL) | ('\\' (EOL | any)))* when !is_sep SEP when is_sep;
+    #rest_item = ((any+ -- EOL) | ('\\' (EOL | any)))* when !is_sep SEP when is_sep;
+    #component = [^\n\r\\] | '\r' [^\n] | '\\' (any | EOL);
+    #rest_item = component* :>> SEP when is_sep;
+    #rest_item =
+    #start:
+    #     ( '\r' -> barecr
+    #     | '\n' -> final
+    #     | ('\\' when !is_sep) -> bslash
+    #     | ('\\' when  is_sep) -> bslashsep
+    #     | ([^\r\n\\] when !is_sep) -> start
+    #     | ([^\r\n\\] when  is_sep) -> final
+    #     ),
+    #bslash:
+    #      ( '\r' -> bslashbarecr
+    #      | '\n' -> start
+    #      | ('\\' when !is_sep) -> final
+    #      | ('\\' when  is_sep) -> bslash
+    #      | ([^\r\n\\] when is_sep) ->final
+    #      ),
+    #bslashsep:
+    #barecr:
+    #      (
+    #      ),
+    #bslashbarecr:
+    #            (
+    #            );
+    # TODO
+
+    exp2 = "ab" ( lala: "cd"
+                | "ef" ->lele
+                )
+         | lele: "gh"
+         | "ij" ->lala;
+                    
 
     break = ('\\' EOL)*;
 

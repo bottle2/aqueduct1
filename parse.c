@@ -32,6 +32,7 @@ int pfprintf(void *data, char const *fmt, ...)
     return code;
 }
 
+#if 0
 // XXX We want to change THIS!
 // hmmmmmm state machines
 enum code vomit(struct printer p, struct movies *movies)
@@ -105,3 +106,4 @@ enum code vomit(struct printer p, struct movies *movies)
 
     return CODE_OKAY;
 }
+#endif

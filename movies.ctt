@@ -1,0 +1,59 @@
+#include <assert.h>
+
+#include "parse.h"
+#include "movie.h"
+
+#define CTT_P(...) p.pprintf(p.data, __VA_ARGS__);
+#define P(...) CTT_P(__VA_ARGS__)
+
+void vomit(struct printer p, struct movies *movies)
+{
+    struct element *curr = movies->elements;
+
+$<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Movies - aqueduct1</title>
+</head>
+<body>
+<h1>Movies</h1>
+$for (; curr; curr = curr->next) switch (curr->type) {
+    case PP:
+        P("<p>\n");
+        curr = curr->next;
+        assert(curr);
+        for (; curr && TEXT == curr->type; curr = curr->next)
+            P("  %s\n", curr->text);
+        P("</p>\n");
+    break;
+    case HEADING:
+    {
+        int level = curr->heading.level;
+        P("<h%d>%s</h%d>\n", level, curr->heading.text, level);
+    }
+    break;
+    case MOV:
+        P("<ul>\n");
+        for (; curr && MOV == curr->type; curr = curr->next)
+        {
+            assert(curr->movie->defined);
+            // https://developer.imdb.com/documentation/key-concepts
+            P(
+                "  <li><a href=\"https://imdb.com/title/"
+                "tt%07d/\">%s</a> (%d)</li>\n",
+                curr->movie->aut,
+                curr->movie->name,
+                curr->movie->year
+            );
+        }
+        P("</ul>\n");
+    break;
+    default:
+        assert(!"Unexpected element!");
+    break;
+}
+
+P("</body>\n</html>\n");
+}

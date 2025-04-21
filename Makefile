@@ -15,8 +15,9 @@ DEPS=libuv
 CFLAGS=-g3 \
 -Wpedantic -Wall -Wextra -Wshadow \
 -fno-strict-aliasing \
-$$(pkg-config --cflags $(DEPS))
-LDLIBS=$$(pkg-config --libs $(DEPS))
+#-fsanitize=address,undefined \
+#$$(pkg-config --cflags $(DEPS))
+#LDLIBS=$$(pkg-config --libs $(DEPS))
 
 SOURCE=main.c parse.c code.c movie.c doc.c parse2.c http.c
 
@@ -44,6 +45,6 @@ tags:
 .SUFFIXES: .c .rl .svg
 
 .rl.c:
-	ragel $<
+	ragel -G2 $<
 .rl.svg:
 	ragel -pV $< | dot -Tsvg > $@

@@ -1,3 +1,10 @@
+Ignore this trash written down.
+
+- Move checks inside vomit to outside it.
+- Comment out current vomit function
+- Link movies.o, maybe add a rule .ctt.c whatever
+- Test (optional)
+
 # The Web server and website written in C
 
 ## Document markup

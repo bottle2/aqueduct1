@@ -6,8 +6,11 @@
 #define CTT_P(...) p.pprintf(p.data, __VA_ARGS__);
 #define P(...) CTT_P(__VA_ARGS__)
 
-void vomit(struct printer p, struct movies *movies)
+enum code vomit(struct printer p, struct movies *movies)
 {
+    if (!movies->title)
+        return CODE_ERROR_NO_TITLE;
+
     struct element *curr = movies->elements;
 
 $<!doctype html>
@@ -23,9 +26,17 @@ $for (; curr; curr = curr->next) switch (curr->type) {
     case PP:
         P("<p>\n");
         curr = curr->next;
+        if (!curr || curr->type != TEXT)
+                return CODE_ERROR_HANGING_TEXT;
         assert(curr);
-        for (; curr && TEXT == curr->type; curr = curr->next)
+        for (;;)
+        {
             P("  %s\n", curr->text);
+            if (curr->next && TEXT == curr->next->type)
+                curr = curr->next;
+            else
+                break;
+        }
         P("</p>\n");
     break;
     case HEADING:
@@ -36,9 +47,10 @@ $for (; curr; curr = curr->next) switch (curr->type) {
     break;
     case MOV:
         P("<ul>\n");
-        for (; curr && MOV == curr->type; curr = curr->next)
+        for (;;)
         {
-            assert(curr->movie->defined);
+            if (!curr->movie->defined)
+                return CODE_ERROR_MOVIE_UNDEFINED;
             // https://developer.imdb.com/documentation/key-concepts
             P(
                 "  <li><a href=\"https://imdb.com/title/"
@@ -47,6 +59,11 @@ $for (; curr; curr = curr->next) switch (curr->type) {
                 curr->movie->name,
                 curr->movie->year
             );
+
+            if (curr->next && MOV == curr->next->type)
+                curr = curr->next;
+            else
+                break;
         }
         P("</ul>\n");
     break;
@@ -56,4 +73,6 @@ $for (; curr; curr = curr->next) switch (curr->type) {
 }
 
 P("</body>\n</html>\n");
+
+return CODE_OKAY;
 }

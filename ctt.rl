@@ -19,7 +19,7 @@
     }
 
     action corpus_begin { printf("CTT_P(\""); }
-    action corpus_end   { printf("\")"); }
+    action corpus_end   { printf("\");"); }
     action corpus_percent { putchar('%'); putchar('%'); }
     action corpus_escape {
         putchar('\\');

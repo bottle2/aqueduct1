@@ -1,0 +1,150 @@
+.TITLE "C Stronghold"
+.HEADING 1 "Welcome to all things C"
+.\".HEADING 2 "Advice for rookies"
+.\".PP
+.\"I'm not self-taught: throughout elementary school to university I've learned from the best.
+.\"I didn't learn C or how to program on my
+.\"own. I had great teachers since Elementary School through University.  That
+.\"being said, if you manage to reach me out, I'm super happy to help you with any
+.\"question.
+.HEADING 2 "Obligatory literature for beginners"
+.LIST
+.ITEM
+.LINK "https://matt.sh/howto-c" "How to C (as of 2016)"
+.LIST OFF
+.HEADING 2 "Quotes"
+.LIST
+.ITEM
+"strong typing just means pounding extra hard on the keyboard"
+-- Peter van der Linden's Expert C Programming
+.LIST OFF
+.\"## "Obligatory literature for beginners"
+.\"
+.\".- [c - "static const" vs "#define" vs "enum" - Stack Overflow](https://stackoverflow.com/questions/1674032/static-const-vs-define-vs-enum)
+.\".- [A beginners' guide <i>away</i> from scanf()               ](http://sekrit.de/webdocs/c/beginners-guide-away-from-scanf.html)
+.\"
+.\"## "Coding style and coding standards"
+.\"
+.\"Pick a coding style. Your style evolves over time. Consistency is supreme. Follow project's style.
+.\".- [Linux kernel coding style — The Linux Kernel documentation" "https://www.kernel.org/doc/html/latest/process/coding-style.html"
+.\".- [cstyle.ms.pdf" "https://www.cis.upenn.edu/~lee/06cse480/data/cstyle.ms.pdf"
+.\".- [Development guide#coding_style" "https://nginx.org/en/docs/dev/development_guide.html#code_style"
+.\"
+.\"I prefer to style manually, but if you need a tool, I had tremendous success with GNU indent.
+.\"
+.\"Besides style, you need discipline and follow good practices.
+.\"- [SEI CERT C Coding Standard - SEI CERT C Coding Standard - Confluence" "https://wiki.sei.cmu.edu/confluence/display/c/SEI+CERT+C+Coding+Standard"
+.\"## "Resources to assert dominance over peasant programmers"
+.\"
+.\"## "Advanced cool shit"
+.\"
+.\"The legendary Mike Acton describes in his blog CellPerformance the restrict keyword from C99:
+.\"- [Understanding Strict Aliasing"     "https://cellperformance.beyond3d.com/articles/2006/06/understanding-strict-aliasing.html"
+.\"- [Demystifying The Restrict Keyword" "https://cellperformance.beyond3d.com/articles/2006/05/demystifying-the-restrict-keyword.html"
+.\"
+.\"Also read the original proposal:
+.\"- [Restricted Pointers in C (Draft 2), X3J11.1 93-006" "https://www.lysator.liu.se/c/restrict.html"
+.\"
+.\"C11 introduced two features that Robert Gample explains and describe pretty well in his blog:
+.\".- [Generic Selections" "http://www.robertgamble.net/2012/01/c11-generic-selections.html"
+.\".ILINK  "Static Assertions" "http://www.robertgamble.net/2012/01/c11-static-assertions.html"
+.\"
+.\"Did you know C can do some array checking?
+.\".- [Static array indices in function parameter declarations (C only)" "https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_73/rzarg/static_array_index.htm"
+.\"
+.\"## "Profiling and microoptimization"
+.\".QUOTE
+.\""Premature optimization is the root of all evil"
+.\".QUOTE OFF
+.\"
+.\"Let's do it anyway!!
+.\"- [Bit Twiddling Hacks" "https://graphics.stanford.edu/~seander/bithacks.html"
+.\"- [The Lost Art of Structure Packing" "http://www.catb.org/esr/structure-packing/"
+.\"
+.\"## "Going FAST"
+.\"- [Pthreads on Microsoft Windows"                 "http://locklessinc.com/articles/pthreads_on_windows/"
+.\"- [Slide 1 - NVIDIA.Introduction_to_CUDA_C.1.pdf" "https://computing.llnl.gov/tutorials/linux_clusters/gpu/NVIDIA.Introduction_to_CUDA_C.1.pdf"
+.\"- [Message Passing Interface (MPI)"               "https://computing.llnl.gov/tutorials/mpi/"
+.\"- [Introduction to Parallel Computing"            "https://computing.llnl.gov/tutorials/parallel_comp/"
+.\"- [POSIX Threads Programming"                     "https://computing.llnl.gov/tutorials/pthreads/"
+.\"- [OpenMP" "https://computing.llnl.gov/tutorials/openMP/"
+.\"
+.\"## "Theory"
+.\"
+.\"## "Libraries"
+.\"
+.\"Here are a few cool online collections of libraries:
+.\".LIST
+.\".LINK                                     "Awesome C" "https://github.com/kozross/awesome-c"
+.\".LINK                               "open source C libraries" "https://en.cppreference.com/w/c/links/libs"
+.\"- [Category:C (programming language) libraries - Wikipedia" "https://en.wikipedia.org/wiki/Category:C_(programming_language)_libraries"
+.\"- [List of single-file C/C++ libraries" "https://github.com/nothings/single_file_libs"
+.\".LIST OFF
+.\"
+.\"As much as I parrot for C, my experience writing real software is slim.
+.\"
+.\"The following libraries I have used,
+.\"
+.\"I'm interested in learning the following libraries:
+.\"
+.\"- [Full List Of Open Source Physics Engines * Blog" "https://www.tapirgames.com/blog/open-source-physics-engines"
+.\"- [RandyGaul/cute_headers: One-file C/C++ libraries with no dependencies, primarily used for games" "https://github.com/RandyGaul/cute_headers"
+.\"- [Hedley" "https://nemequ.github.io/hedley/"
+.\"
+.\"- [orangeduck/mpc: A Parser Combinator library for C" "https://github.com/orangeduck/mpc"
+.\"- [orangeduck/Corange: Pure C Game Engine" "https://github.com/orangeduck/Corange"
+.\"- [A garbage collector for C and C++" "https://www.hboehm.info/gc/"
+.\"- [The Frank Engine | Killed By A Pixel" "https://frankforce.com/frank-engine/"
+.\"- [libtickit" "http://www.leonerd.org.uk/code/libtickit/"
+.\"- [libuv | Cross-platform asynchronous I/O" "https://libuv.org/"
+.\"- [Immediate-Mode-UI/Nuklear: A single-header ANSI C immediate mode cross-platform GUI library" "https://github.com/Immediate-Mode-UI/Nuklear"
+.\"- [raylib" "https://www.raylib.com/"
+.\"- [wmcbrine/PDCurses: PDCurses - a curses library for environments tht don't fit the termcap/terminfo model" "https://github.com/wmcbrine/PDCurses"
+.\"
+.\"## "Of historic interest"
+.\".LINK"A Comparison of the Syntax of C/C++ and Pascal" "http://www.cs.gordon.edu/courses/cs320/handouts/C_C++_Syntax_vs_Pascal.html"
+.\"
+.\"## "Interesting code"
+.\"
+.\"It is particulary interesting to read C code, specifically old code.
+.\".- [links Git repository" "git://leontynka.twibright.com/links.git"
+.\"
+.\"## "Preprocessor chauvinism"
+.\"
+.\"Some don't understand it. Some fear it. Some ban it entirely.
+.\"Did you know the C preprocessor is a functional language?
+.\".- [Boost.Preprocessor" https://www.boost.org/doc/libs/release/libs/preprocessor/
+.\"
+.\"## "Books"
+.\"- [Books - C" "http://iso-9899.info/wiki/Books"
+.\"
+.\"## "Networking and multiplayer"
+.\"- [Gaffer On Games" "https://www.gafferongames.com/"
+.\"
+.\"XXX socketpair and AF_UNIX on Windows.
+.\"- [selectable-socketpair/socketpair.c at master · ncm/selectable-socketpair" "https://github.com/ncm/selectable-socketpair/blob/master/socketpair.c"
+.\"- [compat.c · master · OpenConnect VPN projects / OpenConnect · GitLab" "https://gitlab.com/openconnect/openconnect/-/blob/master/compat.c"
+.\"
+.\"## "General knowledge"
+.\"- [What Every Computer Scientist Should Know About Floating-Point Arithmetic" "https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html"
+.\"- [Programming resources - InstallGentoo Wiki" "https://wiki.installgentoo.com/wiki/Programming_resources"
+.\"- [book.pdf" "https://cses.fi/book/book.pdf"
+.\"- [Books - Brendan Gregg" "http://www.brendangregg.com/books.html"
+.\"
+.\"## "Tooling"
+.\"
+.\"Modern programming languages
+.\"- [jpoirier/picoc: A very small C interpreter" "https://github.com/jpoirier/picoc"
+.\"- [Astrée Static Analyzer for C and C++" "https://www.absint.com/astree/index.htm"
+.\"
+.\"## "Stuff I don't why is here"
+.\"- [The Ganssle Group" "http://www.ganssle.com/"
+.\"- [C subreddit" "https://old.reddit.com/r/C_Programming/"
+.\"- [AVR Libc Home Page" "http://www.nongnu.org/avr-libc/"
+.\"
+.\"## "Stuff that looks interesting but I don't really care about" "https://web.archive.org/web/20210727070230/https://gist.github.com/zneak/5ccbe684e6e56a7df8815c3486568f01"
+.\"- [Pre-defined C/C++ Compiler Macros" "https://web.archive.org/web/20210615002823/http://beefchunk.com/documentation/lang/c/pre-defined-c/precomp.html"
+.\"- [poor man's profiler" "http://poormansprofiler.org/"
+.\"
+.\"\# vim: syntax=groff
+.\"

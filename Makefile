@@ -14,6 +14,7 @@ DEPS=libuv
 
 CFLAGS=-g3 \
 -Wpedantic -Wall -Wextra -Wshadow \
+-Wno-implicit-fallthrough \
 -fno-strict-aliasing \
 $$(pkg-config --cflags $(DEPS)) \
 #-fsanitize=address,undefined

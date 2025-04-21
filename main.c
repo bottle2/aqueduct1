@@ -208,23 +208,27 @@ void process_movie(uv_work_t *work)
 static void maybe_open_movie(void);
 
 static void on_movies_change(
-    uv_fs_event_t *handle,
-    char const *path,
-    int events,
-    int status
+    uv_fs_poll_t *handle,
+    int status,
+    uv_stat_t const *prev,
+    uv_stat_t const *curr
 ) {
     (void)handle;
+    (void)prev;
+    (void)curr;
 
 #if 0
     assert(UV_RENAME == status || UV_CHANGE == status);
 #endif
 
-    printf("%d %s %d\n", events, path, status);
+    printf("poll: %d\n", status);
+    if (status != 0)
+        return;
 
     size_t len = 1000;
     char buffer[1000] = {0};
-    int rc = uv_fs_event_getpath(handle, buffer, &len);
-    printf("%d %s %zu\n", rc, buffer, len);
+    int rc = uv_fs_poll_getpath(handle, buffer, &len);
+    printf("poll: %d %s %zu\n", rc, buffer, len);
 
     maybe_open_movie();
 }
@@ -391,17 +395,17 @@ int main(int argc, char *argv[])
     }
 
     // TODO it stops working after rm or mv! (only on Android, Windows looking good!)
-    uv_fs_event_t movies_event = {0};
+    uv_fs_poll_t movies_event = {0};
 
-    if ((r = uv_fs_event_init(loop, &movies_event)))
+    if ((r = uv_fs_poll_init(loop, &movies_event)))
     {
-        fprintf(stderr, "fs loop error %s\n", uv_strerror(r));
+        fprintf(stderr, "fs poll loop error %s\n", uv_strerror(r));
         return EXIT_FAILURE;
     }
 
-    if ((r = uv_fs_event_start(&movies_event, on_movies_change, "./movies.txt", 0)))
+    if ((r = uv_fs_poll_start(&movies_event, on_movies_change, "./movies.txt", 5000)))
     {
-        fprintf(stderr, "fs event error %s\n", uv_strerror(r));
+        fprintf(stderr, "fs poll start error %s\n", uv_strerror(r));
         return EXIT_FAILURE;
     }
 

@@ -1,0 +1,35 @@
+.TITLE "Home"
+.HEADING 1 "Home"
+.PP
+Hi
+.LIST
+.ITEM
+.LINK "./movies" "A list of movies"
+.LIST OFF
+.PP
+This website is written in C, Ragel and libuv.
+.LINK "https://github.com/bottle2/aqueduct1" SUFFIX "." "Source code"
+.PP
+Future directions:
+.LIST
+.ITEM
+A domain name (expect a .horse TLD)
+.ITEM
+TLS
+.ITEM
+Brotli compression
+.ITEM
+Bookmarks
+.ITEM
+List of vehicle building games
+.ITEM
+Translation of sacred GH texts
+.ITEM
+C stronghold
+.ITEM
+Tables
+.ITEM
+Unity and C# hacks
+.ITEM
+Introduction to C# for C programmers
+.LIST OFF

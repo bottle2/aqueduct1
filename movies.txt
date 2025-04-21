@@ -5,6 +5,7 @@
 .MOV IP_MAN       tt1220719 2008 Ip Man
 .MOV O_VOO        tt0068935 1972 O Voo do Dragão
 .MOV THE_ONE      tt0267804 2001 The One
+.MOV PROJECT_A    tt0085127 1983 Projeto China
 .HEADING 2 "Angry movies"
 .PP
 Movies that.
@@ -33,6 +34,7 @@ Movies that.
 .PP
 Other movies I watched, but for which I have no remarks.
 .MOV WALL_STREET_WOLF tt0993846 2013 The Wolf of Wall Street
+.MOV ALERTA_LOBO      tt7458762 2019 Alerta Lobo
 .HEADING 2 "Unwatched"
 .MOV BRANQUELAS                tt0381707  2004 White Chicks
 .MOV RRR                       tt8178634  2022 RRR

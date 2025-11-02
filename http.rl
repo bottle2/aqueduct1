@@ -14,45 +14,7 @@
 
 void on_close(uv_handle_t *handle); // HACK HACK HACK HACK HACK HACK HACK
 
-#define RESPONSE_503 \
-  "HTTP/1.1 503 Service Unavailable\r\n" \
-  "Connection: close\r\n" \
-  "Content-Type: text/plain\r\n" \
-  "Content-Length: 25\r\n" \
-  "\r\n" \
-  "503 document unavailable\n"
-
-#define RESPONSE_404 \
-  "HTTP/1.1 404 Not Found\r\n" \
-  "Connection: close\r\n" \
-  "Content-Type: text/plain\r\n" \
-  "Content-Length: 28\r\n" \
-  "\r\n" \
-  "404 resource does not exist\n"
-
-#define RESPONSE_400 \
-  "HTTP/1.1 400 Bad Request\r\n" \
-  "Connection: close\r\n" \
-  "Content-Type: text/plain\r\n" \
-  "Content-Length: 26\r\n" \
-  "\r\n" \
-  "400 your request is balls\n"
-
-#define RESPONSE_501 \
-  "HTTP/1.1 501 Not Implemented\r\n" \
-  "Connection: close\r\n" \
-  "Content-Type: text/plain\r\n" \
-  "Content-Length: 30\r\n" \
-  "\r\n" \
-  "501 bro I don't even have TLS\n"
-
-#define RESPONSE_505 \
-  "HTTP/1.1 505 HTTP Version Not Supported\r\n" \
-  "Connection: close\r\n" \
-  "Content-Type: text/plain\r\n" \
-  "Content-Length: 49\r\n" \
-  "\r\n" \
-  "505 bro I don't even have persistent connections\n"
+#include "response.c"
 
 #define RESPONSE_MAIN \
   "HTTP/1.1 200 OK\r\n" \
@@ -100,30 +62,7 @@ int main(void)
 }
 #endif
 
-static uv_buf_t response_503 = {.base = RESPONSE_503, .len = sizeof (RESPONSE_503) - 1};
-static uv_buf_t response_400 = {.base = RESPONSE_400, .len = sizeof (RESPONSE_400) - 1};
-static uv_buf_t response_404 = {.base = RESPONSE_404, .len = sizeof (RESPONSE_404) - 1};
-static uv_buf_t response_501 = {.base = RESPONSE_501, .len = sizeof (RESPONSE_501) - 1};
-static uv_buf_t response_505 = {.base = RESPONSE_505, .len = sizeof (RESPONSE_505) - 1};
 static uv_buf_t response_main = {.base = RESPONSE_MAIN, .len = sizeof (RESPONSE_MAIN) - 1};
-
-#define RESPONSE_BUF(MESSAGE) \
-{.base = (MESSAGE), .len = sizeof (MESSAGE) - 1}
-
-#define RESPONSE_DECL(CODE, REASON, LENGTH, EXPLANATION) \
-_Static_assert((LENGTH) == sizeof (EXPLANATION) - 1, "duh"); \
-static uv_buf_t response_ ## CODE = RESPONSE_BUF( \
-"HTTP/1.1 " #CODE " " REASON "\r\n" \
-"Connection: close\r\n" \
-"Content-Type: text/plain\r\n" \
-"Content-Length: " #LENGTH "\r\n" \
-"\r\n" EXPLANATION);
-
-#undef RESPONSE_DECL
-#undef RESPONSE_BUF
-
-// I think we are in desperate need of some evil M4.
-// Do we benefit to mix M4 and CPP to solve this?
 
 static void on_write_doc(uv_write_t *req, int status)
 {
@@ -161,29 +100,7 @@ static void on_write(uv_write_t *req, int status)
     machine http;
     alphtype unsigned char;
 
-    action error_bad_request
-    {
-        uv_write(&http->write_doc_req.write, (uv_stream_t *)&http->tcp, &response_400, 1, on_write);
-	fhold; fbreak;
-    } # SHOULD answer 400 and close connection. or 301 if line-request error, but idc
-
-    action error_no_upgrade
-    {
-        uv_write(&http->write_doc_req.write, (uv_stream_t *)&http->tcp, &response_501, 1, on_write);
-	fhold; fbreak;
-    } # also https://datatracker.ietf.org/doc/html/rfc9113#appendix-B-2.3
-
-    action error_not_found
-    {
-        uv_write(&http->write_doc_req.write, (uv_stream_t *)&http->tcp, &response_404, 1, on_write);
-	fhold; fbreak;
-    }
-
-    action error_not_implemented
-    {
-        uv_write(&http->write_doc_req.write, (uv_stream_t *)&http->tcp, &response_505, 1, on_write);
-	fhold; fbreak;
-    }
+    include "response.rl";
 
     action set_movie
     {
@@ -248,30 +165,12 @@ static void on_write(uv_write_t *req, int status)
 
     authority = scheme ':' host port;
 
-    _m   = 'm' | "%6D"i;
-    _n   = 'n' | "%6E"i;
-    _o   = 'o' | "%6F"i;
-    _v   = 'v' | "%76";
-    _i   = 'i' | "%69";
-    _e   = 'e' | "%65";
-    _s   = 's' | "%73";
-    _dot = '.' | "%2E"i;
-    _h   = 'h' | "%68";
-    _t   = 't' | "%74";
-    _l   = 'l' | "%6C"i;
-    _d   = 'd' | "%64";
-    _x   = 'x' | "%78";
-
-    _html = _dot _h _t _m _l;
-    _index = _i _n _d _e _x _html;
-
     # index.html is common, but no RFC specifies it.
-    # we will normalize /../ when a hierarchy exists, using fgoto probably
-    pages = _m _o _v _i _e _s (_html | ('/' "./"* _index?))?;
-    path = '/' "./"* (pages %set_movie | _index)?;
+    # we will not normalize /../ when a hierarchy exists, fuck smartasses
+    include "route.rl";
 
     # Comprises both origin-form and absolute-form, we don't use authority and asterisk form.
-    request_target = (authority %host_absolute)? path?;
+    request_target = (authority %host_absolute)? path;
 
     HTTP_version = "HTTP/1.1";
 
@@ -296,7 +195,7 @@ static void on_write(uv_write_t *req, int status)
     field_name = token; # See https://www.rfc-editor.org/rfc/rfc9110#section-5.1-2
     obs_text = 0x80..0xFF;
     field_vchar = VCHAR | obs_text;
-    field_content = field_vchar ((SP | HTAB | field_vchar)+)?;
+    field_content = field_vchar (SP | HTAB | field_vchar)*;
     field_value = field_content*; # See https://www.rfc-editor.org/rfc/rfc9110#section-5.5-2
 
     action host_field
@@ -311,7 +210,7 @@ static void on_write(uv_write_t *req, int status)
         http->host |= HTTP_HOST_FIELD;
     }
 
-    action host_is_absolute { http->host & HTTP_HOST_ABSOLUTE }
+    action host_is_absolute { (http->host & HTTP_HOST_ABSOLUTE) }
 
     host_field = 'host:'i %host_field OWS (field_value when host_is_absolute | host);
     any_field = field_name ":" OWS field_value;

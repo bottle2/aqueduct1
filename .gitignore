@@ -7,3 +7,24 @@ vehicle-building-games.html
 tags
 *.o
 *.svg
+*.pdf
+
+# Generated:
+http.c
+ctt.c
+eof.c
+erro.c
+http.c
+parse2.c
+percent.m4
+response.c
+response.rl
+route.rl
+movies.c
+
+# This is important for ACMEv2 Let's Encrypt stuff
+# I think they are very sensitive. I'm not sure.
+kid
+private_key.pem
+a_different_private_key.pem
+certificate.pem

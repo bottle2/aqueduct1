@@ -10,7 +10,7 @@
 int main(int argc, char *argv[])
 {
     char *category = setlocale(LC_ALL, ".UTF8");
-    assert(category != NULL);
+    //assert(category != NULL);
 
     FILE *f = argc >= 2 ? fopen(argv[1], "rb") : stdin;
 

@@ -22,6 +22,25 @@ LDLIBS=$$(pkg-config --libs $(DEPS))
 
 SOURCE=main.c parse.c code.c movie.c doc.c parse2.c http.c movies.c
 
+http.c:http.rl response.c
+
+http.rl:response.rl route.rl
+	touch $@
+
+response.c:response.m4
+	m4 -Dgen=c $< > $@
+response.rl:response.m4
+	m4 -Dgen=ragel $< > $@
+
+route.rl:route.m4 percent.m4
+	m4 -Dgen=ragel $< > $@
+
+percent.m4:percent
+	./$< > $@
+
+percent:percent.c
+	cc -O3 $< -o $@
+
 site:$(SOURCE) $(LLHTTP)
 	$(CC) $(CFLAGS) -o $@ $(SOURCE) $(LLHTTP) $(LDLIBS)
 	-sudo setcap CAP_NET_BIND_SERVICE=ep $@
@@ -44,6 +63,24 @@ tags:
 #	$(CC) -Wpedantic -Wall -Wextra $$(pkgconf --cflags check) -o $@ check_lb.c lb.c $$(pkgconf --libs check)
 
 movies.c:movies.ctt ctt
+
+draft.pdf:draft.mom
+	pdfmom -Kutf8 $< > $@
+
+edu_x_macros.pdf:edu_x_macros.mom
+	pdfmom -Kutf8 -t $< > $@
+
+edu_groff.pdf:edu_groff.mom
+	pdfmom -Kutf8 -tp $< > $@
+
+edu_makefile.pdf:edu_makefile.mom
+	pdfmom -Kutf8 -t $< > $@
+
+edu_ragel.pdf:edu_ragel.mom
+	pdfmom -Kutf8 -t $< > $@
+
+edu_m4.pdf:edu_m4.mom
+	pdfmom -Kutf8 -t $< > $@
 
 .SUFFIXES: .c .rl .svg .ctt
 

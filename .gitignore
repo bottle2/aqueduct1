@@ -21,6 +21,7 @@ response.c
 response.rl
 route.rl
 movies.c
+hack.c
 
 # This is important for ACMEv2 Let's Encrypt stuff
 # I think they are very sensitive. I'm not sure.

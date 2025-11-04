@@ -23,6 +23,13 @@ void on_close(uv_handle_t *handle); // HACK HACK HACK HACK HACK HACK HACK
   "Content-Length: 714\r\n" \
   "\r\n" RESPONSE_MAIN_MAIN
 
+#define RESPONSE_C \
+  "HTTP/1.1 200 OK\r\n" \
+  "Connection: close\r\n" \
+  "Content-Type: text/html\r\n" \
+  "Content-Length: 260\r\n" \
+  "\r\n" RESPONSE_MAIN_C
+
 #define RESPONSE_MAIN_MAIN \
   "<!DOCTYPE html>\n" \
   "<html lang=\"en\">\n" \
@@ -54,15 +61,31 @@ void on_close(uv_handle_t *handle); // HACK HACK HACK HACK HACK HACK HACK
   "</body>\n" \
   "</html>\n"
 
+#define RESPONSE_MAIN_C \
+  "<!DOCTYPE html>\n" \
+  "<html lang=\"en\">\n" \
+  "<head>\n" \
+  "  <meta charset=\"UTF-8\">\n" \
+  "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n" \
+  "  <title>C - aqueduct1</title>\n" \
+  "</head>\n" \
+  "<body>\n" \
+  "  <h1>All about C</h1>\n" \
+  "  <p>C is da best language ever!</p>\n" \
+  "</body>\n" \
+  "</html>\n"
+
 #if IS_MAIN
 int main(void)
 {
-    printf("%zu\n", sizeof (RESPONSE_MAIN_MAIN));
+    printf("main %zu\n", sizeof (RESPONSE_MAIN_MAIN));
+    printf("c %zu\n", sizeof (RESPONSE_MAIN_C));
     return 0;
 }
 #endif
 
 static uv_buf_t response_main = {.base = RESPONSE_MAIN, .len = sizeof (RESPONSE_MAIN) - 1};
+static uv_buf_t response_c = {.base = RESPONSE_C, .len = sizeof (RESPONSE_C) - 1};
 
 static void on_write_doc(uv_write_t *req, int status)
 {
@@ -102,10 +125,9 @@ static void on_write(uv_write_t *req, int status)
 
     include "response.rl";
 
-    action set_movie
-    {
-    	http->is_movies = true;
-    }
+    action set_movie { http->routed = ROUTED_MOVIES; }
+    action set_c { http->routed = ROUTED_C; }
+    action set_hash { http->routed = ROUTED_HASH; }
 
     action answer
     {
@@ -119,22 +141,47 @@ static void on_write(uv_write_t *req, int status)
             bufs = &response_400;
         if (NULL == latest)
             bufs = &response_503;
-        else if (!http->is_movies)
-	    bufs = &response_main;
-	else
+        else switch (http->routed)
         {
-            bufs = doc_get(http->write_doc_req.doc_used = latest);
-            on_write_cb = on_write_doc;
+            case ROUTED_HOME:
+                bufs = &response_main;
+            break;
 
-            switch (http->method)
-            {
-                case HTTP_METHOD_GET:  n_buf = 4; break;
-                case HTTP_METHOD_HEAD: n_buf = 3; break;
-                case HTTP_METHOD_NONE: // Fall through.
-                default:
-                    assert(!"Should have a known method at this point!");
-                break;
-            }
+            case ROUTED_MOVIES:
+                bufs = doc_get(http->write_doc_req.doc_used = latest);
+                on_write_cb = on_write_doc;
+
+                switch (http->method)
+                {
+                    case HTTP_METHOD_GET:  n_buf = 4; break;
+                    case HTTP_METHOD_HEAD: n_buf = 3; break;
+                    case HTTP_METHOD_NONE: // Fall through.
+                    default:
+                        assert(!"Should have a known method at this point!");
+                    break;
+                }
+            break;
+
+            case ROUTED_C:
+                bufs = &response_c;
+            break;
+
+            case ROUTED_HASH:
+                extern uv_buf_t response_hash[2];
+                bufs = response_hash;
+
+                switch (http->method)
+                {
+                    case HTTP_METHOD_GET:  n_buf = 2; break;
+                    case HTTP_METHOD_HEAD: n_buf = 1; break;
+                    case HTTP_METHOD_NONE: // Fall through.
+                    default:
+                        assert(!"Should have a known method at this point!");
+                    break;
+                }
+            break;
+
+            default: assert(!"Invalid route"); break;
         }
 
         // XXX how about checking return value??
@@ -262,7 +309,7 @@ void http_init(struct http *http)
     %% write init;
     http->method = HTTP_METHOD_NONE;
     http->host   = HTTP_HOST_NONE;
-    http->is_movies = false;
+    http->routed = ROUTED_HOME;
 }
 
 void http_parse(struct http *http, unsigned char *buffer, int len)

@@ -13,7 +13,7 @@ struct http
     {
         int cs;
 
-	bool is_movies;
+	enum routed { ROUTED_HOME, ROUTED_MOVIES, ROUTED_C, ROUTED_HASH } routed;
 
         enum http_method
         {

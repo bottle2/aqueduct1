@@ -20,12 +20,20 @@ $$(pkg-config --cflags $(DEPS)) \
 #-fsanitize=address,undefined
 LDLIBS=$$(pkg-config --libs $(DEPS))
 
-SOURCE=main.c parse.c code.c movie.c doc.c parse2.c http.c movies.c
+SOURCE=main.c parse.c code.c movie.c doc.c parse2.c http.c movies.c hack.c
 
 http.c:http.rl response.c
 
 http.rl:response.rl route.rl
 	touch $@
+
+http:http.c
+	$(CC) -flto -O1 -DIS_MAIN $< -o $@
+marshal:marshal.c
+	$(CC) $< -o $@
+
+hack.c:hack.m4
+	m4 $< > $@
 
 response.c:response.m4
 	m4 -Dgen=c $< > $@

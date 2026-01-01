@@ -1,0 +1,14 @@
+.DOCTYPE SLIDES ASPECT 4:3
+.START
+.HEADING 1 "Emscripten"
+.PP
+Compilador de C e C++ para JavaScript e WebAssembly,
+roda em navegadores Web e no Node.js
+.HEADING 1 "Onde publicar jogos"
+.LIST
+.ITEM
+Newgrounds
+.ITEM
+Itch.io
+.LIST OFF
+.\" vim: syntax=groff tw=70

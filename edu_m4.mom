@@ -1,0 +1,314 @@
+.DOCTYPE SLIDES ASPECT 4:3
+.START
+.HEADING 1 "m4"
+.PP
+Não acho que exista alguma tecnologia mais diabólica e mais poderosa
+do que essa.
+.PP
+Não se trata de aprender os comandos e o seu funcionamento.
+.PP
+Trata-se de como ser produtivo e obter resultados sem ser desintegrado
+no processo.
+.PP
+Se você está aqui, você vai ver coisas que não são muito legais.
+.PP
+A ideia é a seguinte:
+.PP
+\fIDesign-patterns\fP que ditam um uso seguro e razoável e manutenível
+de arquivos m4, sem incorrer em abusos desastrosos.
+.PP
+Coletar \fIdesign patterns\fP
+.PP
+Mesmo que isso signifique não entender a linguagem completamente
+.PP
+Evitar territórios ardilosos e se restringir a um uso são
+.NEWSLIDE
+.HEADING 1 "Motivação"
+.LIST
+.ITEM
+Um projeto moderno consegue fazer tudo dentro da linguagem de
+programação do mesmo
+.ITEM
+Um projeto UNIX clássico utiliza várias linguagens
+.LIST
+.ITEM
+C para grudar tudo
+.ITEM
+Scripts de alto nível invocados em tempo de execução
+.ITEM
+Fragmentos de Makefile
+.ITEM
+Shaders, como OpenGL
+.ITEM
+Um lexer como Flex, re2c ou Ragel
+.ITEM
+Um compilador-compilador como Bison
+.ITEM
+Ferramentas auxiliares particulares ao projeto
+.ITEM
+Eu mesmo estou desenvolvendo um \fCswf2c\fP e um \fCscxml2c\fP
+.ITEM
+SWIG
+.LIST OFF
+.ITEM
+Macros X é a técnica mais poderosa que pode resolver problemas de
+duplicação código dentro do C
+.ITEM
+Porém, Macros X não são úteis para desduplicar código através de
+várias linguagens diferentes
+.ITEM
+m4 resolve esse problema.
+.ITEM
+m4 pode gerar código para várias linguagens.
+.ITEM
+m4 é um template de texto diabólico que remonta os anos 60
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "Conhecimentos"
+.LIST
+.ITEM
+Você quer que as listas não contenham nenhum espaço.
+Para isso, empregue o seguinte:
+.LIST
+.ITEM
+Para obter uma indentação \fIfake\fP, coloque um ou mais \fC`'\fP
+.ITEM
+Use \fCdnl\fP para arrancar fora quebras de linha
+.LIST OFF
+.ITEM
+Comentários começam com \fC#\fP
+.ITEM
+Comentários são escritos diretamente no \fIoutput\fP
+.ITEM
+Os comentários NÃO somem.
+Eles simplesmente não são interpretados
+.ITEM
+Coloque no topo do arquivo \fCdivert(-1)\fP
+.ITEM
+Agora, você pode definir macros e escrever comentários sem arrancar
+cabelos
+.ITEM
+Depois, escreva \fCdivert(0)dnl\fP para começar o \fItemplate\fP de fato
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "Misturando código"
+.LIST
+.ITEM
+Mostrar no Makefile
+.ITEM
+Alguams linguagens possuem um mecanismo embutido para incluir
+arquivos.
+Por exemplo, o \fC#include\fP do pré-processador do C.
+Ou entidades externas do XML (sim, o m4 é apropriado para gerar XML!)
+.ITEM
+Outras linguagens não permitem isso.
+Para essas linguagens, recomenda-se o uso do \fCsoelim\fP
+.ITEM
+\fCsoelim\fP é uma ferramenta específica do Troff
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "Coordenando m4 no Makefile"
+.PP
+Considere um código m4 que gera shader:
+.LIST
+.ITEM
+Queremos linkar no programa um \fCshader.o\fP om todos os
+\fIshaders\fP necessários
+.ITEM
+Queremos também ter um \fCshader.h\fP para que [...]
+.ITEM
+Um jogo pode ter dezenas de shaders.
+.ITEM
+Seria duplicação de código listar todos os \fIshaders\fP em todos os
+códigos e no Makefile
+.ITEM
+Podemos ter uma única lista de \fIshaders\fP num arquivo
+\fCshader.m4\fP
+.ITEM
+Esse arquivo m4 vai gerar uma fragmento de Makefile que coordenará
+.ITEM
+Esse mesmo arquivo vai também gerar os códigos
+.LIST OFF
+.CODE BR
+shader.c:shader.m4
+        m4 
+
+include shader.mk
+.CODE OFF
+.LIST
+.ITEM
+O grafo em árvore do Makefile é construído dinâmica
+.ITEM
+Quando um alvo é repetido, os pré-requisitos dele são concatenados com
+.ITEM
+Então o alvo inicial do Makefile gera pré-requisitos,
+que são então levados em consideração
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "Optional fields"
+.PP
+Crie macros únicas para diferentes possibilidades de parâmetros
+opcionais
+.PP
+Pela seguinte razão:
+tu poderia escrever E(raise,AO(event),) ou E(onentry,,CN(TODO))
+.PP
+E aí usar \fCifelse\fP e \fClen\fP para verificar se algum
+parâmetro/lista está vazia.
+.PP
+Só que aí entra uma definição recursiva.
+.PP
+Se a lista está vazia
+.PP
+TODO Decidir se é melhor ter várias macros ou usar len e ifelse...
+qual é mais fácil???????????????????/
+.NEWSLIDE
+.HEADING 1 "Editando"
+.PP
+Se tu quiser apagar algo...
+.PP
+Tente apagar aos poucos...
+.PP
+Comece apagando as partes mais internas e vai avançando pra fora
+.PP
+Não conte com realce de sintaxe
+.PP
+Manter tudo balanceado é bem delicado
+.PP
+Lembre-se. M4 é mais ou menos uma linguagem \fIwrite-only\fP
+.PP
+Um erro, e provavelmente será mais são reescrever do zero a macro que
+tu queria.
+.NEWSLIDE
+.HEADING 1 "Inserindo apóstrofos e crases"
+.PP
+Não tente.
+.PP
+Não vai dar certo.
+.PP
+Eis a solução: use quadrígrafos (\fIquadrigraphs\fP)
+.PP
+Não resolva o problema DENTRO do m4
+.PP
+Quando tu quiser um apóstrofo, escreva @at@.
+.PP
+Teu m4 vai gerar vários @at@.
+.PP
+Esses @at@ vão virar apóstrofos somente DEPOIS que o m4 processar,
+usando \fCsed\fP: \fC sed "s/@at@/'/g".
+.PP
+Sim.
+Um programa externo fará a conversão
+.PP
+Esse é o único jeito são de fazer isso.
+.PP
+Não tenha ideias.
+.NEWSLIDE
+.HEADING 1 "Regras"
+.LIST
+.ITEM
+Evite gerar código C
+.BR
+Ao invés, gere macros X, literalmente apenas reescrevendo a lista m4
+como uma lista de pré-processador
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "Nerd sniping"
+.PP
+Nerd sniping é quando você se depara com um problema difícil, e gasta
+muito tempo nele, sem realmente chegar numa solução justificável, um
+trabalho ingrato, que não vale a pena, sem resultados.
+.PP
+Quanto mais poderosa uma linguagem, mais sujeito a nerd sniping um
+está, pois há mais oportunidades e escolhas e caminhos a percorrer.
+.PP
+m4 está cheio desses perils/pitfalls.
+.PP
+Fazer coisas perfeitinhas bonitinhas elegantes é um brainrot muito
+poderoso.
+NÃO PODE DEIXAR ISSO TOMAR CONTA DA MENTE.
+Resultados são o que importam.
+Ergonomia deve existir, mas apenas o necessário.
+NÃO USE NERD SNIPING PRA ALIMENTAR O PRÓPRIO EGO.
+Você não é melhor porque fez um código maluco pra atingir um objetivo
+abstrato.
+Muito perigoso.
+Altamente perigoso.
+.NEWSLIDE
+.HEADING 1 "Não automatize separadores"
+.PP
+Um iniciante irá montar uma lista simples, e expandi-la.
+.PP
+Um usuário mediano irá tentar inserir separadores customizáveis entre os itens
+.PP
+Logo o usuário mediano verá que precisa de vários separadores para
+listas heterogêneas
+.PP
+O usuário avançado não usa separadores.
+Ele usa \fCsubstr\fP para cortar fora os separadores excedentes.
+.PP
+E isso é bom o suficiente.
+.PP
+Tentar controlar separadores aproximadamente duplica ou triplica a
+complexidade do gerador de código.
+.NEWSLIDE
+.HEADING 1 "Não tenta formatar bonitinho"
+.PP
+Ler código formatado ajuda muito a entender o código gerado, tanto
+como documentação, como depuração, para ver se consegue o resultado
+desejado.
+.PP
+No início, controlar whitespace é estranho, mas logo se torna
+proficiente em não inserir whitespace indesejado
+.PP
+Um usuário mediano vai obter controle absoluto sobre whitespace, e vai
+conceber macros avançadas para gerar código onde tudo está alinhado
+bonitinho.
+E depois de muito esforço, é possível obter os resultados desejados,
+realmente.
+.PP
+Isso é uma imensa perda de tempo.
+.PP
+Gere código todo feio.
+E aí filtre o código com um formatter/beautifier.
+.PP
+Não existe um beautifier?
+É melhor o esforço de criar um, do quê perder tempo no m4.
+Crie um beautifier, e ele formatará todos os códigos do futuro.
+Automatize formatação no m4, e você terá que fazer isso manualmente
+para todos os códigos.
+.PP
+Estamos em busca de produtividade máxima.
+.PP
+Controlar whitespace aproximadamente duplica o tamanho das macros.
+.PP
+Pode usar syscmd(printf %s\\n X(Y) | ./<script>) onde script é um
+column | sed da vida.
+.PP
+Usar quadrígrafos pra vírgulas, por causa do \fCsyscmd\fP
+.PP
+Usar script externo, porque é um inferno digitar script dentro do m4
+.NEWSLIDE
+.HEADING 1 "Não!"
+.PP
+Formatar código com \fCnroff\fP!!!!!!!!!!!!!!!!!!!11
+.PP
+Porém.
+.PP
+Como inserir um tab? No caso de gerar Makefile?
+.PP
+Precisa usar quadrígrafo.
+Recomendo \fC@ht@\fP
+.PP
+Uma solução não confiável é usar sequência \fC\eN'9'\fP,
+porém aí tu precisa digitar dois apóstrofos, que requer
+quadrígrafos...
+.PP
+Outros detalhes.
+\fCnroff\fP são regras novas.
+Então pra digitar uma contra-barra, chamada solidus, tu mete um
+\fC\ee\fP.
+A sequência \fC\e\e\fP NÃO faz o que tu pensa fazer.
+.PP
+.PDF_WWW_LINK https://lists.gnu.org/archive/html/groff/2022-08/msg00015.html
+.\" vim: syntax=groff tw=70

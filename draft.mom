@@ -1,0 +1,1592 @@
+.PAPER A4
+.PRINTSTYLE TYPESET
+.L_MARGIN 1c
+.R_MARGIN 1c
+.T_MARGIN 2c
+.B_MARGIN 2c
+.DOCHEADER OFF
+.HEADERS OFF
+.FOOTERS OFF
+.PAGINATE OFF
+.PT_SIZE 12
+.LS 14.4
+.PARA_INDENT 0c
+.PARA_SPACE 6p
+.JUSTIFY
+.START
+.HEADING 1 "Draft"
+.PP
+It is probably self-contradictory, this is why it is a draft!!!!!!
+.PP
+Also, I don't focus on writing properly, just writing down my mind as
+it is, no care for grammar etc.
+.HEADING 2 "Acronym list"
+.LIST
+.PP
+Format this!
+.ITEM
+DSL Domain Specific Language
+.ITEM
+EULA End User License Agreement
+.ITEM
+GUI Guided-User Interface
+.ITEM
+SBOM Software Bill of Materials
+.ITEM
+ToS Terms of Service
+.ITEM
+OST Original Soundtrack
+.LIST OFF
+.PP
+These could be some macros, so that in a future HTML thing, they
+become tooltips with the meaning, and maybe also links in some cases.
+Reusable sort of thing.
+.HEADING 2 "Project ideas"
+.HEADING 3 "C dumbifier"
+.PP
+THIS HAS BEEN SOLVED:
+.PDF_WWW_LINK https://github.com/libav/c99-to-c89
+.PDF_WWW_LINK https://github.com/thradams/cake
+.PP
+Similar to JavaScript polyfill.
+.PP
+So you write modern C, then in order to have the code usable in old
+systems with old tools, the proposed tool rewrites the source, hence
+dumbifying it, to introduce kludges and remove features, partially
+expanding stuff etc.
+.PP
+Example: \fCremoving\fP restrict from inside array subscript from
+function prototype, which doesn't work in any MSVC version.
+.PP
+Fucking people redefining their own bools and fixed-width integers
+because they don't know better.
+.HEADING 3 "m4 syscmd parallelization"
+.PP
+Nuff said.
+.HEADING 3 "scxml2c"
+.PP
+If answer
+.PDF_WWW_LINK \
+https://github.com/statecharts/statecharts/discussions/39 here
+is negative, then implement it.
+.HEADING 3 "DSL based on \f(CBpic\fB that generates C code for a GUI"
+.PP
+What I really liked about the \fCpic\fP preprocessor that generates
+diagram drawings for troff typesetting, is that is highly ad-hoc.
+In comparison, the few GUI libraries and languages I'm acquainted with
+are highly structured.
+.PP
+Describe more.
+.HEADING 3 "Some markdown filter for groff"
+.PP
+Allow to write markdown inside groff between some diretives such as
+\fC.MdS\fP \fC.MdE\fP.
+.HEADING 3 "Mix troff inside C comments to generate documentation"
+.PP
+If you write a man page, it's okay, but you have to keep it in sync
+with your headers, which is not a big deal.
+But if you think about it, assert() present in the beginning and end
+of function is also documentation.
+I was thinking about a filter that parses C comments and
+enables/disables troff and then you can get some documentation out of
+it, I don't know.
+.PP
+Something like this:
+.FLOAT
+.CODE QUOTE
+// .SILENT OFF
+enum error i_hate_madeup_names(
+    struct context *ctx,
+    int n,
+    int xs[static const n]
+) {
+    assert(ctx != NULL);
+    // .SILENT
+    [lots of code]
+    // .SILENT OFF
+    assert(!ret || ERROR_A == ret || ERROR_B == ret);
+    return ret;
+}
+// .SILENT
+.FLOAT OFF
+.PP
+Fuck I don't want to write an example right now.
+I will pull something from some existing code of mine.
+.HEADING 3 "C dumbifier"
+.PP
+Look.
+JavaScript has got this polyfill thing that turns modern JavaScript
+into a crappy JavaScript that runs in ever older Web browser.
+.PP
+C should have a similar tool.
+Write modern C.
+Then this dumbifier will transform it into C89, or deal with Windows
+shenanigans such as not having \fCrestrict\fP inside array declarator
+for function prototypes.
+Expand \fC_Generic\fP and so on.
+.HEADING 3 "Beautifier/formatter"
+.PP
+Create one for Ragel, with LOTS of heuristics so it looks manual, with
+lots of cringe whitespace alignment.
+.HEADING 3 "Offline sockets"
+.PP
+The idea is that you can configure the Linux kernel to listent to some
+ports, both UDP and TCP, and it automatically accept() them and stores
+up some GBs of data. 
+.\"
+Then any process that is spawned AFTER, if they \fClisten()\fP and
+\fCaccept()\fP, everything the kernel was holding back is dumped into
+this program.
+.\"
+This could allow some kernel-level hot update of Web server.
+.HEADING 3 "Nice code inside a troff document"
+.PP
+Some tool that inserts formatted code inside troff document.
+.PP
+We also need to reference lines of code of code during a paragraph, so
+provide means to do so.
+.HEADING 3 "Images for troff"
+.PP
+You can include PDFs, and that's fine.
+But manual conversion is bad.
+So we have a special macro present inside of text.
+We compile once, collecting these macros as they print themselves to
+stderr.
+Then we generate a Makefile that deals with all conversions using
+existing tools installed in system.
+We want pictures inside pic
+.HEADING 2 "Profile"
+.HEADING 3 "Vim"
+.PP
+On Windows (there are many ways):
+.LIST ROMAN3
+.ITEM
+Download and install Git for Windows
+.ITEM
+Open up "Git Bash"
+.ITEM
+Write "\fCvimtutor\fP" or, if you speak portuguese, "\fCvimtutor
+pt\fP" (the translation is human-made, high quality)
+.ITEM
+Follow all steps
+.LIST OFF
+Otherwise on Linux or Android (Termux):
+.LIST ROMAN2
+.ITEM
+Install Vim through the existing package manager
+.ITEM
+[same steps bruh]
+.LIST OFF
+.PP
+[Vimtutor] is all needed.
+.PP
+Extra info:
+.LIST
+.ITEM
+Write config in file comment [TODO]
+.ITEM
+.PDF_WWW_LINK \
+"https://stackoverflow.com/questions/1878974/redefine-tab-as-4-spaces" \
+"Redefine tab as 4 spaces"
+.LIST OFF
+.PP
+Vim should be mantadory to learn starting at elementary school
+probably.
+.LIST
+.ITEM
+Activate Vim mode for IDEs
+.ITEM
+Activate Vim mode in Overleaf
+.LIST OFF
+.HEADING 3 "UNIX tooling"
+.LIST
+.ITEM
+Bash
+.LIST
+.ITEM
+.PDF_WWW_LINK "https://www.funtoo.org/Bash_by_Example,_Part_1" "Bash by Example, Part 1"
+.ITEM
+.PDF_WWW_LINK "https://www.funtoo.org/Bash_by_Example,_Part_2" "Bash by Example, Part 2"
+.ITEM
+.PDF_WWW_LINK "https://www.funtoo.org/Bash_by_Example,_Part_3" "Bash by Example, Part 3"
+.LIST OFF
+.ITEM
+AWK
+.LIST
+.ITEM
+.PDF_WWW_LINK "https://www.funtoo.org/Awk_by_Example,_Part_1" "Awk by Example, Part 1"
+.ITEM
+.PDF_WWW_LINK "https://www.funtoo.org/Awk_by_Example,_Part_2" "Awk by Example, Part 2"
+.ITEM
+.PDF_WWW_LINK "https://www.funtoo.org/Awk_by_Example,_Part_3" "Awk by Example, Part 3"
+.LIST OFF
+.ITEM
+sed
+.LIST
+.ITEM
+.PDF_WWW_LINK "https://www.funtoo.org/Sed_by_Example,_Part_1" "Sed by Example, Part 1"
+.ITEM
+.PDF_WWW_LINK "https://www.funtoo.org/Sed_by_Example,_Part_2" "Sed by Example, Part 2"
+.ITEM
+.PDF_WWW_LINK "https://www.funtoo.org/Sed_by_Example,_Part_3" "Sed by Example, Part 3"
+.LIST OFF
+.LIST OFF
+.HEADING 3 "C"
+.PP
+Lilili:
+.LIST
+.ITEM
+Choose how to define a constant (\fCenum\fP vs. \fC#define\fP vs.
+\fCconst\fP.
+.LIST OFF
+.HEADING 4 "Modern or less known features and tricks"
+.LIST
+.ITEM
+\fC_Static_assert\fP
+.LIST
+.ITEM
+.PDF_WWW_LINK \
+"http://www.robertgamble.net/2012/01/c11-static-assertions.html" \
+"C11 - Static Assertions"
+.LIST OFF
+.ITEM
+\fCrestrict\fP
+.LIST
+.ITEM
+.PDF_WWW_LINK \
+"https://cellperformance.beyond3d.com/articles/2006/06/understanding-strict-aliasing.html" \
+"Understanding Strict Aliasing"
+.ITEM
+.PDF_WWW_LINK \
+"https://cellperformance.beyond3d.com/articles/2006/05/demystifying-the-restrict-keyword.html" \
+"Demystifying The Restrict Keyword"
+.ITEM
+.PDF_WWW_LINK "https://www.lysator.liu.se/c/restrict.html" \
+              "Restricted Pointers in C (Draft 2), X3J11.1 93-006"
+.LIST OFF
+.ITEM
+\fC_Generic\fP
+.LIST
+.ITEM
+.PDF_WWW_LINK \
+"http://www.robertgamble.net/2012/01/c11-generic-selections.html" \
+"C11 - Generic Selections"
+.ITEM
+.PDF_WWW_LINK \
+"https://www.chiark.greenend.org.uk/%7Esgtatham/quasiblog/c11-generic/" \
+"Workarounds for C11 \fC_Generic\fP"
+.LIST OFF
+.ITEM
+\fC_Thread_local\fP
+.BR
+What can I say...
+.LIST OFF
+.HEADING 4 "X macros"
+.PP
+Skills:
+.LIST
+.ITEM
+Choose between a
+.LIST OFF
+.PP
+Competences:
+.LIST
+.ITEM
+Generate \fCenum\fP declarations using X macros.
+.ITEM
+Fill an array initializator.
+.ITEM
+Generate functions using X macros.
+.LIST
+.ITEM
+Generate constructors.
+.ITEM
+Generate destructors.
+.LIST OFF
+.ITEM
+Generate \fCstruct\fP declarations using X macros.
+.ITEM
+Generate \fCcase\fP statements using X macros in a \fCswitch\fP
+statement.
+.ITEM
+Acknowledge that \fCsizeof\fP is usually simpler than X macros that
+calculate things.
+.LIST OFF
+.PP
+Material:
+.LIST
+.ITEM
+.PDF_WWW_LINK "https://docs.oracle.com/javase/1.5.0/docs/guide/language/enums.html"
+.LIST OFF
+.HEADING 4 "Atomic programming"
+.PP
+What can I say, eh?
+.HEADING 4 "Emscripten"
+.PP
+Building C programs for the Web.
+.HEADING 4 "Coroutines"
+.LIST
+.ITEM
+.PDF_WWW_LINK "https://www.chiark.greenend.org.uk/~sgtatham/coroutines.html" "Coroutines in C"
+.LIST OFF
+.HEADING 4 "Object orientation"
+.HEADING 3 "Code generation, C dialects, filters"
+.PP
+Something annoying: ignoring all files that are generated.
+You generate C files, Rage files.
+How to ignore???
+.PP
+Open problem:
+.LIST
+.ITEM
+How to combine two C dialects, such as one text template and one for
+mathematical expressions?
+.LIST OFF
+.HEADING 3 "m4"
+.HEADING 3 "POSIX \f(CBmake\fP"
+.PP
+Skills:
+.LIST
+.ITEM
+Write escape sequences
+.LIST
+.ITEM
+Escape \fC$\fP with another \fC$\fP: \fC$$\fP
+.LIST OFF
+.ITEM
+Break a long line into several lines placing a \fC\e\fP [TODO]
+.ITEM
+Build a target without it being explicitly written in the
+\fCMakefile\fP file, because of inference rules.
+.ITEM
+Recall which file \fCmake\fP utility reads: \fCMakefile\fP,
+\fCmakefile\fP, \fCGNUmakefile\fP and none.
+.ITEM
+Recognize the limitations of Makefile
+.LIST
+.ITEM
+Do not write targets and dependants contain whitespace in their name
+.LIST OFF
+.ITEM
+Avoid common pitfalls:
+.LIST
+.ITEM
+You cannot simply only list the \fC#include\fPd headers of a \fC.c\fP
+file as prerequisites, because a \fC.h\fP can \fC#include\fP other
+\fC.h\fPs, [sic] to several levels of depth.
+.LIST OFF
+.ITEM
+Write common targets
+.LIST
+.ITEM
+Add a \fCall\fP target
+.LIST
+.ITEM
+Simplify maintenance leveraging the macro \fCTARGET\fP.
+.LIST OFF
+.ITEM
+Add a \fCclean\fP target
+.LIST
+Simplify maintenance leveraging macros \fCTARGET\fP and \fCOBJECT\fP.
+.LIST OFF
+.ITEM
+Add a \fCdist-clean\fP target
+.LIST
+.ITEM
+Use \fCclean\fP as prerequisite to deduplicate [sic] work. 
+.ITEM
+Exempt files that TODO
+.LIST OFF
+.ITEM
+Add a \fCinstall\fP target
+.BR
+I don't have personal experience with this target.
+.LIST OFF
+.ITEM
+Define standard macros:
+.LIST
+.ITEM
+\fCCFLAGS\fP
+.ITEM
+\fCLDFLAGS\fP
+.ITEM
+\fCLDLIBS\fP
+.LIST OFF
+.ITEM
+Define common macros:
+.LIST
+.ITEM
+\fCOBJECT\fP
+.ITEM
+\fCTARGET\fP
+.LIST OFF
+.ITEM
+Resolve \fCCFLAGS\fP and \fCLDLIBS\fP using \fCpkg-config/pkgconf\fP
+.LIST
+.ITEM
+.PDF_WWW_LINK \
+"https://people.freedesktop.org/~dbn/pkg-config-guide.html" \
+"Guide to pkg-config"
+.ITEM
+.PDF_WWW_LINK "http://pkgconf.org/features.html"
+.LIST OFF
+.LIST OFF
+.PP
+Competences:
+.LIST
+.ITEM
+Write a Makefile that builds a C program
+.ITEM
+Write a Makefile suited for programming competitions
+.ITEM
+Write a Makefile to typeset documents
+.ITEM
+Build static dependencies for a C project
+.LIST OFF
+.PP
+Links:
+.LIST
+.ITEM
+.PDF_WWW_LINK "https://nullprogram.com/blog/2017/08/20/" \
+              "A Tutorial on Portable Makefiles"
+.BR
+This tutorial has the following shortcomings:
+.LIST
+.ITEM
+TODO list them.
+.LIST OFF
+.ITEM
+.PDF_WWW_LINK "https://www.cs.cornell.edu/courses/cs403/2003sp/Lecture06/makefile.html" \
+              "How to write a Makefile"
+.ITEM
+.PDF_WWW_LINK "https://aegis.sourceforge.net/auug97.pdf" \
+              "Recursive Make Considererd Harmful"
+.ITEM
+.PDF_WWW_LINK "https://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html" 
+.ITEM
+.PDF_WWW_LINK "https://pubs.opengroup.org/onlinepubs/9799919799/utilities/make.html"
+.BR
+I'm not acquainted with this version yet.
+.ITEM
+.PDF_WWW_LINK "https://learn.microsoft.com/en-us/cpp/build/reference/nmake-reference"
+.ITEM
+.PDF_WWW_LINK "https://github.com/pete-gordon/planet-hively/blob/master/makefile"
+.ITEM
+.PDF_WWW_LINK "https://locklessinc.com/articles/makefile_tricks/"
+.BR
+I haven't read this one yet. Dunno its contents.
+.ITEM
+.PDF_WWW_LINK "https://man.archlinux.org/man/makedepend.1"
+.LIST OFF
+.PP
+Things I don't have experience:
+.LIST
+.ITEM
+Cross-compilation
+.ITEM
+Packaging and shipping
+.ITEM
+Code coverage
+.ITEM
+Testing (unit testing, fuzzing, canaries)
+.ITEM
+Generating documentation
+.LIST OFF
+.HEADING 3 "Git"
+.HEADING 3 "Ragel"
+.PP
+Competences:
+.LIST
+.ITEM
+Process text combining several FSMs, one feeding another, separation
+of concerns.
+.LIST
+.ITEM
+One layer that does decoding, another that does actual processing of
+Unicode scalar values.
+.ITEM
+Process some parts specially
+.LIST OFF
+.LIST OFF
+.PP
+Exercises:
+.LIST
+.ITEM
+Exercises from K&R:
+.LIST
+.ITEM
+Exercise 1-8 [p. 22] Write a program to count
+.UNDERSCORE -3p "blanks, tabs and"
+newlines.
+.BR
+[But what are newlines? is it LF, CRLF? can it be mixed? Can stdin
+fool you?]
+.ITEM
+Exercise 1-23 [p. 34]. Write a program to remove all comments from a C
+program [or any other language of your choice].
+Don't forget to handle quoted strings and character constants
+properly.
+C comments don't nest.
+.LIST OFF
+.ITEM
+Parse POSIX utility flags
+.ITEM
+Parse common items such as:
+.LIST
+.ITEM
+CPF
+.ITEM
+CNPJ
+.ITEM
+Phone number
+.ITEM
+e-mail addresses
+.ITEM
+Web URLs, specific and generic.
+.ITEM
+Dates, such as birthday.
+.LIST OFF
+.ITEM
+Simple troff-like "semantic" data format for some specific purpose.
+.ITEM
+Use some trick to parse recursive languages:
+.LIST
+.ITEM
+Check for balanced parentheis, braces and brackets.
+.ITEM
+Specific or generic JSON, such as:
+.LIST
+.ITEM
+.PDF_WWW_LINK \
+https://doc.mapeditor.org/en/stable/reference/json-map-format/ \
+"Tiled's JSON Map Format"
+.LIST OFF
+.LIST OFF
+.LIST OFF
+.HEADING 3 "groff"
+.PP
+In some errors, make sure files are using LF rather than CRLF!!!!
+.PP
+Competences:
+.LIST
+.ITEM
+Lay out tables
+.LIST OFF
+.HEADING 3 "Writing"
+.HEADING 4 "General writing"
+.LIST
+.ITEM
+Hyperlink everything.
+.PP
+I feel like crying blood and killing myself whenever a webpage or a
+PDF:
+.LIST
+.ITEM
+TODO
+.LIST OFF
+.ITEM
+Phrase in a "quotable" way
+.BR
+I don't have specifics on this, but I frequently find valuable text
+that is presented in a way that quoting it is quite ugly.
+.BR
+This also means that text should be quotable without context.
+.BR
+It's about providing enough information, without hyperlinking.
+.ITEM
+.UNDERSCORE "Be specific, in an exhaustive way"
+.BR
+If you can't, then this means your text is trash.
+Just do your research and stop wasting people's time.
+.BR
+Pinpoint everything.
+.BR
+Don't write "there are many such and such".
+.BR
+Write "there are X things: 1) ..., 2) ..., n) ..."
+.ITEM
+.UNDERSCORE "Reuse jargon, precisely"
+.BR
+Don't invent new terms if there are already existing terms.
+.BR
+Don't waste people's time, making them decipher the meaning of new
+terms.
+.BR
+Don't reuse terms with new meanings, wasting people's time always
+questioning which of the meanings is in effect.
+.LIST OFF
+.HEADING 4 "Documentation writing"
+.PP
+Opinions no one asked for:
+.LIST
+.ITEM
+Writing examples:
+.LIST
+.ITEM
+.UNDERSCORE "Examples must be exclusively production code."
+.BR
+Fictional examples are banned.
+Consequently, words like foo, bar and baz are banned.
+.BR
+If you don't have real examples, then your technology is useless,
+because nothing has been accomplished with it.
+.ITEM
+.UNDERSCORE "Show complex examples upfront."
+.BR
+Your reader is not a fucking moron.
+Your reader is a professional that needs to get work done.
+Or at least you should be trying to cater to this audience, not some
+fucking braindead student who will dropout later and needs to be
+spoonfed all the time in the meanwhile he roleplays as useful person.
+.BR
+Show the full power of your technology with very complex examples
+upfront.
+Otherwise people won't know what your technology is capable of, and
+won't be able to decide whether to use it at all.
+.BR
+If you think that complex examples cannot be comprehended, then your
+technology is useless and you should rethink your life.
+It means that in production code, your technology will be unbearable
+and unmaintenable, hence a waste of time for everyone.
+.BR
+Simple examples are useless.
+Fuck your hello world example.
+Everything can do a fucking hello world.
+It is not big deal.
+You are not proving anything with a fucking hello world.
+.ITEM
+.UNDERSCORE "Examples must be exemplary, complete and standalone."
+.BR
+People will use your examples verbatim, so do them right.
+You can't fight this.
+Being original is a waste of time.
+.BR
+Examples must promote best practices and provide common patterns.
+.BR
+Fuck every example that says "we have omitted such and such to make
+the example simpler, such as error checking".
+Fuck that.
+.BR
+Evidence of what can happen if you provide bad examples:
+.PDF_WWW_LINK https://en.wikipedia.org/wiki/Common_Gateway_Interface#Security
+.ITEM
+.UNDERSCORE "Examples must have context and explanation"
+.BR
+Examples must exercise concepts presented before it is shown.
+.BR
+If your example uses concepts and APIs not explained, provide
+hyperlinks to them to make it the reader's life easier.
+.LIST OFF
+.ITEM
+Don't listen your API in alphabetical order.
+This is useless.
+Fuck you.
+Just group your APIs just like you have several headers for each
+module.
+.ITEM
+Never 
+.LIST OFF
+.PP
+High quality documentation to take inspiration from:
+.LIST
+.ITEM
+TODO. Place groff, mom, troff documents here.
+.ITEM
+Copy examples from that angry e-mail I sent.
+.LIST OFF
+.HEADING 5 "Developer documentation"
+.PP
+Developing technology is roughly two things: a) adding new
+features and b) fixing broken things.
+.LIST
+.ITEM
+.UNDERSCORE "Document maintenance tasks"
+.BR
+So basically.
+.LIST
+.ITEM
+Which files need to be changed.
+.LIST OFF
+.LIST OFF
+.HEADING 4 "Scientific writing"
+.HEADING 3 "Intellectual property, copyright, licenses and patents"
+.PP
+Skills:
+.LIST
+.ITEM
+Understand the concept of "moral rights"
+.ITEM
+Understand the concept of "work for hire"
+.ITEM
+Understand the concept of automatic, unalienable copyright
+.LIST
+.ITEM
+Observe the conventions
+.LIST OFF
+.ITEM
+Understand operations that can be performed intellectual property
+.ITEM
+Understand how a country respects the laws of another country
+.ITEM
+Understand landmarks justice cases and their consequences
+.ITEM
+SPDX [XXX]
+.ITEM
+Write a header
+.ITEM
+Write a LICENSE file
+.ITEM
+Track down the license of a document or software
+.ITEM
+EULA
+.ITEM
+Terms of Service (ToS) (possibly wide in a website)
+.ITEM
+Understand how ToS overrides/puts some constraints [sic] some
+licensing terms (is it so?)
+.LIST OFF
+.PP
+Competences:
+.LIST
+.ITEM
+Contrast free software and open source software.
+.ITEM
+Choose a license for a piece of software or document.
+.ITEM
+Properly license a piece of software
+.ITEM
+Reuse code from other people.
+.ITEM
+Write a Software Bill of Materials (SBOM) to acknowledge third-party
+[XXX]
+.LIST OFF
+.HEADING 3 "Internet etiquette (or duties)"
+.LIST
+.ITEM
+Take notes of shortcomings of XXX and share them once you are done
+.ITEM
+Save on Internet Archive's Wayback Machine a snapshot of webpages that
+are ancient and not popular infrequent rare [sic].
+.ITEM
+Save on Internet Archive's Wayback Machine a snapshot of Web content
+that is likely to be deleted or altered because of controversies.
+.ITEM
+Save on Internet Archive's Wayback Machine a snapshot of a Web that
+has went offline.
+.LIST OFF
+.HEADING 3 "Errors"
+.PP
+Discussing of object-oriented exceptions is out of scope, even though
+they have their merits.
+.PP
+Opinions:
+.LIST
+.ITEM
+.UNDERSCORE "Technology must have one single error namespace"
+.BR
+Creating errors per function or per module is a pitfall.
+.BR
+Further consequences
+.LIST
+.ITEM
+.UNDERSCORE "Wrap errors from underlying technologies into yours"
+.BR
+Never exposing your users to them directly.
+.BR
+But you can provide functions to obtain them, although this will
+complicate portability if you use different technologies for different
+platforms.
+.ITEM
+.UNDERSCORE "Errors must be unique and identidiable (id)"
+.BR
+So they are searchable and stadalone
+.BR
+One choice is numbers.
+Or unique textual identifier.
+.BR
+This matter is interesting.
+.BR
+Rationale: searchability of errors
+.BR
+Don't use numbers if your errors are an enum.
+Fix: provide functions that map numbers to a string.
+.LIST OFF
+.ITEM
+.UNDERSCORE "Don't delete, rename or reorder errors"
+.BR
+Open problem: how do you enforce this automatically?
+.LIST OFF
+.HEADING 3 "Logging"
+.PP
+I don't know this, but it is an important matter.
+.HEADING 2 "Productivity music"
+.PP
+O Rappa \(en Lado B Lado A is a good album for chilling.
+Not really productivity oriented.
+.PP
+Besides quality, music is needed in quantity to endure hours of work,
+and also maintain some consistency, so as to keep mood. [sic]
+For these reasons, albums are preferred, and the entire discography of
+certain musicians, if they are consistent.
+Minimize skip.
+Maybe if I had time, I could waste many hours or days of my life
+listening to singles and compiling them in a playlist that lasts for
+one or two hours.
+I think that performance charts could aid.
+.PP
+Learn more about music at
+.PDF_WWW_LINK "https://music.ishkur.com/" PREFIX "" SUFFIX . "Ishkur's Guide to Electronic Music"
+.PP
+This is mostly organized by "mood", which is currently roughly
+defined.
+Roughly organized by most listened.
+.PP
+Powerful music:
+.LIST
+.ITEM
+Rukkus (aka Nightkilla aka Realistik aka [names Stephen, Steve, Coub,
+Crouse)
+.BR
+He is the king.
+Even his unfinished releases are off the chart.
+.LIST
+.ITEM
+.PDF_WWW_LINK "https://rukkus.newgrounds.com/audio?sort=views" \
+              "Most viewed"
+.ITEM
+.PDF_WWW_LINK "https://rukkus.newgrounds.com/audio?sort=score" \
+              "Highest score"
+.ITEM
+.PDF_WWW_LINK \
+"https://www.newgrounds.com/search/conduct/audio?advanced=1&match=tdtu&user=Rukkus&before=2019-01-01&sort=views-asc" \
+"Least viewed"
+.ITEM
+.PDF_WWW_LINK \
+"https://www.newgrounds.com/search/conduct/audio?advanced=1&match=tdtu&user=Rukkus&before=2019-01-01&sort=score-desc" \
+"Lowest score"
+.LIST OFF
+.ITEM
+.PDF_WWW_LINK \
+"https://www.newgrounds.com/playlist/293562/okay-xtrullor-music" \
+"Xtrullor"
+.BR
+His later work is more "orchestral".
+.ITEM
+KaixoMusic
+.LIST
+.ITEM
+.PDF_WWW_LINK \
+"https://www.newgrounds.com/playlist/89855/beyond-paradise-lp" \
+"KaixoMusic \(en Beyond Paradise LP"
+.ITEM
+.PDF_WWW_LINK \
+"https://www.newgrounds.com/playlist/114017/how-it-began-lp" \
+"KaixoMusic \(en How it Began LP"
+.ITEM
+.PDF_WWW_LINK \
+"https://www.newgrounds.com/playlist/114016/the-alpha-axiom-ep" \
+"KaixoMusic \(en The Alpha Axiom EP"
+.ITEM
+.PDF_WWW_LINK \
+"https://www.newgrounds.com/playlist/330011/fragments-lp" \
+"KaixoMusic \(en Fragments LP"
+.LIST OFF
+.LIST OFF
+.PP
+High energy power victory music:
+.LIST
+.ITEM
+.PDF_WWW_LINK "https://creomusic.newgrounds.com/audio" "Creo Music"
+.ITEM
+.PDF_WWW_LINK \
+"https://www.newgrounds.com/playlist/459852/okay-cysmix-music" \
+"cYsmix"
+.LIST OFF
+.PP
+Very very high energy music:
+.LIST
+.ITEM
+Initial D music:
+.PDF_WWW_LINK "https://www.youtube.com/watch?v=Gah8FnYSypk"
+.ITEM
+.PDF_WWW_LINK "https://f-777.newgrounds.com/audio?sort=views" "F-777"
+.ITEM
+Happy 2b Hardcore
+.BR
+I did not like at all chapters five to eight.
+.LIST
+.ITEM
+Happy 2b Hardcore (named later [sic] Chapter one)
+.ITEM
+Happy 2b Hardcore Chapter Two
+.ITEM
+Happy 2b Hardcore Chapter Three
+.ITEM
+Happy 2b Hardcore Chapter Four
+.LIST OFF
+.LIST OFF
+.PP
+Evil mood:
+.LIST
+.ITEM
+Periphery - Hail Stan IV
+.ITEM
+.PDF_WWW_LINK \
+"https://www.newgrounds.com/playlist/226666/mister-scoops" \
+"Mister Scoops"
+.LIST OFF
+.PP
+Intense chanting music for extra crunching, for overexherting,
+work until exhaustion:
+.LIST
+.ITEM
+Static X - Wisconsin Death Trip
+.LIST OFF
+.PP
+Music to cool down without losing work rhythm:
+.LIST
+.ITEM
+piri & tommy - froge.mp3
+.BR
+Good when you lost steam after a crunch, or when you are starving
+after crunching, but you need more energy to prepare food etc.
+Yeah this is the last purpose.
+Afterburner.
+.LIST OFF
+.PP
+Comedy music, for "ironic" [detail more] mood:
+.LIST
+.ITEM
+.PDF_WWW_LINK "https://www.youtube.com/watch?v=0c_mhrB7LlQ" \
+              "Pink Guy - Pink Season"
+.ITEM
+.PDF_WWW_LINK "https://www.youtube.com/watch?v=fLELt1TueHw" \
+              "Bonda II MC VV - BONDA 2"
+.LIST OFF
+.PP
+Grumpy music, for "thwarted" feeling (shortlived):
+.LIST
+.ITEM
+Linkin Park - Hybrid Theory
+.ITEM
+Linkin Park - Meteora
+.LIST OFF
+.PP
+When feeling nervous and dreary:
+.LIST
+.ITEM
+50 Cent - Get Rich or Die Tryin'
+.LIST OFF
+.PP
+Not classified:
+.LIST
+.ITEM
+Dido - No Angel
+.ITEM
+.PDF_WWW_LINK \
+"https://web.archive.org/web/20200509032233/http://www.technikal.co.uk/demo/technikal_promo_jan_07.zip" \
+"Technikal - Promo"
+.ITEM
+.PDF_WWW_LINK \
+"https://web.archive.org/web/20120722223115/http://www.technikal.co.uk/demo/Technikal_Promo_Mix_4.zip" \
+"Technikal - Promo Mix 4"
+.BR
+Some parts are mid.
+.ITEM
+Truckfighers - Gravity X
+.ITEM
+.PDF_WWW_LINK \
+"https://www.newgrounds.com/playlist/199842/fractal-severance" \
+Wahnsinn \(en Fractal Severance
+.ITEM
+System of a Down [TODO]
+.ITEM
+Offspring - Greatest Hits
+.ITEM
+Disturbed - Indestructible
+.ITEM
+Deftones - Around the Fur
+.ITEM
+Calyx - No Turning Back
+.ITEM
+Charlie Brown Jr.
+.ITEM
+Authority Zero - Andiamo
+.ITEM
+Angra - [TODO] have to pick some
+.ITEM
+50 cent - Get rich or die tryin'
+.ITEM
+What about the hardbass
+.ITEM
+Skipknot - Iowa
+.ITEM
+.PDF_WWW_LINK \
+"https://www.newgrounds.com/playlist/362100/okay-waxterk-music" \
+WaxTerK
+.LIST OFF
+.HEADING 2 "Game ideas"
+.HEADING 3 "Multiplayer raid game"
+.HEADING 4 "Minecraft critique"
+.PP
+First problem is that you spawn and then you have to travel several
+miles before you find an unocuppied spot to start mining, farming and
+building.
+All the bases you pass by are protected, you can't open doors, you
+can't steal chests, you can't destroy anything.
+This is boring, because over time, as players leave the server for a
+long time or forever, everything is abandoned, and also untouchable.
+Protecting terrain is boring, because it adds no challenge to the
+game, and makes it ugly.
+.PP
+On the opposite, "anarchy" servers have zero protection mechanisms,
+which is also boring, because you can literally do nothing other than
+travelling as far as possible, few people will see your base.
+.HEADING 4 "Rest"
+.PP
+Characteristics:
+.LIST
+.ITEM
+Multiplayer
+.ITEM
+Voxel
+.ITEM
+Notion of territory
+.LIST OFF
+.PP
+So the player can build golems that perform simple to complex tasks.
+They require supply of energy to work, so the player must have some
+energy generation such as batteries or wiring.
+.PP
+Examples of tasks:
+.LIST
+.ITEM
+Farming
+.ITEM
+Carrying resources around
+.ITEM
+Cleaning
+.ITEM
+Cooking
+.ITEM
+Mining
+.ITEM
+Watching
+.ITEM
+Crafting
+.LIST OFF
+.PP
+There will be animals, which have varying levels of agression, fear,
+domesticability, disease. There could be giraffes, elephants, wolfs,
+rats, fish etc.
+.PP
+Water can have disease, such as from radiation, lead or pollution.
+.PP
+There is biocumulative disease such as lead, that fish can get and
+transmit from eating.
+.PP
+Disease can affect camera movement, although hacks could compensate
+for it.
+.PP
+Different kinds of attack/tools: puncturing/perfurative, cutting,
+blunt. No much liberty. Predefined tools and weapons, predefined
+interactions.
+.PP
+Very slow mining and building. Players can join efforts to destroy or
+place a single block, golems can later help.
+.PP
+Players spawn randomly, unconditionally. If you want to play together,
+must manually travel to reunite, won't know where you are, server will
+provide all coordinates relatively.
+.PP
+Medium-sized island, randomly generated, ever-more realistic terrains,
+copying art of Minecraft mods. Minerals and plants will cluster
+heavily, there will be no general availability, so that each city has
+to initially specialize and trade.
+.PP
+Some randomized properties. Every match, property of minerals and
+animals are randomized.
+.PP
+Matches can be unfair. No problem, just wait it end and try to be
+lucky next time.
+.PP
+Leaderboards early on.
+.PP
+Players hibernate when logoff. They don't disappear and reappear. Can
+be killed while hibernating.
+.PP
+Basic technology: nothings' voxel engine.
+.PP
+Flag system. Golems use flags to work. Flags indicate territory span
+in a radius. So you can define your castle. Flags can overlap.
+Individual players can have family flags inside city flags. Destroy
+flags and you can conquer a city. Flags are powered by electricity.
+.PP
+Some degree of gravity.
+.PP
+There will never be teleportation, nor destruction protection.
+.PP
+Some match ending conditions. Can be ended by nuclear explosion. Or
+pollution that leads to catastrophe.
+.PP
+Accumulate points somehow, so that endgame is desirable. Luxury and
+buildings.
+.PP
+Has some pollution effects, possibility of extinction.
+.PP
+Plants have properties, nutritional and medicinal values.
+.PP
+Some nutrients: structure, energy, vitamin.
+.PP
+Players can vary status depending on work done and nutrition, can
+become weaker.
+.PP
+Heat affects vision. Cold makes your vision bluer, heat makes your
+vision turbulent.
+.PP
+There is inundation, aridness, rain, storms, snow, meteor, earthquake.
+.PP
+There is pirates and viking attacks.
+.PP
+There is flies and dead bodies causing disease.
+.PP
+Points such as span of territory.
+.PP
+Tattoos when spawned, fixed until death. Clothes can cover then.
+Inter-match allegiance.
+.PP
+Can drink water, directly from river. Bathing mechanics.
+.PP
+Low-pop, uses lots of statistics to simulate, has supernatural
+phenomena and contact. High-pop, more server intensive, expects to
+have more money IRL, less simulation, no supernatural anymore.
+.HEADING 3 "Mass destruction fighter game"
+.PP
+Maybe a fight game, or a survival game.
+You are a normal person while incredibly powerful creatures fight on
+Earth.
+Obviously inspired by Dragon Ball.
+A game with mechanics of destroying entire mountains, this kind of
+havoc.
+.HEADING 1 "Plans, research"
+.HEADING 2 "Building"
+.PP
+Uma DAG com tudo pro Makefile.
+Um Makefile que faz TUDO.
+Usar m4 pra gerar coisas, por causa de herança.
+Herança?
+.PS
+boxwid = 1
+[
+CODE: box "Code"
+]
+move
+[
+ down
+ box invis "Platform"
+ [
+  right
+  [
+   down
+   box "Windows"
+   box "Linux"
+   box "Android"
+   box "HTML5"
+  ]
+  [
+   down
+   box "x86"
+   box "x86 v3"
+   box "ARMv7"
+   box "ARMv8"
+  ]
+  [
+   down
+   box "\fCfanalyzer\fP"
+   box "Sanitizer"
+   box "OpenMP"
+   box "PGO"
+   box "Code" "Coverage"
+   box "LTO"
+  ]
+ ]
+]
+move
+[
+down
+box invis "Vendor"
+box "Steam"
+box "Newgrounds"
+box "Itch.io"
+box "Play Store"
+]
+line dashed from 2nd [].nw-(movewid/2,0) to 2nd [].sw-(movewid/2,0)
+line dashed from 2nd [].ne+(movewid/2,0) to 2nd [].se+(movewid/2,0)
+.PE
+.PP
+Variantes!
+Variante abstrato e final.
+Herança!
+.PP
+O vendor varia.
+Só tem um no final, mas queremos herdar rápido.
+Tipo, mandar pro beta tester, depois a versão final muda.
+Habilitar e desabilitar plataformas
+Depender ENTRE plataformas, tipo o PGO depende dos dados coletados, e
+um release depende dos coverage estar acima de uma porcentagem
+.PP
+M4 no início, por segurança, por ser de todos os propósitos, depois
+tenta ser inteligente...
+.PP
+Herança no M4 é só concatenar listas
+.HEADING 1 RANDOM
+.PP
+Some structured, uuuuhhh some methodic method to... keep track of
+specification implementation...
+.PP
+Given santizers and advanced static analyzers, should we really
+initialize variables? Maybe initializing them hides errors that an
+analyzer or sanitizer could catch.
+.PP
+.PDF_WWW_LINK https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/mosh.html
+.PP
+Rant about Unicode. Counterpoint against parrots:
+.PDF_WWW_LINK https://devblogs.microsoft.com/oldnewthing/20170714-00/?p=96605
+.PP
+Top five reasons to clean your house:
+.LIST
+.ITEM
+It is not comfortable to breath on the floor if it is unclean.
+.ITEM
+Dust ruins clothes appearance.
+.ITEM
+It is more annoying to walk around when flip-flops are slipping.
+.ITEM
+If your clothes or blankets fall on the floor, they are ruined.
+.ITEM
+I think it might cause you an intermittent "dog" cough that is very
+annoying to hear.
+.LIST OFF
+.HEADING 2 "Problems"
+.PP
+Problems that I want to explore scientifically.
+I will probably not work on them personally, due to lack of time or
+domain knowledge, so I hope to acquire to fund such research.
+.HEADING 3 "Branchless compiler"
+.PP
+Is the compiler smart enough to optimize code making it branchless? I
+think Ragel writes tons of conditionals, can the compiler make it all
+branchless? Check the assembly. Benchmark. Is it worth it? Should
+Ragel write branchless code, or should the compiler? I think the
+compiler should, because then other tools could benefit from it.
+.HEADING 1 "Go Horse translation"
+.HEADING 2 "Steve Jobs is badass, isn't he?"
+.PP
+This post is being written in a MacBook, but not always I use my Apple
+laptop to compose my writings.
+Some weeks ago[,] for example[,] I wrote a post using my iPad during a
+[thai] massage [session].
+To [monitorar] my [shares/stocks/assets/ações][,] I use the iPhone.
+.\".PP
+.\"Este post está sendo escrito em um MacBook, mas nem sempre utilizo meu
+.\"laptop da Apple para redigir meus textos. Há algumas semanas, por
+.\"exemplo, escrevi um post usando meu iPad durante uma sessão de
+.\"massagem tailandesa. Para monitorar minhas ações, uso o iPhone.
+.PP
+Whenever someone sees me using an Apple product[,] [comenta]: "Steve
+Jobs is badass".
+.\".PP
+.\"Sempre que alguém me vê usando um produto da Apple, comenta: “Steve
+.\"Jobs é foda”.
+.PP
+No wonder everyone associates Apple and its products to Steve Jobs, as
+each innovation [is introduced] to [the market/ao mercado] through
+[some] presentation [by] its CEO.
+Steve Jobs is [the face/a cara] of Apple.
+.\".PP
+.\"Não é à toa que todos associam a Apple e seus produtos a Steve Jobs,
+.\"pois cada inovação é introduzida ao mercado através de alguma
+.\"apresentação do seu CEO. Steve Jobs é a cara da Apple.
+.PP
+Although being the [founder] of the company, Jobs left it in 1985
+after being defeated by excellent goHorser[,] John Sculley.
+Such situation lasted until 1997, year when Jobs triunfally returned
+[to the company].
+The good goHorser waits until the time is right for vengeance.
+.\".PP
+.\"Apesar de ter sido fundador da empresa, Jobs a deixou em 1985 após ter
+.\"sido derrotado por um exímio goHorser, John Sculley. Tal situação
+.\"durou até 1997, ano da volta triunfal de Jobs à empresa. O bom
+.\"goHorser sabe esperar o momento certo da vingança.
+.PP
+Apple immeditely changed its direction [em virtude de] [sucessivos]
+years of failure.
+Steve Jobs knew that the products were trash and needed [ser
+renovados].
+He launched the iMac, the iPod, [e o resto da história todos
+conhecem/and the rest is history].
+.\".PP
+.\"A Apple imediatamente mudou seu direcionamento em virtude de
+.\"sucessivos anos de fracasso. Steve Jobs sabia que os produtos eram
+.\"um lixo e precisavam ser renovados. Lançou o iMac, o iPod, e o
+.\"resto da história todos conhecem.
+.PP
+Reread the paragraph above.
+Did you notice [something/anything] [ressaltado/to be emphasised]?
+No?
+So read again.
+.\".PP
+.\"Releia o parágrafo acima. Notou algo a ser ressaltado? Não? Então leia
+.\"de novo.
+.PP
+In the aforementioned paragraph, I [attribute] the launch of Apple
+products to Steve Jobs exclusively.
+In reality, such products were launched during his management, but
+would Jobs be the [idealizador] of all of them?
+[If the reader] beleive so, then he doesn't know the role of the
+goHorser manager.
+Managers only sign ideas presented by technicians.
+.\".PP
+.\"No referido parágrafo, eu atribuo o lançamento dos produtos da
+.\"Apple a Steve Jobs exclusivamente. Na verdade, tais produtos foram
+.\"lançados durante a sua gestão, mas teria sido Jobs o idealizador de
+.\"todos eles? Se o leitor acredita que sim, então não conhece a
+.\"função de um gerente goHorser. Gerentes apenas assinam ideias
+.\"apresentadas por técnicos.
+.PP
+Ascend to the circle of trust [traz/brings] to the [beneficiário] of
+the promotion not only a higher salary, but also status.
+Actually, status is the tool goHorse managers use to exercise what is
+theirs by right: negotiations, [troca de favores] and [traçar] the
+[mulherada] of the company (if they are men).
+It doesn't [cabe] to the manager do the work, [muito menos]
+[idealizá-lo].
+It doesn't [cabe] to the manager define the products, this is done by
+technicians.
+GoHorse managers simply sign [below].
+.\".PP
+.\"Ascender ao círculo de confiança traz ao beneficiário da promoção
+.\"não somente um salário maior, mas também status. Na verdade, o
+.\"status é a ferramenta que gerentes goHorses utilizam para exercer o
+.\"que lhes é de direito: negociações, troca de favores e traçar a
+.\"mulherada da empresa (se for homem). Não cabe ao gerente fazer o
+.\"trabalho, muito menos idealizá-lo. Não cabe ao gerente definir os
+.\"produtos, isso é feito por técnicos. Gerente goHorse simplesmente
+.\"assina.
+.PP
+At this [altura] the [reader] might be changing their opinion... must
+be thinking: "badass isn't Steve Jobs, badass are the engineers that
+[bolaram] the iPod". \" TODO can use adj. verb sequence?
+[Ledo engano].
+Badass is Steve Jobs and all members of the Circle of Trust around the
+world.
+Go Horse isn't for [the weak] and reaching the Circle of Trust is [a
+kind] of [corporative] darwinism.
+To invent something is easy, hard is to [apropriar-se] of the
+intellectual property [de criãção] [alheia].
+Managers, directors, VPs and presidents are badass... not [palerma]
+horses.
+.\".PP
+.\"A essa altura o leitor pode estar mudando de opinião… deve estar
+.\"pensando: “foda não é o Steve Jobs, foda são os engenheiros que
+.\"bolaram o iPod”. Ledo engando. Foda é o Steve Jobs e todos os
+.\"membros dos Círculos de Confiança ao redor do mundo. Go Horse não é
+.\"para os fracos e chegar ao Círculo de Confiança é uma espécie de
+.\"darwinismo corporativo. Inventar alguma coisa é fácil, difícil é
+.\"apropriar-se da propriedade intelectual de criação alheia.
+.\"Gerentes, diretores, VPs e presidentes são foda… horses são
+.\"palermas.
+.HEADING 2 "[Gestão de Portfólio] Go Horse"
+.PP
+The PMI bureaucrats[,] not [contentes] in [having built] the biggest
+repository of [asneiras] in terms of [Project Management] \(em the
+PMBOK \(em recently they have been [dando palpites] in [areas] of
+[Gestão de Programas e Portfólio].
+.\" Os burocratas do PMI, não contentes em terem construído o maior
+.\"repositório de asneiras em termos de Gerência de Projetos  – o
+.\"PMBOK – recentemente vêm dando palpites nas áreas de Gestão de
+.\"Programas e Portfólio.
+.PP
+The Go Horse also has its approach to [Gestão de Portfólio].
+With only [4] axioms, [desbancamos o papo furado] of PMI.
+.\"O Go Horse também tem a sua abordagem para a Gestão de Portfólio.
+.\"Com apenas 4 (quatro) axiomas, desbancamos o papo furado do PMI.
+.PP
+\fB1 \(en Don't worry [about] adding value\fP
+.\"1 – Não se preocupe em agregar valor
+.PP
+Many ideas are [desperdiçadas/wasted] because some [chato] [as veta]
+[sob o argumento][under the argument] that they don't "add value" to
+the client.
+Worrying about adding value is a mistake, and the reason is explained
+in axiom 2.
+.\"Muitas idéias são desperdiçadas porque algum chato as veta sob o
+.\"argumento de que não “agregam valor” ao cliente. Preocupar-se em
+.\"agregar valor é um erro, e o motivo disso é explicado no axioma 2.
+.PP
+\fB2 \(en [Parta da premissa] that your customers are idiots\fP
+.\"2 – Parta da premissa de que seus consumidores são idiotas
+.PP
+Because they are.
+If you doubt this, follow the series "Go Horse Products" to be
+published in this website, beginning in this post.
+.\"Porque eles são. Se você duvida disso, acompanhe a série “Produtos
+.\"Go Horse”, a ser publicada neste site, e iniciando neste post.
+.PP
+\fB3 \(en Scruples are for the weak
+.\"3 – Escrúpulos são para os fracos
+.PP
+If the Sony BMG's [portfolio] manager worries with [frescuras] like
+[this], he'd never hire Milli Vanilli for your artist[s] portfolio.
+.\"Se o gestor de portfólios da Sony BMG se preocupasse com frescuras
+.\"como essa, jamais contrataria o Milli Vanilli para o seu portfólio
+.\"de artistas.
+.PP
+\fB4 \(en Don't waste time with [market research.]
+.\"4 – Não perca tempo com pesquisas de mercado.
+.PP
+There will always be someone that will consume what you produce
+([see/vide] axiom 2).
+.\"Sempre vai haver alguém que consumirá o que você produzir (vide
+.\"axioma 2).
+.HEADING 2 "Soft Skills"
+.PP
+Soft skills, until recently ignored, became a [verdadeira modinha] in
+the corporate world in the last few years.
+[Muito se fala] on the importance of soft skills and how to develop
+them, which is a big challenge, since we must first identify what they
+are.
+.\" Soft skills, até pouco tempo ignoradas, viraram uma verdadeira
+.\" modinha no mundo corporativo nos últimos anos. Muito se fala na
+.\" importância das soft skills e em como desenvolvê-las, o que é um
+.\" grande desafio, já que primeiro devemos identificar o que elas
+.\" são.
+.PP
+[Idiotices] such as research [about] the best companies to work at
+gained a lot of traction [recently], giving horses the illusion that
+their employers have some [dever junto à peonada] [no que diz
+respeito] to well-being and work conditions.
+Among the criteria that such useless research use to qualify a company
+as good or bad to work at is on [está a tal de] "meritocracy", or
+"promotion by merit".
+Suddenly, [a peonada] started to [insurge] against one of the oldest
+Go Horse practices: promotion by friendship and trust.
+.\"Idiotices como pesquisas sobre melhores empresas para se trabalhar
+.\"ganharam muita força ultimamente, dando aos horses a ilusão de que
+.\"seus empregadores possuem algum dever junto à peonada no que diz
+.\"respeito a bem estar e condições de trabalho. Dentre os critérios
+.\"que tais pesquisas inúteis utilizam para qualificar uma empresa
+.\"como boa ou ruim para se trabalhar está a tal da “meritocracia”, ou
+.\"“promoção por mérito”. De repente, a peonada começou a se insurgir
+.\"contra uma das mais antigas práticas Go Horse: a promoção baseada
+.\"na amizade e confiança.
+.PP
+.\"O horse deve ter em mente que chefe não é pai e promove quem bem
+.\"entender. Além disso, uma promoção para um cargo de natureza
+.\"gerencial exclui o promovido do ciclo produtivo, o que faz da
+.\"promoção por mérito uma grande inconveniência.
+.\"
+.\"Tendo em vista o fato de que as atividades de um gerente se
+.\"assemelham muito ao trabalho de verdade, porém totalmente alheias à
+.\"construção do bem ou serviço vendido pela organização, promoções
+.\"para cargos gerenciais passaram a ser justificados pelas tais “soft
+.\"skills”. Ou seja, se algum peão ousar contestar uma promoção de
+.\"alguém que não demonstra, segundo seu julgamento, a qualificação
+.\"necessária, basta respondê-lo que tal promoção se deu em virtude de
+.\"soft skills que o recém promovido detém.
+.\"
+.\"Uma soft skill é uma competência ou característica pessoal atrelada
+.\"à personalidade e que, ao contrário das competências técnicas, não
+.\"demanda esforço por parte da pessoa que deseja desenvolvê-la. A
+.\"avaliação de uma soft skill de alguém é vaga e subjetiva, o que
+.\"torna extremamente fácil a um chefe goHorser justificar a promoção
+.\"de um amigo incompetente.
+.\"
+.\"Ou seja, soft skills são uma criação de membros goHorsers do
+.\"Círculo de Confiança que tem como objetivo viabilizar uma fácil
+.\"justificativa para uma inclusão repentina de um amigo às altas
+.\"rodas da empresa.
+.\"
+.\"Tal criação se mostrou tão eficiente na obtenção do seu objetivo
+.\"que, em muitas empresas, ser competente tecnicamente depõe contra o
+.\"horse. Isso significa que, se desejamos manter um horse competente
+.\"eternamente na condição de peão, basta rotulá-lo como alguém
+.\"“essencialmente técnico e sem soft skills”. Hoje é muito comum o
+.\"fato de horses omitirem suas qualificações técnicas para manterem
+.\"vivas as suas chances de ascender ao Círculo de Confiança.
+.\"
+.\"Conheça algumas Soft Skills:
+.\"
+.\"Nome Técnico: Sociabilidade Significado: Vaselina O que é:
+.\"capacidade de dar tapinhas nas costas e sorrir para colegas
+.\"escrotos e sem escrúpulos de quem se possa vir a precisar algum
+.\"dia.
+.\"
+.\"Nome Técnico: Capacidade de Persuasão Significado: Manipulação de
+.\"Otários O que é: não importa o quão estúpida seja uma ideia,
+.\"dependendo da convicção com a qual a defendemos, podemos convencer
+.\"os otários a segui-las.
+.\"
+.\"Nome Técnico: Liderança Significado: Cenoura na frente do burro O
+.\"que é: ninguém faz nada sem receber algo em troca, e são vistos
+.\"como líderes aqueles que ganham o apoio da massa ludibriando-a com
+.\"promessas vazias.
+.\"
+.\"O advento das soft skills trouxe a nós, goHorsers, um efeito
+.\"colateral positivo: tem muito horse que quer crescer através do
+.\"desenvolvimento desse tipo de competência, ignorando o fato de que
+.\"as soft skills são usadas para justificar uma promoção DEPOIS que a
+.\"mesma ocorre, e não antes. Isso gerou um vasto mercado a se
+.\"explorar: cursos e treinamentos de comunicação, negociação,
+.\"técnicas de apresentação e outras inutilidades.
+.HEADING 1 "Translation"
+.PP
+Não é à toa \(-> [It's] no/little/small wonder / <neg>..for nothing /
+[It's] Not for nothing.
+.PDF_WWW_LINK https://www.englishexperts.com.br/forum/como-dizer-nao-e-a-toa-que-em-ingles-t1418.html
+.PP
+Esperar o momento certo \(-> wait until the time is right.
+.PDF_WWW_LINK https://www.englishexperts.com.br/forum/como-dizer-esperar-o-momento-certo-em-ingles-t50912.html
+.PP
+Agregar valor \(-> add value.
+.PDF_WWW_LINK https://www.englishexperts.com.br/forum/como-dizer-agregar-valor-em-ingles-t34687.html
+.PP
+line \(-> traçado.
+(no contexto de corrida, os vários caminhos que o carro escolhe pra
+andar em retas e curvas)
+https://www.youtube.com/watch?v=Krx1_NP99dc
+.HEADING 1 "Disfemismo"
+.PP
+jorro, jato \(-> mijo
+.HEADING 1 "FUCK"
+.PP
+\fCflat\fP keyword in GLSL first appears in GLSL 1.3 (or 1.3.10 for
+that matter), which is \fC#version 130\fP and OpenGL 3.0.
+\fCflat\fP is also keyword for GLSL ES 3.00.06 or OpenGL ES 3.0 or
+WebGL 2.0, based on GLSL 3.30 which is either \fC#version 300 es\fP or
+\fC#version 330\fP.
+.HEADING 1 "Random 2"
+.LIST
+.ITEM
+Never automate before
+.ITEM
+If automate, it must be 100% reliable, if only 90% predictable, try to make manual easier
+.ITEM
+If really automate, make it trivial to affect kludge manually the results
+.ITEM
+Only after automate after a lot of manual cases
+.LIST OFF
+.NEWPAGE
+.HEADING 1 "Asset dependency gatherer for troff"
+.PP
+.NEWPAGE
+.HEADING 1 "Linux desktop"
+.HEADING 2 "Clipboard"
+.LIST
+.ITEM
+Ability
+.LIST OFF
+.HEADING 2 "Screens"
+.LIST
+.ITEM
+.LIST OFF

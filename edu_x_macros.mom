@@ -1,0 +1,209 @@
+.DOCTYPE SLIDES ASPECT 4:3
+.START
+.HEADING 1 "Macros X"
+.NEWSLIDE
+.HEADING 1 "Limitações do tutorial"
+.LIST
+.ITEM
+Não cobre novidades do C23 nem futuras versões como o vindouro C2Y
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "Limitações"
+.PP
+Adicionar, remover e reordenar parâmetros ainda é uma cirurgia de espingarda.
+.NEWSLIDE
+.HEADING 1 "Desvantagens"
+.LIST
+.ITEM
+Quebra IDEs e seus \fIplugins\fP
+.LIST
+.ITEM
+IntelliSense, realce de sintaxe e SonarQube param de funcionar
+.ITEM
+IDE inteira pode parar de funcionar
+.LIST OFF
+.ITEM
+Uso do pré-processador é banido inteiramente em vários projetos C++
+.ITEM
+Impede colaboração entre pessoas
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "Coisas sequências"
+.TS
+center allbox;
+cB cB cB
+l l l.
+Construção	Separador	Separador após último item
+Lista de constantes de enumerador	Vírgula	Desde C99, sim
+Várias funções em uma unidade de tradução	Nenhum
+Vários \fCcase\fP em uma expressão \fCswitch\fP
+Um bloco de código com vários \fIstatements\fP	Ponto e vírgula	Obrigatório
+Lista de parâmetros	Vírgula	Proibido
+Uma expressão	Operadores	Proibido
+\fIstatements\fP primários	Ponto e vírgula	Obrigatório
+.TE
+.PP
+Nota: impossível gerar vários \fC#define\fP ou vários \fC#include\fP
+.NEWSLIDE
+.HEADING 1 "Básico"
+.PP
+Por que existe o \fCenum\fP, quando um \fC#define\fP serve o mesmo
+propósito?
+O fato do valor das constantes se autoincrementar pode parecer a
+principal razão, mas na prática qualquer projeto grande vai preferir
+ditar os valores manualmente, por questões de retrocompatibilidade,
+interfaces binárias e padrões.
+.PP
+Resposta: gerar procedimentalmente as constantes
+.NEWSLIDE
+.HEADING 1 "Fatos sobre pré-processador"
+.PP
+Possui \fItokens\fP!
+.LIST
+.ITEM
+Diretivas que começam \fC#\fP: \fC#define\fP, \fC#ifdef\fP,
+\fC#include\fP etc.
+.ITEM
+Literais de strings
+.ITEM
+Literais de caractere
+.ITEM
+Parênteses
+.LIST
+Devem sempre aparecer balanceados!
+.BR
+Isso proíbe o seguinte:
+.BR
+.CODE
+#define OPEN (((
+#define CLOSE )))
+int foo = OPEN 3 CLOSE ;
+.CODE X
+.ITEM
+Apesar de chaves e colchetes também serem balanceados no C, isso não
+persiste (hold) em nível de pré-processamento
+.LIST OFF
+.ITEM
+Inteiros e operações matemáticas e lógicas
+.LIST
+Habilita para testes lógicos do \fC#if\fP e \fC#elif\fP
+.LIST OFF
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "Erros comuns"
+.PP
+Um macro X expandido somente uma vez não é útil.
+.PP
+Nem mesmo vale a pena para "futuros usos", pois quando for necessário, um editor de texto com muti-cursor ou substituição com expressão regular pode rapidamente fazer a adaptação.
+.PP
+Considere que o seguinte, para um jogo de defesa de torre ou defesa \fItop-down\fP, seja escrito diretamente ou gerado com macros X:
+.CODE
+enum enemy { ENEMY_RAT, ENEMY_GRUNT, ENEMY_GUARD,  };
+.CODE OFF
+.PP
+O seguinte código é estúpido:
+.CODE
+#define WAVE_XS(X,Y) \
+    X(Y(ENEMY_RAT, 3, 
+
+#define AS_1(A, ...) A
+#define AS_2(A, B, ...) B
+#define AS_3(A, B, C) C
+#define
+.CODE OFF
+.PP
+A razão é que o \fCstruct\fP já existe, então faça assim:
+.CODE BR
+#define WAVE(...) (struct wave[]){__VA_ARGS__}
+#
+struct wave {
+    int entrance;
+    int amount;
+    enum enemy type;
+} **levels[] = {
+    WAVE(
+        {0, 3, ENEMY_RAT}
+        {0, 5, ENEMY_RAT}
+    ),
+    WAVE(
+        {0, 7, ENEMY_RAT}
+        {0, 2, ENEMY_GRUNT}
+    ),
+    WAVES(
+        {0,
+};
+.CODE OFF
+.PP
+Não precisamos de uma \fCenum\fP
+.NEWSLIDE
+.HEADING 1 "Alternativa para outras linguagens"
+.LIST
+.ITEM
+O \fIdesign pattern\fP \fItypesafe enum\fP é a alternativa
+para associar dados e comportamento à constantes de enumeração.
+.LIST
+.ITEM
+Descrito por Joshua Bloch no livro Java Efetivo, 1. ed., em 1999.
+.LIST OFF
+.ITEM
+A linguagem deve ter ou permitir o seguinte:
+.LIST
+.ITEM
+Campos/propriedades/membros estáticos para tipos/classes
+.ITEM
+Construtores estáticos
+.ITEM
+Construtores privados (opcional)
+.LIST OFF
+.ITEM
+Desvantagens:
+.LIST
+.ITEM
+Não funciona com \fCswitch..case\fP e \fIpattern matching\fP
+.LIST OFF
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "\f(BITypesafe enum\fP no C#"
+.NEWSLIDE
+.HEADING 1 "Enumerações do Java no C# a partir do T4"
+.LIST
+.ITEM
+T4 é uma ferramenta de \fItemplate\fP de texto que pode gerar código
+C# em tempo de compilação.
+.ITEM
+As constantes de enumeração geradas são verdadeiras
+.LIST
+.ITEM
+Portanto, \fCswitch..case\fP e \fIpattern matching\fP funcionam
+.LIST OFF
+.LIST OFF
+.CODE BR
+.CODE OFF
+.NEWSLIDE
+.HEADING 1 "Geração de código no Unity"
+.LIST
+.ITEM
+Não há T4 para o editor do motor de jogos Unity
+.LIST
+.ITEM
+Alguém faça um \fIplugin\fP que funcione, pelo amor de Deus?
+.ITEM
+A alternativa é escrever um script de editor
+.ITEM
+Usar \fCMenuItem\fP
+.ITEM
+Usar um \fCStringBuilder\fP e salvar tudo num arquivo na pasta do
+projeto Unity
+.ITEM
+Problema:
+.LIST
+.ITEM
+Se o código gerado estiver incorreto, o scripts de editor param de
+funcionar, logo o gerador não pode ser executado mais uma vez após
+corrigir o erro de geração de código.
+.LIST OFF
+.ITEM
+Salvar script numa pasta \fCEditor\fP
+.LIST OFF
+.LIST OFF
+.\" vim: syntax=groff tw=70

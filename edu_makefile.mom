@@ -1,0 +1,282 @@
+.DOCTYPE SLIDES ASPECT 4:3
+.FOOTNOTE_QUAD LEFT
+.START
+.HEADING 1 "Escopo"
+.LIST
+.ITEM
+CMake
+.ITEM
+GNU Makefile
+.LIST OFF
+.HEADING 1 "Limitações do professor"
+.LIST
+.ITEM
+Não sabe criar um pacote distribuível em lojas de aplicativos
+.BR
+Exemplos:
+.TS ADJUST -0.5v
+l l l l.
+\(bu\ Steam	\(bu\ Play Store	\(bu\ Apple Store	\(bu\ Windows Store
+.TE
+.RLD 1.5v
+.ITEM
+Não sabe gerar um instalador do Windows
+.ITEM
+Não sabe fazer \fIcross-compilation\fP
+.ITEM
+Não sabe fazer \fIprofiled-guided optimization\fP (PGO)
+.ITEM
+Não sabe fazer \fIcode coverage\fP
+.ITEM
+Não sabe gerar documentação
+.ITEM
+Não sabe realizar testes unitários
+.ITEM
+Não sabe realizar testes de integração
+.ITEM
+Não sabe realizar testes usando \fIfuzzers\fP
+.ITEM
+Não sabe o que é um pipeline de CI/CD
+.ITEM
+Não sabe produzir um \fIsoftware bill of materials\fP (SBOM)
+.ITEM
+Não sabe construir vários programas com dependências diferentes a
+partir de um único Makefile
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "Ambiente"
+.LIST
+.ITEM
+Não se fie 
+.ITEM
+No Windows, \fCnmake.exe\fP nunca usa o PowerShell, sempre usa \fCcmd.exe\fP
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "Conceitos"
+.LIST
+.ITEM
+O Makefile é um grafo acíclico direcionado
+.ITEM
+Porem esss grafo pode evoluir, desse modo, diz ser uma DAG dinâmica!
+.ITEM
+Exemplo: novos alvos e novas dependências após um ou mais
+\fCinclude\fP
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "Ignorando status de saída de comandos"
+.LIST
+.ITEM
+Pode colocar uma meia-risca \fC-\fP no início do comando para ignorar
+.ITEM
+A meia-risca permite tudo, inclusive comandos que só estão
+sintaticamente corretos ou programas inexistentes fazem sentido em
+sistemas específicos
+.ITEM
+Outra alternativa é colocar um ponto e vírgula ao final do comando
+\fC;\fP
+Porém isso não protege contra comandos sintaticamente incorretos
+.ITEM
+A alteração de capacidade após compilar é essencial num servidor
+Linux, no Windows e no Android podemos ignorar:
+.LIST OFF
+.CODE BREAK
+server:
+\(-> -sudo setcap CAP_NET_BIND_SERVICE=ep $@
+.CODE OFF
+.NEWSLIDE
+.HEADING 1 "Silenciando comandos"
+.LIST
+.ITEM
+Ao colocar um arroba \fC@\fP no início de um comando, para de imprimir
+.ITEM
+O único caso de uso válido é para avisos, por exemplo:
+.ITEM
+Em geral, nunca silencie comandos.
+A razão é que ao silenciar um comando, o usuário que está tentando
+compilar algo não saberá que um comando foi silenciado.
+Então se algo dá errado, ele não vai ter dificuldade de depurar.
+Em geral, comandos são legíveis, então devem ser impressos verbatim.
+.LIST OFF
+.CODE BREAK
+.CODE OFF
+.NEWSLIDE
+.HEADING 1 "Código gerado"
+.LIST
+.ITEM
+É teta integrar um gerador de código
+.ITEM
+Geração de código é um dos pilares do C.
+.ITEM
+"C é tão poderoso quanto \fIassembly\fP, e tão legível quanto
+\fIassembly\fP"
+.ITEM
+C é uma linguagem escassa em funcionalidades
+.ITEM
+O que o C falta em funcionalidades, pode compensar gerando código que
+cumpre a mesma função.
+.ITEM
+Para um parser de mapa Tiled em formato JSON escrito com Ragel:
+.LIST OFF
+.CODE BREAK
+tiled.c:tiled.rl
+\(->    ragel -G2 $< > $@
+.CODE OFF
+.LIST
+.ITEM
+Código gerado a partir de m4:
+.LIST OFF
+.CODE BREAK
+shader.c:shader.m4
+\(->  m4 -Dm4_type=c $< > $@
+
+shader.h:shader.m4
+\(->  m4 -Dm4_type=h $< > $@
+.CODE OFF
+.LIST
+.ITEM
+Caso o gerador de código seja específico para o projeto e não esteja
+disponível em várias distribuições, adicione mais dependentes:
+.ITEM
+Exemplo: dialeto do C que permite expressões matemáticas com vetores
+e matrizes com notação infixa, mas que passa por um filtro que
+transforma tudo em chamas de funções ordinárias.
+.LIST OFF
+.CODE BREAK
+.CODE OFF
+.LIST
+.ITEM
+Exemplo: dialeto do C que permite misturar texto a ser impresso com
+código em C, na mesma \fIvibe\fP que PHP, .NET Blazor e T4.
+.ITEM
+Exemplo: bison/flex (yacc/lex)
+.LIST OFF
+.HEADING 1 "Organização básica"
+.PP
+Apenas um \fIheader\fP.
+.HEADING 1 "Construção paralela com \f(CB-j\fP"
+.LIST
+.ITEM
+Opção 
+.ITEM
+Nunca dá certo limpar e construir em paralelo ao mesmo tempo
+.BR
+.CODE
+$ make -j clean all
+.CODE OFF
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "Opção \f(CB-B\fP, alvo \f(CBclean\fP e alvo \f(CBdistclean\fP"
+.LIST
+.ITEM
+Às vezes
+Ao mudar algum macro do \fCMakefile\fP, como \fCCFLAGS\fP para
+compilar de um jeito difere
+.ITEM
+A opção \fC-B\fP constrói tudo do zero, sem testar alvos já prontos
+.ITEM
+A opção \fC-f\fP para o comando \fCrm\fP faz com que ele não reclame
+com uma saíde diferente de zero caso o arquivo a ser removido não
+exista.
+.ITEM
+A alternativa correta para \fCrm -f\fP no \fCcmd.exe\fP é:
+.CODE BREAK
+TARGET=fractalser.exe fractalpar.exe
+clean:
+\kx\D'c 1.5'\h'|\nx'\h'+0.25'\v'.25m'\(->\v'-.25m'FOR %%f IN (*.obj $(BINARIES)) DO IF EXIST %%f del %%f
+.CODE OFF
+.ITEM
+FUCK
+.ITEM
+Usado quando \fCCFLAGS\fP são trocadas, ou o \fC-flto\fP para de
+funcionar (acontece!!)
+.ITEM
+Em um único passo: \fC$ make clean all\fP ou \fC$ make -B\fP
+.ITEM
+Em dois passos: \fC$ make clean; make -j all\fP
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "Resolvendo dependências com \f(CBpkgconf\fP/\f(CBpkg-config\fP"
+.LIST
+.ITEM
+Listar todas as bibliotecas disponíveis no sistema:
+.BR
+.CODE
+$ pkgconf --list-all | sort | uniq
+.CODE OFF
+.ITEM
+Gerar \fIflags\fP de
+.UNDERSCORE SUFFIX : compilação
+.BR
+.CODE
+$ pkgconf --cflags SDL2 SDL2_image SDL2_ttf SDL2_net
+.CODE OFF
+.ITEM
+Gerar \fIflags\fP de
+.UNDERSCORE SUFFIX : \fIlinkagem\fP
+.BR
+.CODE
+$ pkgconf --libs SDL2 SDL2_image SDL2_ttf SDL2_net
+.CODE OFF
+.ITEM
+O utilitário sabe que bibliotecas dependem de outras
+.LIST
+.ITEM
+O utilitário inclui recursivamente \fIflags\fP das bibliotecas
+subjacentes
+.ITEM
+O utilitário funde \fIflags\fP comuns
+.LIST OFF
+.ITEM
+Um programa pode imprimir argumentos para outro programa
+.LIST
+.ITEM
+A sintaxe usando duas crases é a mais antiquada \fC`...`\fP
+.ITEM
+A sintaxe moderna usa \fC$(...)\fP
+.LIST
+.ITEM
+Os espaços impressos viram separados de argumentos
+.LIST OFF
+.ITEM
+Como o cifrão \fC$\fP introduz macros no \fCMakefile\fP, use dois
+cifrões \fC$$\fP
+.ITEM
+Nem te conto a sintaxe do \fCcmd.exe\fP...
+.LIST OFF
+.ITEM
+No \fCMakefile\fP:
+.BR
+.CODE
+DEPS=SDL2 SDL2_image SDL2_ttf SDL2_net
+.BR
+CFLAGS=$$(pkgconf --cflags $(DEPS)) -std=c99 -Wpedatic -Wall -Wextra
+.BR
+LDLIBS=$$(pkgconf --libs   $(DEPS))
+.CODE OFF
+.ITEM
+Lala
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "Alvo \f(CBtags\fP"
+.LIST
+.ITEM
+O editor de texto Vim entende e monitora\c
+.FOOTNOTE
+Não é necessário reiniciar o Vim se o arquivo for alterado
+.FOOTNOTE OFF
+ o arquivo \fCtags\fP
+.LIST
+.ITEM
+Ao apertar Ctrl-] com o cursor em cima de algum símbolo, o Vim pula para
+sua definição
+.ITEM
+Ao apertar Ctrl-t, o Vim "volta"
+.ITEM
+Esses dois atalhos operam sobre uma pilha
+.LIST
+.ITEM
+Portanto, podem ser usados mais de uma vez consecutivamente
+.LIST OFF
+.LIST OFF
+.LIST OFF
+.\" vim: syntax=groff tw=70

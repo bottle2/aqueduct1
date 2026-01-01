@@ -21,11 +21,9 @@ $$(pkg-config --cflags $(DEPS)) \
 LDLIBS=$$(pkg-config --libs $(DEPS))
 
 SOURCE=main.c parse.c code.c movie.c doc.c parse2.c http.c movies.c hack.c
+OBJ=$(SOURCE:.c=.o)
 
-http.c:http.rl response.c
-
-http.rl:response.rl route.rl
-	touch $@
+http.c:http.rl response.c response.rl route.rl
 
 http:http.c
 	$(CC) -flto -O1 -DIS_MAIN $< -o $@
@@ -49,8 +47,8 @@ percent.m4:percent
 percent:percent.c
 	cc -O3 $< -o $@
 
-site:$(SOURCE) $(LLHTTP)
-	$(CC) $(CFLAGS) -o $@ $(SOURCE) $(LLHTTP) $(LDLIBS)
+site:$(OBJ)
+	$(CC) $(CFLAGS) -o $@ $(OBJ) $(LDLIBS)
 	-sudo setcap CAP_NET_BIND_SERVICE=ep $@
 
 batch:batch.c parse.c code.c parse2.c movies.c
@@ -60,7 +58,7 @@ batch:batch.c parse.c code.c parse2.c movies.c
 #	$(CC) $(CFLAGS) -o $@ batch2.c parse.c code.c movie.c $(LDLIBS)
 
 clean:
-	rm -f $(LLHTTP) $(TARGET)
+	rm -f $(TARGET) $(OBJ=.o=.d)
 	rm -f $(PAGES) bookmarks vehicle-building-games
 
 tags:
@@ -72,8 +70,11 @@ tags:
 
 movies.c:movies.ctt ctt
 
+troff_exp.pdf:troff_exp.mom
+	pdfmom -Kutf8 -pt troff_exp.mom > $@
+
 draft.pdf:draft.mom
-	pdfmom -Kutf8 $< > $@
+	pdfmom -Kutf8 -p $< > $@
 
 edu_x_macros.pdf:edu_x_macros.mom
 	pdfmom -Kutf8 -t $< > $@
@@ -90,7 +91,9 @@ edu_ragel.pdf:edu_ragel.mom
 edu_m4.pdf:edu_m4.mom
 	pdfmom -Kutf8 -t $< > $@
 
-.SUFFIXES: .c .rl .svg .ctt
+include $(OBJ:.o=.d)
+
+.SUFFIXES: .c .d .rl .svg .ctt
 
 .rl.c:
 	ragel -G2 $<
@@ -98,3 +101,6 @@ edu_m4.pdf:edu_m4.mom
 	ragel -pV $< | dot -Tsvg > $@
 .ctt.c:
 	./ctt < $< > $@
+.c.d:
+	cc -MM -MG $< | sed 's@^\(.*\)\.o:@\1.d \1.o:@' > $@
+#TODO Missing CFLAGS

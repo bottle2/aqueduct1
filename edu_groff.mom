@@ -1,0 +1,171 @@
+.DOCTYPE SLIDES ASPECT 4:3
+.START
+.HEADING 1 "Groff"
+.HEADING 1 "Propósitos"
+.PP
+Excelente para:
+.LIST
+.ITEM
+Compilação condicional
+.ITEM
+Alimentar documento com dados externos
+.ITEM
+Gerar comandos com um programa 
+.LIST OFF
+.PP
+Exemplos de usos:
+.LIST
+.ITEM
+Gerar relatórios automaticamente
+.LIST
+.ITEM
+Relatórios com dados estatísticos
+.ITEM
+Relatórios com soma automática de horas
+.LIST OFF
+.ITEM
+Várias versões de \fIcurriculum vitae\fP a partir de um único
+arquivo
+.LIST
+.ITEM
+Tradução automática
+.ITEM
+Variar conteúdo listado, dependendo do emprego almejado
+.LIST OFF
+.ITEM
+Apresentações
+.UNDERSCORE simples
+de slides
+.LIST OFF
+.NEWSLIDE
+.PP
+Coisas inadequadas:
+.LIST
+.ITEM
+Escrever artigos científicos para publicação
+.LIST
+.ITEM
+Muito demorado ou inviável seguir formato exigido
+.LIST
+.ITEM
+Conferências que dão especificações incompletas, pois esperam que o
+autor vá usar um \fItemplate\fP pronto
+.ITEM
+Complexidade do formato exigido, que requeriria conhecimento muito
+avançado e tempo para reproduzir
+.ITEM
+Talvez dê para inserir meta-dados usando comandos X
+.LIST OFF
+.LIST OFF
+.ITEM
+Escrever seu TCC ou dissertação de mestrado
+.LIST
+.ITEM
+Formatação ABNT coloca elementos pré-textuais antes do sumário,
+enquanto resto do mundo coloca depois, e o pacote \fCmom\fP não espera
+isso.
+.ITEM
+Pacote \fCmom\fP provê apenas três listas: de figuras, de equações e
+de tabelas.
+ABNT distingue duas listas para tabelas e quadros, e recomenda
+desmembrar a lista de figuras em inúmeras listas, como de equações, de
+listagens, de gráficos, de imagens e mais.
+.LIST OFF
+.LIST OFF
+.PP
+Limitações:
+.LIST
+.ITEM
+Sistema \fIrefer\fP não consegue formatar referências em estilo ABNT
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "Escolhas"
+.PS
+box "MS Word" wid 1.5
+line <- "NÃO" "" 1
+box "Você é um imbecil?" wid 2
+arrow at last box.s down " SIM" ljust
+DRONE: box "Você é um drone do software livre" "que sonha pelo ano do desktop Linux?" wid 4 ht 0.75
+arrow at last box.w left "SIM" "" 1
+box "LibreOffice" "Writer" wid 1.5
+arrow at DRONE.s down " NÃO" ljust
+BURRO: box "Você é tão burro que recursos básicos sempre bastam?" wid 6
+arrow at last box.w left "SIM" "" 1
+box "Google Docs" wid 1.5
+arrow at BURRO.s down " NÃO" ljust
+SHIT: box \
+"Você quer usar \fItemplates\fP e pacotes prontos para" \
+"aderir à norma rapidamente sem questionar nada, e" \
+"então desafiar sua sanidade realizando ajustes finos?" \
+wid 7 ht 1
+arrow at last box.w left "SIM" "" 1
+box "LaTeX" wid 1.5
+arrow at SHIT.s down " NÃO" ljust
+box "Groff"
+arrow at last box.w left
+box invis "Não se esqueça que" "você ainda é um imbecil" wid 3
+.PE
+.NEWSLIDE
+.HEADING 1 "Comparação"
+.PP
+Você é um idiota?
+.PP
+NÃO \(-> Word
+.PP
+SIM \(-> 
+.PP
+Você é um drone que defende cegamente o software livre?
+.PP
+Você é tão burro que nunca precisou de recursos avançados?
+.PP
+SIM \(-> Google Docs
+.PP
+NÃO \(->
+.PP
+Você [VER CADERNO]
+.TS
+center allbox;
+l cB cB cB cB cB
+l  l l  l  l l.
+	MS Word	Groff	LaTeX	LibreOffice	Google Docs
+Custo	Existe	De graça	De graça	De graça	De graça
+Usável no celular	?	Sim!!	?	Não	Sim
+Recursos	Completo	NIH	Infelizmente	Vômito	Infantil
+Colaboração	Não	Não	Em tempo real(2 ou paga)	Em tempo real	Não
+Versionamento	"Sim"	Provavelmente Git	Histórico do Overleaf, ou Git	"Sim"	Até 30 dias de todas alterações
+Comparação de versões	Embutido, igual um diff	Diff do UNIX	UNIX diff	?  Acabou pra ti	Acabou pra ti
+Recursos	Tudo embutido	Desértico	Sim, mas se fudeu	Não Se fudeu
+.TE
+.PP
+Quebrar LaTeX em: Overleaf, Texlive e Tectonic
+.NEWLISDE
+.HEADING 1 "Comparação"
+.PP
+Primeiro você learn do Word: ferramenta profissional usada por
+profissionais.
+E o Google Docs: a alternativa gratuita que permite colaboração em
+tempo real.
+.PP
+Ao entrar na faculdade, você descobre o LaTeX, e o Overleaf, o
+software mais usado para trabalhos acadêmicos e que também tem
+colaboração em tempo real.
+.PP
+Ao instalar Linux pela primeira vez, certamente verá que o LibreOffice
+Writer existe.
+.PP
+E ao estudar o que são as páginas \fCman\fP, verá que Groff existe, e
+que além de manuais, ele pode produzir PDFs e que possui uma
+linhagem/pedigree \s-2UNIX\s+2.
+.PP
+Isso resume cada ferramenta
+.NEWSLIDE
+.HEADING 1 "Comparação"
+.PP
+Groff e Word se parecem muito.
+.HEADING 1 "Medo de criar macros"
+.PP
+Se tu tiver, medo use \fC.if\fP e \fC.ab\fP para checar se existe, e
+abortar positivo.
+.PP
+Ou ative o aviso X
+.\" vim: syntax=groff tw=70

@@ -1,0 +1,181 @@
+.DOCTYPE SLIDES ASPECT 4:3
+.START
+.HEADING 1 "Ragel"
+.NEWSLIDE
+.HEADING 1 "Roteiro da aula"
+.PP
+Faça o seguinte:
+.LIST
+.ITEM
+Leia os exercícios
+.ITEM
+Baixe o Ragel e GraphViz na sua máquina
+.LIST
+.ITEM
+Até mesmo no celular, tu tiver Android e Termux
+.LIST OFF
+.ITEM
+Faça um programa básico e execute o Ragel:
+.LIST
+.ITEM
+Gere código para sua linguagem predileta
+.ITEM
+Visualize o diagrama de estados da máquina inteira ou partes dela
+.LIST OFF
+.ITEM
+Leia a documentação
+.LIST
+.ITEM
+.PDF_WWW_LINK https://www.colm.net/files/ragel/ragel-guide-6.10.pdf "Guia oficial"
+.ITEM
+.PDF_WWW_LINK https://man.archlinux.org/man/ragel.1 "A página de manual \fCman ragel\fP"
+.ITEM
+A saída do programa para \fCragel -h\fP
+.LIST
+.ITEM
+Para descobrir quais linguagens de fato podem ser hospedeiras
+.LIST OFF
+.LIST OFF
+.ITEM
+Faça os exercícios
+.LIST OFF
+.PP
+Tire os seguintes tipos de dúvidas:
+.LIST
+.ITEM
+Como instalar os programas
+.ITEM
+Como compilar
+.ITEM
+Como visualizar
+.ITEM
+Como interpretar a documentação
+.ITEM
+Como resolver algum problema cabeludo
+.LIST
+.ITEM
+"O diabo mora nos detalhes"
+.LIST OFF
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "Limitações do professor"
+.PP
+Eu não sei a respeito do seguinte:
+.LIST
+.ITEM
+\fIScanners\fP e suas variáveis \fCts\fP, \fCte\fP e \fCact\fP.
+.ITEM
+Pilha nativa usando \fCfcall\fP e \fCfret\fP e variáveis \fCstack\fP e
+\fCtop\fP e \fIstatements\fP \fCprepush\fP e \fCpostpop\fP.
+.ITEM
+Máquina dividida
+.ITEM
+Ações embutidas em estados
+.ITEM
+A diferença entre erros locais e globais
+.ITEM
+Construção \fC**\fP estrela de Kleene \fIlongest-match\fP
+.ITEM
+Configurar realce de sintaxe decente
+.LIST OFF
+.PP
+Coisas que eu já fiz:
+.LIST
+.ITEM
+Máquinas reetrantes
+.ITEM
+Desduplicação de código usando m4 (insalubre)
+.ITEM
+Lidar com Unicode
+.ITEM
+Associar pedaços do diagrama à pedaços do código gerado
+.ITEM
+Técnicas podres de depuração
+.ITEM
+Ler e interpretar especificações
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "Comparação"
+.TS
+center;
+cBcBcB
+l l l.
+Funcionalidade	ReGeX comuns	Ragel
+Compilação	Tempo de execução (com JIT)	Gera código-fonte
+Definição da máquina	Dinâmica	Imutável
+Extração de dados	Grupos de captura	Ações embutidas nas transições
+Dados estraídos	Strings	O caractere atual
+Tamanho da especificação	Uma linha, no máximo umas três	Centenas de linhas
+Alimentação	Uma string completa	Uma \fIstream\fP
+Execução	De uma vez só	\fBPausável, reiniciável\fP
+Poder acima do regular	\fILookahead\fP, \fIlookbehind\fP	\fCwhen\fP
+Unicode	Sim	Não
+.TE
+.PP
+Exemplos de \fIstreams\fP:
+.LIST
+.ITEM
+Dados do \fCstdin\fP (entrada padrão)
+.ITEM
+Teclas do teclado conforme são pressionadas
+.ITEM
+Pacotes conforme são lidos dum \fIsocket\fP
+.ITEM
+Páginas conforme são lidos dum disco
+.ITEM
+Dados conforme são descomprimidos
+.ITEM
+Dados conforme são descriptografados
+.LIST OFF
+.PP
+Mas se quiser pode ler \fIstrings\fP completas, como argumentos de
+linha de comando ou caminhos de arquivos
+.NEWSLIDE
+.HEADING 1 "Assuntos avançados"
+.LIST
+.ITEM
+Dominar estados paralelos
+.ITEM
+Dominar o fato de tu só conseguir avançar um estado por vez, sem olhar pra frente ou pra trás.
+Erros comuns.
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "Exercícios"
+.LIST
+.ITEM
+Podem ser implementados na linguagem hóspode que quiser
+.ITEM
+Primeiros cinco são obrigatórios
+.ITEM
+Os últimos cinco são opcionais e exercitam assuntos mais avançados
+.LIST OFF
+.PP
+Se tu quiser comparar o desempenho ou eficiência do Ragel versus
+competidores como flex ou re2c, ou o motor embutido de ReGex, tu vai
+estar perdendo tempo e não vai ganhar nota extra.
+Talvez seja legal pra postar isso no LinkedIn.
+Use seu tempo estrategicamente.
+.NEWSLIDE
+.HEADING 1 "Exercícios obrigatórios"
+.LIST
+.ITEM
+Fazer programa que remove comentários de um código C
+.ITEM
+Fazer programa que lê opções de linha de comando
+.ITEM
+Fazer programa
+.LIST OFF
+.NEWSLIDE
+.HEADING 1 "Exercícios extras"
+.PP
+.LIST
+.ITEM
+Verificar se parênteses estão balanceados
+.ITEM
+Ler um JSON simples
+.ITEM
+Ler uma linguagem recursivamente
+.ITEM
+Ler uma linguagem sensível a contexto como XML, HTML
+.LIST OFF
+.\" vim: syntax=groff tw=70

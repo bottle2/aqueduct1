@@ -129,6 +129,11 @@ extensions. GOOD.
 And we want our documents, also provide a PDF version. Really neat <3
 And an epic simplified Gopher interface!!!!!!
 
+### Referrals
+
+- Namecheap referral
+- Locaweb referral
+
 ---
 
 Ignore this trash written below.

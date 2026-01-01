@@ -1,0 +1,159 @@
+.PAPER A4
+.PRINTSTYLE TYPESET
+.L_MARGIN 1c
+.R_MARGIN 1c
+.T_MARGIN 2c
+.B_MARGIN 2c
+.DOCHEADER OFF
+.HEADERS OFF
+.FOOTERS OFF
+.PAGINATE OFF
+.PT_SIZE 12
+.LS 14.4
+.PARA_INDENT 0c
+.PARA_SPACE 6p
+.JUSTIFY
+.START
+.HEADING 1 "Writing a thesis"
+.HEADING 2 ""
+.HEADING 2 "Citations and bibliography"
+.PP
+I rolled out my own solution.
+.HEADING 2 "Figures, list of figures"
+.PP
+\fCmom\fP provides three lists for three kinds of figures.
+.HEADING 1 "Writing presentation slides"
+.HEADING 2 "Lists"
+.PP
+I made nine macros to allow typing lists like so:
+.FLOAT
+.TS BOXED CENTER
+center box;
+lfC.
+\&.NTITULO 3 \(dqO que é o Flash\(dq 2
+\&.\0IPP São três tecnologias
+\&.\0SNUM Um editor de animações
+\&.\0\0OBULLET Conhecido simplesmente como \e(lqo Flash\e(rq
+\&.\0MNUM Um formato de arquivo chamado SWF
+\&.\0\0OBULLET Significa Small Web Format
+\&.\0MNUM O Flash Player
+\&.\0\0SBULLET A \efIruntime\efP que renderiza um SWF
+\&.\0\0EBULLET Um \efIplugin\efP para navegadores de Internet
+\&.\0LIST OFF
+.TE
+.FLOAT OFF
+.PP
+Not shown are macros \fC.ENUM\fP for last numbered item and \fC.MBULLET\fP for
+middle bullet item.
+.\"
+Prefix \fCO\fP is for "Only one item".
+.PP
+The intent is to allow to write text and markup in a single line and visualize
+the hiearchy in plaintext. 
+.\"
+However, having to choose between the \fCS\fP, \fCM\fP and \fCE\fP versions of
+each inline item and mixed usage of \fC.LIST OFF\fP muddles edits such as
+changing order of items, copy-pasting things to another place, and forgetting
+to end or to start levels of nesting.
+.\"
+My next approach will look like this:
+.FLOAT
+.TS CENTER BOX
+center box;
+lfC.
+\&.NTITULO 3 \(dqO que é o Flash\(dq 2
+\&.\0IPP São três tecnologias
+\&.\0_NUM Um editor de animações
+\&.\0__BUL Conhecido simplesmente como \e(lqo Flash\e(rq
+\&.\0_NUM Um formato de arquivo chamado SWF
+\&.\0__BUL Significa Small Web Format
+\&.\0_NUM O Flash Player
+\&.\0__BUL A \efIruntime\efP que renderiza um SWF
+\&.\0__BUL Um \efIplugin\efP para navegadores de Internet
+.TE
+.FLOAT OFF
+.PP
+So that the count of underlines evidence the nesting, while removing manual
+opening and closing of levels of nesting.
+.HEADING 1 "Additional observations"
+.HEADING 2 "Android typesetting"
+.PP
+Termux is an app that gives you a shell and a package manager to work
+on a UNIX-like environment in a smartphone.
+.\"
+It has Bash, Vim, Makefile, groff, compilers, libraries, Git etc.
+.\"
+This is a big deal, because even though laptops are built for
+mobility, carrying one around still implies using a backpack or
+similar, while a smartphone is literally just in your pocket, so you
+can go to places totally unemcubered.
+.\"
+And Vim works really well with touchscreen and its keybindings are
+really comfortable on the virtual keyboard.
+.\"
+However, I ended not working much on my smartphone, for four reasons:
+.LIST
+.ITEM
+Typing on a smartphone is fast, but typos are too frequent, and typing
+on a laptop keyboard is much faster.
+.LIST
+.ITEM
+For very small changes, it is still preferable to type them in
+WhatsApp so that you can copypaste them in the actual document, rather
+than go through the trouble of synchronizing changes through Git.
+.ITEM
+If you are going to spend a lot of time doing big changes, it is then
+preferable to just travel back home and work efficiently in a full
+keyboard, than to spend hours wiggling around in a smartphone.
+.LIST OFF
+.ITEM
+.nr x \n(.i
+Visualizing a PDF is annoying.\nx
+.LIST
+.ITEM
+You can't \fCcd\fP outside of Termux' internal storage, so you can't
+work inside a folder such as Documents.
+.ITEM
+The PDF viewer also cannot open a PDF from inside Termux' internal
+storage.
+.ITEM
+My PDF viewer (MJ PDF) doesn't reload changed PDFs like SumatraPDF or
+MuPDF.
+.\"
+I could make a pull request, but then I'd have to make a pull request
+.LIST OFF
+.BR
+\h'\nxu-\n(.iu'It takes several manual steps:
+.LIST DIGIT
+.ITEM
+Compile the PDF
+.ITEM
+Move the PDF to a user folder such as Documents
+.ITEM
+Close your PDF viewer
+.ITEM
+Enter the user folder from a file explorer
+.ITEM
+Press to open PDF in your PDF viewer
+.ITEM
+Scroll the PDF to where you are performing changes
+.LIST OFF
+.BR
+Since the PDF viewer cannot open a PDF directly from Termux's internal
+storage, the ideal scenario would be to keep troff files directly inside a user
+folder such Documents, however this is also not possible, because
+lots of funcionality stops working outside Termux internal storage, I
+don't think you can even \fCcd\fP outside of it.
+.ITEM
+Pressing ALT-TAB on a desktop is also instantaneous and robust,
+compared to switching apps on smartphone, which also sometimes doesn't
+work (it's mind boggling that this basic feature breaks so often),
+adding to the overhead.
+.BR
+The animations of Android when switching apps makes it even more
+inefficient when you have to look at several places, so it doesn't
+help small screen, a laptop small screen is still doable because
+ALT-TAB is instantaneous.
+.LIST OFF
+.PP
+.\" vim: syntax=groff tw=70

@@ -279,4 +279,6 @@ Portanto, podem ser usados mais de uma vez consecutivamente
 .LIST OFF
 .LIST OFF
 .LIST OFF
+.PP
+Evite colocar dependências que envolvam Internet, por causa da opção -B
 .\" vim: syntax=groff tw=70

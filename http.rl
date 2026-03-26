@@ -4,6 +4,8 @@
 #include "doc.h"
 #include "http.h"
 
+// XXX Only server code here!!
+
 // CURRENT STATE OF IMPLEMENTATION
 // - We do not have persistent connections, i.e. not keep-alive.
 //   - Thus, we currently ignore Content-Length and Transfer-Encoding
@@ -194,13 +196,7 @@ static void on_write(uv_write_t *req, int status)
         fhold; fbreak;
     }
 
-    CRLF = "\r\n"; # MAY be a bare a \n, but MUST NOT a bare \r
-                   # if bare \r received, consider invalid or replace with SP
-                   # Let's just error ffs
-    SP = ' ';
-    HTAB = '\t';
-    OWS = (SP | HTAB)*;
-    RWS = (SP | HTAB)+;
+    include "http_base.rl";
 
     scheme = "http"i;
 
@@ -219,8 +215,6 @@ static void on_write(uv_write_t *req, int status)
     # Comprises both origin-form and absolute-form, we don't use authority and asterisk form.
     request_target = (authority %host_absolute)? path;
 
-    HTTP_version = "HTTP/1.1";
-
     action method_get  { assert(HTTP_METHOD_NONE == http->method); http->method = HTTP_METHOD_GET;  }
     action method_head { assert(HTTP_METHOD_NONE == http->method); http->method = HTTP_METHOD_HEAD; }
 
@@ -232,18 +226,6 @@ static void on_write(uv_write_t *req, int status)
                 SP HTTP_version;
 
     # answer with 400 when no Host: header field or two or more or "invalid" value.
-
-    tchar = [!#$%&'*+-.^_`|~] | digit | alpha;
-    token = tchar+;
-    # See https://www.rfc-editor.org/rfc/rfc9110#section-5.6.2-2
-
-    VCHAR = graph;
-
-    field_name = token; # See https://www.rfc-editor.org/rfc/rfc9110#section-5.1-2
-    obs_text = 0x80..0xFF;
-    field_vchar = VCHAR | obs_text;
-    field_content = field_vchar (SP | HTAB | field_vchar)*;
-    field_value = field_content*; # See https://www.rfc-editor.org/rfc/rfc9110#section-5.5-2
 
     action host_field
     {
@@ -259,8 +241,7 @@ static void on_write(uv_write_t *req, int status)
 
     action host_is_absolute { (http->host & HTTP_HOST_ABSOLUTE) }
 
-    host_field = 'host:'i %host_field OWS (field_value when host_is_absolute | host);
-    any_field = field_name ":" OWS field_value;
+    host_field = 'Host:'i %host_field OWS (field_value when host_is_absolute | host);
 
     field_line = (host_field | any_field) OWS; #("content-length"i | "transfer-encoding"i)
 

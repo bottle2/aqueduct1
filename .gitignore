@@ -30,3 +30,9 @@ kid
 private_key.pem
 a_different_private_key.pem
 certificate.pem
+
+#Second attempt ACME
+domain.csr
+key_private.donotcommit
+key_domain.donotcommit
+signed_chain.donotcommit

@@ -22,8 +22,8 @@ vrum:vrum.c my_certs.c http_client.c acme.c
 
 acme.c:unicode.rl
 
-json:acme.c
-	$(CC) -DIS_MAIN -Wpedantic -Wall -Wextra acme.c -o $@
+json:json.c
+	$(CC) -DIS_JSON_MAIN -Wpedantic -Wall -Wextra acme.c -o $@
 
 JSON_CASES=JSONTestSuite/test_parsing/
 json_test:json

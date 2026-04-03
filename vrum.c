@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
 #include <uv.h>
@@ -194,13 +195,81 @@ static void bruh(uv_connect_t *req, int status)
         fprintf(stderr, "tcp conn %d %s\n", status, uv_strerror(status));
 }
 
+static void pem_cb(void *ud, void const *src, size_t len)
+{
+    br_skey_decoder_push((br_skey_decoder_context *)ud,src,len);
+}
+
 int main(int argc, char *argv[])
 {
-    (void)argc;
-    (void)argv;
+    if (argc != 2)
+        return 30;
+
+    {
+        FILE *account_key = fopen(argv[1],"rb");
+        if (!account_key)
+            return 31;
+
+        char buf[10000];
+        size_t n_read = fread(buf,1,sizeof buf,account_key);
+        if (ferror(account_key) || !feof(account_key))
+            return 32;
+        (void)fclose(account_key);
+
+        br_pem_decoder_context bpd_ctx;
+        br_pem_decoder_init(&bpd_ctx);
+
+        size_t sofah = 0;
+
+        sofah += br_pem_decoder_push(&bpd_ctx, buf, n_read);
+        if (br_pem_decoder_event(&bpd_ctx) != BR_PEM_BEGIN_OBJ)
+            return 33;
+
+        br_skey_decoder_context bsd_ctx;
+        br_skey_decoder_init(&bsd_ctx);
+
+        br_pem_decoder_setdest(&bpd_ctx, pem_cb, &bsd_ctx);
+        (void)br_pem_decoder_push(&bpd_ctx, buf+sofah, n_read-sofah);
+        if (br_pem_decoder_event(&bpd_ctx) != BR_PEM_END_OBJ)
+            return 34;
+
+        br_rsa_private_key const *pk = br_skey_decoder_get_rsa(&bsd_ctx);
+        if (!pk)
+            return 35;
+
+        uint32_t pubexp = br_rsa_compute_pubexp_get_default()(pk);
+        printf("pubexp is %" PRIu32 "\n", pubexp);
+	br_rsa_compute_modulus brcp = br_rsa_compute_modulus_get_default();
+	size_t _len = brcp(NULL, pk);
+        if (!_len)
+            return 37;
+	unsigned char *big = malloc(_len);
+	if (!big)
+            return 36;
+        if (!brcp(big, pk))
+            return 38;
+
+        #define ALG "RS256"
+        
+        #define JWK_FMT "{\"e\":\"%s\",\"kty\":\"RSA\",\"n\":\"%s\"}"
+        // base64url encode
+
+        unsigned char *accountkey_json; // TODO print
+        unsigned char *thumbprint; // TODO sha256
+
+        free(big);
+
+        // TODO skipped some stuff
+
+        #define SOMES "aqueduct1.horse"
+    }
+    // XXX
+    return 0;
 
     http_client_init(&hc);
+#if 0
     acme_init();
+#endif
 
     loop = uv_default_loop();
     uv_tcp_t client;

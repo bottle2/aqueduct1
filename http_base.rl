@@ -20,7 +20,7 @@
     field_content = field_vchar (SP | HTAB | field_vchar)*;
     field_value = field_content*; # See https://www.rfc-editor.org/rfc/rfc9110#section-5.5-2
 
-    any_field = (field_name ":") @(goat,0) OWS field_value OWS;
+    any_field = (field_name ":") @(pri_http_field,0) OWS field_value OWS;
 
     HTTP_version = "HTTP/1.1";
 }%%

@@ -7,8 +7,7 @@
 
 #include "my_certs.c"
 
-#include "http_client.c"
-#include "acme.c"
+#include "acme_xgh.c"
 
 #define IP "0.0.0.0"
 #define HOST "www.howsmyssl.com"

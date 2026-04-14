@@ -1,5 +1,10 @@
     long usv; // Unicode Scalar Value
 
+#define USV usv
+
+// You can define macro UNICODE_XGH_EFFECT to nothing, or to
+// __VA_ARGS__, or to a if-else that is controlled during runtime.
+
 %%{
     machine unicode;
     alphtype unsigned char;
@@ -10,15 +15,15 @@
         return 1;
     }
 
-    action push { PARSE(usv); }
+    action push { UNICODE_XGH_EFFECT(UNICODE_XGH_PARSE(UNICODE_XGH_USV)); }
 
-    action utf8_1_ini { assert(   0 == (fc & 0x80)); usv = fc; }
-    action utf8_2_ini { assert(0xC0 == (fc & 0xE0)); usv = fc & 0x1F; }
-    action utf8_3_ini { assert(0xE0 == (fc & 0xF0)); usv = fc & 0xF; }
-    action utf8_4_ini { assert(0xF0 == (fc & 0xF8)); usv = fc & 7; }
+    action utf8_1_ini { assert(   0 == (fc & 0x80)); UNICODE_XGH_EFFECT(UNICODE_XGH_USV = fc); }
+    action utf8_2_ini { assert(0xC0 == (fc & 0xE0)); UNICODE_XGH_EFFECT(UNICODE_XGH_USV = fc & 0x1F); }
+    action utf8_3_ini { assert(0xE0 == (fc & 0xF0)); UNICODE_XGH_EFFECT(UNICODE_XGH_USV = fc & 0xF); }
+    action utf8_4_ini { assert(0xF0 == (fc & 0xF8)); UNICODE_XGH_EFFECT(UNICODE_XGH_USV = fc & 7); }
     action utf8_a {
         assert(0x80 == (fc & 0xC0));
-        usv = (usv << 6) + (0x3F & fc);
+        UNICODE_XGH_EFFECT(UNICODE_XGH_USV = (UNICODE_XGH_USV << 6) + (0x3F & fc));
     }
 
     # But... we could simplify! NO. We don't simplify. Ragel does. And the compiler.

@@ -29,20 +29,12 @@ HTTP_XGH_X(SOME         ), \
 HTTP_XGH_X(UNRECOVERABLE), \
 HTTP_XGH_X(REJECT       )
 
-enum http_xgh_error
-{
-    #define HTTP_XGH_X(ID) HTTP_XGH_ERROR_##ID
-    HTTP_XGH_ERROR_XS,
-    HTTP_XGH_ERROR_USER_DEFINED,
-    #undef HTTP_XGH_X
-}
-
 enum acme_xgh_error
 {
     #define HTTP_XGH_X(ID) ACME_XGH_ERROR_##ID
     HTTP_XGH_ERROR_XS,
     #undef HTTP_XGH_X
-}
+};
 
 // TODO WIP Just thinking how it will look like.
 //          This part will handle what the Web server must serve.

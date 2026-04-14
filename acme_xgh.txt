@@ -1,0 +1,481 @@
+#include <assert.h>
+#include <limits.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <string.h>
+
+#include "acme_xgh.h"
+
+#define ACME_XGH_ENDPOINT_MAX 200
+
+static unsigned char acme_xgh_replay_nonce[200];
+
+static unsigned char *acme_xgh_resource_buffed;
+static unsigned char acme_xgh_resource_endpoint_account[ACME_XGH_ENDPOINT_MAX];
+static unsigned char acme_xgh_resource_endpoint_nnonce[ACME_XGH_ENDPOINT_MAX];
+static int acme_xgh_resource_prog;
+
+static int acme_xgh_resource_cs;
+
+%%{
+    machine acme_xgh_resource_directory;
+    alphtype unsigned char;
+
+    variable cs acme_xgh_resource_cs;
+
+    include json "json.rl";
+
+    action buf
+    {
+        if (acme_xgh_resource_prog > ENDPOINT_MAX-2)
+            return ACME_XGH_ERROR_SKILL_ISSUE;
+        acme_xgh_resource_buffed[acme_xgh_resource_prog++] = fc;
+    }
+    action buf_zero { acme_xgh_resource_prog = 0; }
+    action buf_account { acme_xgh_resource_buffed = account; }
+    action buf_nnonce  { acme_xgh_resource_buffed = nnonce; }
+    action buf_end
+    {
+        acme_xgh_resource_buffed[acme_xgh_resource_prog] = '\0';
+    }
+
+    action die { return HTTP_XGH_ERROR_SOME; }
+
+    domain = "pebble"i; # TODO configure using m4... or allow config
+
+    url = "https://"i domain '/' alnum+ $buf %buf_end;
+
+    meta_field = empty #'"caaIdentities"'           %2 gc '[' url (ws ',' ws url)* ws ']'
+               | '"externalAccountRequired"' %2 gc "false" # ("false" | "true")
+               #| '"profiles"'                %2 gc profile
+               #| '"termsOfService"'          %2 gc url
+	       | string %1 gc value6
+               ;
+
+    meta_fields = meta_field (ws ',' ws meta_field)*;
+
+    resource_field = empty #'"keyChange"'   %2 gc url
+                   | '"meta"'        %2 gc '{' ws meta_fields ws '}'
+                   | '"newAccount"'  %2 gc url >buf_zero >buf_account
+                   | '"newNonce"'    %2 gc url >buf_zero >buf_nnonce
+                   #| '"newOrder"'    %2 gc url
+                   #| '"renewalInfo"' %2 gc url
+                   #| '"revokeCert"'  %2 gc url
+                   | '"newAuthz"' @die
+                   | string %1 gc value6
+                   ;
+
+    resource_fields = resource_field (ws ',' ws resource_field)*;
+
+    main2 = ws '{' ws resource_fields ws '}' ws;
+    main := main2 $!die;
+
+    #main := (ws '{' ws field (ws ',' ws field)* ws '}' ws); #$!die;
+
+    #profile_field = string gc string;
+
+    #profile = '{' ws profile_field (ws ',' ws profile_field)* ws '}';
+
+    write data noerror nofinal noentry; 
+}%%
+
+#define UNICODE_XGH_EFFECT(...)
+
+.so acme_xgh.inc
+
+#undef UNICODE_XGH_EFFECT
+
+  acme_xgh_resource_eof = acme_xgh_resource_##ID##_eof;
+  acme_xgh_resource_recv = acme_xgh_resource_##ID##_recv;
+
+void acme_xgh_resource_null_init(void)
+{
+    // Do nothing.
+}
+
+bool _Noreturn acme_xgh_resource_null_eof(void)
+{
+    assert(!"Fuck you bitch");
+    abort();
+}
+
+enum acme_xgh_error acme_xgh_resource_null_recv(unsigned char *p, unsigned char *pe, unsigned char *eof)
+{
+    (void)p;
+    (void)pe;
+    (void)eof;
+    assert(!"I'll tear you apart");
+    abort();
+}
+
+// Thanks Simon Tatham.
+// 'https://www.chiark.greenend.org.uk/~sgtatham/coroutines.html
+
+#define ACME_XGH_CHANNEL_CR_BEGIN switch(state) { case 0:
+#define ACME_XGH_CHANNEL_CR_FINISH } (void)0
+#define ACME_XGH_CHANNEL_CR_SAVE_SEND do { s_send=__LINE__; case __LINE__:; } while (0)
+#define ACME_XGH_CHANNEL_CR_YIELD_SEND do { s_send=__LINE__; return; case __LINE__:; } while (0)
+
+static unsigned char *acme_xgh_channel_send_current = NULL;
+static size_t acme_xgh_channel_send_current_remnant;
+static bool (*acme_xgh_resource_eof)(void);
+static enum acme_xgh_error (*acme_xgh_resource_recv)(unsigned char *p, unsigned char *pe, unsigned char *eof);
+
+#define ACME_XGH_CHANNEL_LITERAL_BASE(...) \
+  static unsigned char fwded[] = __VA_ARGS__; \
+  current = fwded; \
+  remnant = sizeof fwded - 1; \
+
+#define ACME_XGH_CHANNEL_LITERAL_SAVE(...) do { \
+  assert(ev != ACME_SUM); \
+  ACME_XGH_CHANNEL_LITERAL_BASE(__VA_ARGS__) \
+  ACME_XGH_CHANNEL_CR_SAVE_SEND; \
+  assert(!acme_xgh_channel_send_current_remnant); \
+} while (0)
+
+#define ACME_XGH_CHANNEL_LITERAL_YIELD(...) if (ACME_SEND == ev) { \
+  ACME_XGH_CHANNEL_LITERAL_BASE(__VA_ARGS__) \
+  ACME_XGH_CHANNEL_CR_SAVE_SEND; \
+  assert(!acme_xgh_channel_send_current_remnant); \
+} else if (ACME_XGH_CHANNEL_EVENT_SUM == ev && is_counting) { \
+  length_numbah += sizeof (__VA_ARGS__); \
+} else (void)0
+
+#define ACME_XGH_CHANNEL_STRING_YIELD(...) if (ACME_SEND == ev) { \
+  current = (__VA_ARGS__); \
+  remnant = strlen(current); \
+  crYieldSend; \
+  assert(!remnant); \
+} else if (ACME_XGH_CHANNEL_EVENT_SUM == ev && is_counting) { \
+  length_numbah += strlen(__VA_ARGS__); \
+} else (void)0
+
+#define ACME_XGH_CHANNEL_PARSE(ID) do { \
+  acme_xgh_resource_##ID##_init(); \
+  acme_xgh_resource_eof = acme_xgh_resource_##ID##_eof; \
+  acme_xgh_resource_recv = acme_xgh_resource_##ID##_recv; \
+  s_recv=__LINE__; return; case __LINE__:; \
+} while (0)
+
+#define LENGTH_NOW do { s_sum = __LINE__; acme_sum(); case __LINE__:; } while (0)
+
+#define SSUM // TODO
+#define ESUM if (ACME_XGH_CHANNEL_EVENT_SUM == ev) { return; } else (void)0
+
+#define ACME_CHANNEL_EVENT_XS(X) \
+X(init, INIT, s_recv = s_send = state = 0) \
+X(recv, RECV, state = s_recv) \
+X(send, SEND, state = s_send) \
+X(sum , SUM , state = s_sum )
+
+#define ACME_XGH_CHANNEL_EVENT_AS_ENUM(A, B, C) ACME_XGH_CHANNEL_EVENT_##B,
+#define ACME_XGH_CHANNEL_EVENT_AS_FACADE(A, B, C) acme_##A(void) { acme(ACME_XGH_CHANNEL_EVENT_##B); }
+#define ACME_XGH_CHANNEL_EVENT_AS_RESUME(A, B, C) case ACME_XGH_CHANNEL_EVENT_##B: C; break;
+
+enum acme_xgh_channel_event { ACME_CHANNEL_EVENT_XS(AS_2) };
+
+ACME_CHANNEL_EVENT_XS(AS_DECO)
+
+static void acme(enum acme_xgh_channel_event ev)
+{
+    unsigned char length[20];
+    static int length_numbah;
+    bool is_counting;
+
+    // Not worth X macros.
+    static int s_recv, s_send, s_sum;
+    int state;
+
+    switch (ev)
+    {
+        ACME_CHANNEL_EVENT_XS(AS_ATT)
+        default: assert(!"fuck"); break;
+    }
+
+    ACME_XGH_CHANNEL_CR_BEGIN;
+
+    // Crypto startup.
+
+    LITS(
+        "GET /dir HTTP/1.1\r\n"
+        ACME_SOME_FIELDS
+        "Connection: keep-alive\r\n"
+        "\r\n"
+    );
+
+    ACME_XGH_CHANNEL_PARSE(directory);
+
+    if (acme_xgh_replay_nonce)
+        printf("Already has nonce: %s\n", acme_xgh_replay_nonce);
+    else
+    {
+        LITS("HEAD /");
+        if (ACME_RECV == ev)
+        {
+            STR(nnonce_dir);
+            LITY(
+                " HTTP/1.1\r\n"
+                ACME_SOME_FIELDS
+                "Connection: keep-alive\r\n"
+                "\r\n"
+            );
+        }
+
+        ACME_XGH_CHANNEL_PARSE(null);
+
+        printf("Got nonce: %s\n", acme_xgh_replay_nonce);
+    }
+
+    LITS("GET /");
+    STR(account_dir);
+    LIT(
+        " HTTP/1.1\r\n"
+        ACME_SOME_FIELDS
+        "Connection: keep-live\r\n"
+        "Content-Length: "
+    );
+    LENGTH_NOW;
+    LIT("\r\n\r\n");
+    SLIT(
+        "{\"termsOfServiceAgreed\":true,\"contact\":\"" ACME_CONTACT "\"}"
+    );
+    ESUM;
+
+    ACME_XGH_CHANNEL_PARSE(account);
+
+    ACME_XGH_CHANNEL_CR_FINISH;
+}
+
+static unsigned char * acme_send_buf(size_t *len)
+{
+    if (!remnant)
+        acme_send();
+
+    if (current)
+        *len = remnant;
+
+    return remnant ? current : NULL;
+}
+
+static void acme_send_ack(size_t len)
+{
+    assert(len <= remnant);
+    remnant -= len;
+    current += len;
+}
+
+enum http_xgh_error
+{
+    #define HTTP_XGH_X(ID) HTTP_XGH_ERROR_##ID
+    HTTP_XGH_ERROR_XS,
+    HTTP_XGH_ERROR_USER_DEFINED,
+    #undef HTTP_XGH_X
+};
+
+enum
+{
+    HTTP_XGH_BODY_LENGTH_UNTIL_CLOSE = -1,
+    HTTP_XGH_BODY_LENGTH_TOO_BIG = -2,
+#if 0
+    HTTP_XGH_BODY_LENGTH_TRANSFER_ENCODING = -3,
+#endif
+};
+
+static int acme_xgh_http_client_cs;
+static int http_xgh_client_status;
+
+static int http_xgh_body_length;
+static int http_xgh_body_length_i;
+
+static unsigned char *http_xgh_body_start;
+static unsigned char *http_xgh_body_end;
+
+static inline bool http_xgh_body_is_buffering(void)
+{
+    assert(!http_xgh_body_start == !http_xgh_body_end);
+    return http_xgh_body_start;
+}
+
+#define HTTP_XGH_CLIENT_BODY_BUFFER(EOF) do { \
+    enum acme_xgh_error e = \
+    acme_xgh_http_body_recv( \
+        http_xgh_body_start, \
+        http_xgh_body_end, \
+        (EOF)); \
+    if (e != ACME_XGH_NONE) \
+        return e; \
+} while (0)
+
+#if 0
+static enum http_xgh_encoding
+{
+    HTTP_XGH_ENCODING_IDENTITY,
+    HTTP_XGH_ENCODING_GZIP,
+    HTTP_XGH_ENCODING_ZLIB,
+    HTTP_XGH_ENCODING_BROTLI,
+    HTTP_XGH_ENCODING_ZSTD,
+} acme_xgh_http_encoding;
+#endif
+
+static int http_xgh_client_tmp_num;
+
+static int acme_xgh_replay_nonce_length;
+
+static bool http_xgh_client_is_head;
+
+%%{
+    machine acme_xgh_http_client;
+    alphtype unsigned char;
+
+    variable cs acme_xgh_http_client_cs;
+
+    include http_base "http_base.rl";
+
+    action acme_xgh_http_client_init
+    {
+        acme_xgh_http_client_body_length = ACME_XGH_HTTP_BODY_LENGTH_UNTIL_CLOSE;
+#if 0
+        acme_xgh_http_client_encoding = ACME_XGH_HTTP_ENCODING_IDENTITY;
+#endif
+    }
+
+    # TODO Maintenance burden (requires m4 to solve).
+    action http_xgh_skill_issue { return HTTP_XGH_SKILL_ISSUE; }
+    action http_xgh_error_some { return HTTP_XGH_ERROR_SOME; }
+    action http_xgh_error_unrecoverable { return HTTP_XGH_ERROR_UNRECOVERABLE; }
+
+    action http_xgh_body_start
+    {
+        acme_xgh_http_client_body_init();
+          http_xgh_client_body_start;
+        = http_xgh_client_body_end
+        = fpc;
+        http_xgh_body_length_i = 0;
+    }
+    action http_xgh_body_advance
+    {
+        http_xgh_client_body_end++;
+    }
+    action http_xgh_body_end
+    {
+        HTTP_XGH_CLIENT_BODY_IS_BUFFERING(http_xgh_client_body_end);
+        acme_xgh_http_client_body_start = NULL;
+        acme_xgh_http_client_body_end = NULL;
+    }
+
+    action acme_xgh_http_client_is_body_not_exhausted
+    {
+        !http_xgh_client_is_head && (
+            ACME_XGH_HTTP_BODY_LENGTH_UNTIL_CLOSE
+            == acme_xgh_http_body_length
+            || acme_xgh_http_body_length_i++
+             < acme_xgh_http_body_length
+        )
+    }
+
+    # TODO body_length and _i ought be only one number which is
+    # decremented until zero
+
+    action http_xgh_set_body_length_0
+    {
+        http_xgh_body_length = 0;
+    }
+    action http_xgh_zero
+    {
+        acme_xgh_http_client_num = 0;
+    }
+    action http_xgh_concat_digit
+    {
+        int const x = fc - '0';
+        if (acme_xgh_http_client_num > (INT_MAX - x) / 10)
+            return HTTP_CLIENT_SKILL_ISSUE;
+        else
+            acme_xgh_http_client_num = acme_xgh_http_client_num * 10 + x;
+    }
+    action http_xgh_client_as_status
+    {
+        acme_xgh_http_client_status = acme_xgh_http_client_num;
+    }
+    action http_xgh_body_length_copy
+    {
+        acme_xgh_http_client_body_length = acme_xgh_http_client_num;
+    }
+    action http_xgh_body_length_assert
+    {
+        if (acme_xgh_http_client_body_length != acme_xgh_http_client_num)
+            return ACME_XGH_HTTP_CLIENT_REJECT;
+    }
+
+    content_length = "Content-Length:"i @(pri_http_field,1) OWS
+                     digit+ >do_zero $do_dig %body_length_numbah
+                     (OWS ',' OWS digit+ >do_zero $do_dig %assert_body_length)*
+                     OWS;
+    transfer_encoding = "Transfer-Encoding:"i @(pri_http_field,1) @skill_issue OWS field_value OWS;
+    content_encoding = "Content-Encoding:"i @(pri_http_field,1) @acme_xgh_skill_issue OWS field_value OWS;
+
+    base64url = alnum | '-' | '_';
+
+    replay_nonce_value = base64url+ > $ @ $!some_error
+    replay_nonce = "Replay-Nonce"i @(pri_http_field,1) OWS replay_nonce_value OWS;
+
+    known_field = content_encoding
+                | content_length
+                | transfer_encoding
+                | replay_nonce
+                ;
+
+    field_line = known_field | any_field;
+
+    empty_body_status_code = ( "1" digit digit
+                             | "204"
+                             | "304"
+                             ) %body_length_0;
+    # https://www.rfc-editor.org/rfc/rfc9112.html#section-6.3-2.1
+
+    known_status_code = empty_body_status_code | "200";
+
+    status_code = known_status_code | digit{3};
+    reason_phrase = ( HTAB | SP | VCHAR | obs_text ){1,};
+
+    status_line = HTTP_version SP status_code >do_zero $do_dig %as_status SP (reason_phrase)?;
+
+    message_body = any*
+                   >http_xgh_body_start
+                   $http_xgh_body_advance
+                   %http_xgh_body_end
+                   when is_body_not_exhausted
+
+    HTTP_message = CRLF* # https://datatracker.ietf.org/doc/html/rfc9112#section-2.2-6
+                   status_line CRLF
+                   (field_line CRLF)*
+                   CRLF
+                   message_body
+                   ;
+
+    main := HTTP_message** >acme_xgh_http_client_init $!error_some;
+
+    write data noerror nofinal noentry;
+}%%
+
+void acme_xgh_init(void)
+{
+    %% write init;
+}
+
+enum acme_xgh_error acme_xgh_recv(unsigned char *p, size_t len)
+{
+    unsigned char *pe = p + len, *eof = NULL;
+
+    if (http_xgh_client_body_is_buffering)
+          http_xgh_client_body_start
+        = http_xgh_client_body_end
+        = p
+        ;
+
+    %% write exec;
+
+    if (http_xgh_client_body_is_buffering)
+        HTTP_XGH_CLIENT_BODY_IS_BUFFERING(NULL);
+
+    return ACME_XGH_NONE;
+}

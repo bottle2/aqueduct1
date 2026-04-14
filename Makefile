@@ -22,6 +22,14 @@ vrum:vrum.c my_certs.c http_client.c acme.c
 
 acme.c:unicode.rl
 
+acme_xgh.inc:acme_xgh.m4
+	m4 acme_xgh.m4 > $@
+
+acme_xgh.rl:acme_xgh.txt acme_xgh.inc
+	soelim acme_xgh.txt | sed 's/^\.lf \([0-9]\) \(.\+\)$$/#line \1 \"\2\"/' > $@
+
+acme_xgh.c:acme_xgh.rl json.rl unicode.rl
+
 json:json.c
 	$(CC) -DIS_JSON_MAIN -Wpedantic -Wall -Wextra acme.c -o $@
 

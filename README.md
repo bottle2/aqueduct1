@@ -1,5 +1,18 @@
 # The Web server and website written in C
 
+## Libraries
+
+There are some libraries emerging.
+They are all named like `*_xgh*`.
+Examples:
+
+- `http_xgh.rl`
+- `unicode_xgh.rl`
+- `json_xgh.rl`
+- `acme_xgh.m4`
+
+Currently unversioned.
+
 ## Future directions
 
 ### HTTPS support

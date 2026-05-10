@@ -1,5 +1,5 @@
 %%{
-    machine http_base;
+    machine http_xgh_base;
     CRLF = "\r\n"; # MAY be a bare a \n, but MUST NOT a bare \r
                    # if bare \r received, consider invalid or replace with SP
                    # Let's just error ffs

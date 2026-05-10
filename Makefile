@@ -1,3 +1,8 @@
+ninja:build.ninja
+
+build.ninja:ninja.m4
+	m4 ninja.m4 > build.ninja
+
 # XXX This is a mess OMG
 PAGES=bookmarks.html vehicle-building-games.html
 
@@ -14,9 +19,12 @@ my_certs.c:
 	find /usr/share/ca-certificates/mozilla/ \
 	-type f -exec brssl ta test/certs/pebble.minica.pem {} + > $@
 
-http_client.c:http_base.rl
+#acme_xgh.rl:acme_xgh.txt
+#	soelim -r acme_xgh.txt > acme_xgh.rl
 
-vrum:vrum.c my_certs.c http_client.c acme.c
+acme_xgh.c:acme_xgh.rl
+
+vrum:vrum.c my_certs.c acme_xgh.c acme.c
 	$(CC) -std=c18 -D_XOPEN_SOURCE=600 \
 	$(CFLAGS) -o $@ vrum.c $(LDLIBS)
 
@@ -172,6 +180,8 @@ edu_ragel.pdf:edu_ragel.mom
 
 edu_m4.pdf:edu_m4.mom
 	pdfmom -Kutf8 -t $< > $@
+
+DATA=music.m4 vehicle-building-games.m4 movies.m4 bookmarks.m4
 
 include $(OBJ:.o=.d)
 

@@ -196,7 +196,7 @@ static void on_write(uv_write_t *req, int status)
         fhold; fbreak;
     }
 
-    include "http_base.rl";
+    include http_xgh_base "http_xgh.rl";
 
     scheme = "http"i;
 

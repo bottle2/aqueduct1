@@ -1,0 +1,9 @@
+define(`XGH_MOV',`ifelse(`$#',`4',`dnl
+`'define(`XGH_MOV___$1___WIKIDATA',`$2')dnl
+`'define(`XGH_MOV___$1___YEAR',`$3')dnl
+`'define(`XGH_MOV___$1___TITLE',`$4')dnl
+')')dnl
+define(`XGH_MOVI',`XGH_MOV($@)')dnl
+define(`XGH_MOVIX',`XGH_MOV(shift(shift($@)))')dnl
+define(`XGH_HUL',`$*')dnl
+divert(-1)

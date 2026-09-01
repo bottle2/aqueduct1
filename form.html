@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Formulário de trajetos</title>
+    <script>
+    var all_cells = [];
+    function self_destruct(who) {
+      who.parentNode.parentNode.remove();
+    }
+    function escape2(strin) {
+      // https://stackoverflow.com/a/6234804
+      return strin
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll("\x34", "&quot;")
+        .replaceAll("\x39", "&#039;");
+    }
+    function complain_bad(ver,file,nl,msg) {
+      const full_msg = escape2(ver) +":" +escape2(file) +":" +escape2(nl+"") +":" +escape2(msg);
+      document.getElementByid("badd_msg").innerText = full_msg;
+      document.getElementById("badd").removeAttribute("hidden");
+    }
+    function cleanse() {
+      for (const row in Array.prototype.slice.call(document.getElementById("table").children,0,-1))
+        if (!Array.prototype.slice.call(row.children,1,-1).some((chid) => chid.firstElementChild.value.trim().length))
+          row.remove();
+    }
+    function dirty(ev) {
+      const is_last = ev.parentNode.parentNode == ev.parentNode.parentNode.parentNode.lastElementChild;
+      if (is_empty && !is_last)
+      {
+        const cell = ev.parentNode;
+        const row = cell.parentNode;
+        const i = Array.prototype.indexOf.call(row.children, cell);
+        row.nextElementSibling.children.item(i).firstElementChild.focus();
+        row.remove();
+      }
+      else if (!is_empty && is_last)
+        ev.parentNode.parentNode.parentNode.insertRow(-1).innerHTML = "<tr><td></td><td><input oninput=\"dirty(this)\" /></td><td><input inputmode=\"decimal\" oninput=\"dirty(this)\" /></td><td><input inputmode=\"decimal\" oninput=\"dirty(this)\" /></td><td><input oninput=\"dirty(this)\" /></td><td><input oninput=\"dirty(this)\" /></td><td><input oninput=\"dirty(this)\" /></td><td><input oninput=\"dirty(this)\" /></td><td><button onclick=\"self_destruct(this)\"style=\"filter: grayscale(100%)\">&#x1F5D1;&#xFE0F;</button></td></tr>";
+    }
+    function go_bacc() {
+      all_cells.length = 0; // NO memory leak at all. Guaranteed.
+      document.getElementById("badd").setAttribute("hidden","");
+      document.getElementById("resumo").setAttribute("hidden","");
+      document.getElementById("erro_requ").setAttribute("hidden","");
+      document.getElementById("erro_spa_digi").setAttribute("hidden","");
+      document.getElementById("erro_virg").setAttribute("hidden","");
+      document.getElementById("erro_dig15").setAttribute("hidden","");
+      document.getElementById("erro_dec2").setAttribute("hidden","");
+      document.getElementById("erro_unrec").setAttribute("hidden","");
+      document.getElementById("erro_neg").setAttribute("hidden","");
+      _le_export();
+    }
+    function gay_goto(i) { all_cells[i].focus(); }
+    </script>
+    <style>
+    tfoot tr { text-align: center; }
+    tbody tr { text-align: right; }
+    li button { user-select: text; }
+    tbody tr :nth-child(3) input { text-align: right; }
+    tbody tr :nth-child(4) input { text-align: right; }
+    tbody tr :nth-child(5) input { text-align: center; }
+    <!-- TODO Formatar com a fonte e cores oficiais de placa de carro seria muito based -->
+    </style>
+  </head>
+  <body>
+    <h1>Formulário de trajetos</h1>
+    <button onclick="cleanse()">Remover linhas vazias (não precisa)</button>
+    <table>
+      <thead><tr>
+      	<td></td>
+        <th>Tipo de carga</th>
+        <th>Valor da carga</th>
+        <th>Kilometragem</th>
+        <th>Placa do veículo</th>
+        <th>Nome do motorista</th>
+        <th>Ponto de entrega</th>
+        <th>Ponto de saída</th>
+      </tr></thead>
+      <tbody id="table">
+      <tr><td></td>
+        <td><input oninput="dirty(this)" /></td>
+        <td><input inputmode="decimal" oninput="dirty(this)" /></td>
+        <td><input inputmode="decimal" oninput="dirty(this)" /></td>
+        <td><input oninput="dirty(this)" /></td>
+        <td><input oninput="dirty(this)" /></td>
+        <td><input oninput="dirty(this)" /></td>
+        <td><input oninput="dirty(this)" /></td><td><button onclick="self_destruct(this)"style="filter: grayscale(100%)">&#x1F5D1;&#xFE0F;</button></td>
+      </tr>
+      </tbody>
+      <tfoot><tr><td></td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td></tr></tfoot>
+    </table>
+    <button onclick="go_bacc()" type="button">
+      Validar formulário e exportar Excel
+    </button>
+    <p>
+      Se há erros, nenhum arquivo Excel é gerado. A lista de erros
+      <strong>não</strong> é atualizada enquanto valores são
+      modificados.
+    </p>
+    <div hidden id="badd">
+      <p>Erro interno (não é culpa sua). Repasse toda a seguinte mensagem para um responsável:</p>
+      <code id="badd_msg"></code>
+      <button onclick="clipboard.writeText(document.getElementById(&quot;badd_msg&quot;).innerText)">Copiar</button>
+    </div>
+    <div hidden id="resumo">
+      <h2>Erros a serem corrigidos: <span id="total"></span></h2>
+      <div id="erro_requ" hidden>
+        <h3>Erro: campo obrigatório não preenchido</h3>
+        <p>Contagem de campos com esse erro: <span id="erro_requ_cnt"></span></p>
+        <ul id="erro_requ_list">
+        </ul>
+      </div>
+      <div id="erro_spa_digi" hidden>
+        <h3>Erro: campo não pode ter espaços em branco entre dígitos</h3>
+        <p>Contagem de campos com esse erro: <span id="erro_spa_digi_cnt"></span></p>
+        <ul id="erro_spa_digi_list">
+        </ul>
+      </div>
+      <div id="erro_virg" hidden>
+        <h3>Erro: há mais de uma vírgula no número, só pode uma</h3>
+        <p>Contagem de campos com esse erro: <span id="erro_virg_cnt"></span></p>
+        <ul id="erro_virg_list">
+        </ul>
+      </div>
+      <div id="erro_dig15" hidden>
+        <h3>Erro: só pode até 15 dígitos no número, contando os decimais</h3>
+        <p>Contagem de campos com esse erro: <span id="erro_dig15_cnt"></span></p>
+        <ul id="erro_dig15_list">
+        </ul>
+      </div>
+      <div id="erro_dec2" hidden>
+        <h3>Erro: só pode duas casas decimais para dinheiro</h3>
+        <p>Contagem de campos com esse erro: <span id="erro_dec2_cnt"></span></p>
+        <ul id="erro_dec2_list">
+        </ul>
+      </div>
+      <div id="erro_unrec" hidden>
+        <h3>Erro: caracteres não reconhecidos encontrados, somente dígitos e vírgula são permitidos</h3>
+        <p>Contagem de campos com esse erro: <span id="erro_unrec_cnt"></span></p>
+        <ul id="erro_unrec_list">
+        </ul>
+      </div>
+      <div id="erro_neg" hidden>
+        <h3>Erro: valor não pode ser negativo</h3>
+        <p>Contagem de campos com esse erro: <span id="erro_neg_cnt"></span></p>
+        <ul id="erro_neg_list">
+        </ul>
+      </div>
+    </div>
+    <p>
+    Copyright (C) 2026 Bento Borges Schirmer
+    </p>
+  </body>
+  {{{ SCRIPT }}}
+</html>

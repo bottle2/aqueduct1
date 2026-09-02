@@ -1,3 +1,11 @@
+dnl # https://www.newgrounds.com/portal/view/829585
+dnl # https://www.newgrounds.com/portal/view/615220
+dnl # https://cogg.itch.io/drednot
+dnl # https://adrianmanser.itch.io/captainsway
+dnl # https://www.helloengineer.com/
+dnl # https://www.newgrounds.com/portal/view/836343
+dnl # https://playdynamo.itch.io/dynamo
+dnl # https://www.newgrounds.com/portal/view/883532
 define(`XGH_GAME___LOC_ADDICTING_GAMES',`Addicting Games')dnl
 define(`XGH_GAME___LOC_AMAZON',`Amazon')dnl
 define(`XGH_GAME___LOC_APP_STORE',`App Store')dnl

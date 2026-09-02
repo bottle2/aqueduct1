@@ -6,6 +6,7 @@ define(`XGH_UL',`<ul>XGH_NL`'$1`'dnl
 </ul>')dnl
 define(`XGH_LI',`<li>XGH_NL`'$1`'XGH_NL</li>')dnl
 define(`XGH_LIA',`XGH_LI(`<a href="$1">$2</a>')')dnl
+define(`XGH_LIAL',`XGH_LI(`<a href="$1">$1</a>')')dnl
 define(`XGH_LIAR',`XGH_LIA(`./$1.html',`$2')')dnl
 define(`XGH_P',`<p>XGH_NL`'$1`'XGH_NL</p>')dnl
 define(`XGH_DL',`<dl>XGH_NL`'$1</dl>')dnl

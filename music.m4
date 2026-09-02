@@ -258,5 +258,16 @@ dnl # What about the hardbass
 dnl # Skipknot - Iowa
 dnl # WaxTerK:
 dnl # https://www.newgrounds.com/playlist/362100/okay-waxterk-music
+dnl # Classical:
+dnl # XGH_LIA(`https://www.youtube.com/user/TheWickedNorth',`TheWickedNorth - YouTube')
+dnl # XGH_LIA(`https://www.youtube.com/user/neuIlaryRheinKlange',`neuIlaryRheinKlange - YouTube')
+dnl # XGH_LIA(`https://www.youtube.com/user/IlaryRhineKlange/featured',`IlaryRhineKlange - YouTube')
+dnl # XGH_LIA(`https://www.youtube.com/user/avrilfan2213',`avrilfan2213 - YouTube')
+dnl # XGH_LIA(`https://open.spotify.com/playlist/0wbWiD8bxhhSFMLyNx8Mf8?si=WOwM4zGnQQmdFHTXNfl12g',`Japanese Vibes - Spotify')
+dnl # Nerd music:
+dnl # https://www.youtube.com/watch?v=b-Cr0EWwaTk
+dnl # https://www.youtube.com/watch?v=SYRlTISvjww
+dnl # https://www.youtube.com/watch?v=1S1fISh-pag
+dnl # what about phonk?
 XGH_KILLED(`undefine(`$1')')dnl
 undefine(`XGH_KILLED')dnl

@@ -238,14 +238,14 @@ XGH_HUL(`2',`Banned movies',`dnl
 XGH_MOVI(`JUPITER_ASCENDING',`Q12125299',`2015',`Jupiter Ascending')
 XGH_MOVI(`THE_JACKAL',       `Q167437',  `1997',`O Chacal')
 XGH_MOVIX(`',`: soundtrack allegedly inspired by <a href="https://www.youtube.com/watch?v=QspuCt1FM9M">a Justin Bieber song slowed down 800%</a>',`DREDD',`Q276772',`2012',`Dredd')
+XGH_MOVI(`BLADE_TRINITY',`Q217008',`2004',`Blade: Trinity')
 ')
-XGH_H(`1',`List of series')
-XGH_P(`I watch very few series, so imma go ahead and list them here.')
+XGH_H(`1',`List of animes, cartoons and series')
 XGH_HUL(`2',`Seen',`dnl
 ')
 XGH_HUL(`2',`Dropped',`dnl
 ')
-XGH_HUL(`2',`Want to seen',`dnl
+XGH_HUL(`2',`Want to see',`dnl
 ')
 XGH_HUL(`2',`Unseen',`dnl
 XGH_MOVI(`DANGER_5',        `Q5215988', `2011–2015',`Danger 5')
@@ -255,11 +255,11 @@ XGH_MOVI(`THE_STRAIN',      `Q15070575',`2014-2017',`The Strain')
 XGH_MOVI(`FREAKS_AND_GEEKS',`Q500769',  `1999-2000',`Freaks and Geeks')
 XGH_MOVI(`VIKINGANE',       `Q27312160',`2016-2020',`Vikingane')
 ')
-XGH_H(`1',`List of animes')
-XGH_P(`I also watch very few animes.')
-XGH_HUL(`2',`Seen',`dnl
-')
-XGH_HUL(`2',`Dropped',`dnl
-')
-XGH_H(`1',`List of cartoons')
-XGH_P(`I watched a bunch of cartoons as a kid. They were good.')
+dnl # TODO:
+dnl # Austin Powers
+dnl # animated LotR
+dnl # Puss In Boots: The Last Wish
+dnl # Pontypool
+dnl # Os Homens que Encaravam Cabras
+dnl # Scanners
+dnl # Bee Movie (first movie of the Internet)

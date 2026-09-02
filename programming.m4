@@ -42,7 +42,22 @@ XGH_LI(`The fish book: Expert C Programming: Deep C Secrets')
 XGH_LI(`Effective C')
 XGH_LI(`Design Patterns by Erich Gamma')
 ')
+XGH_HUL(`3',`Lists of books',`dnl
+XGH_LIA(`https://4chan-science.fandom.com/wiki/Mathematics',`Mathematics | /sci/ Wiki | Fandom')
+XGH_LIA(`https://github.com/EbookFoundation/free-programming-books',`free-programming-books')
+')
 XGH_HUL(`3',`RFCs I@aq@ve read',`dnl
+XGH_LIA(`https://datatracker.ietf.org/doc/html/rfc2616',`RFC2616 Hypertext Transfer Protocol -- HTTP/1.1')
+XGH_LIA(`https://datatracker.ietf.org/doc/html/rfc3875',`RFC3875 The Common Gateway Interface (CGI) Version 1.1')
+XGH_LIA(`https://datatracker.ietf.org/doc/html/rfc1436',`RFC1436 The Internet Gopher Protocol')
+XGH_LIA(`https://datatracker.ietf.org/doc/html/rfc2046',`Multipurpose Internet Mail Extensions (MIME) Part Two: Media Types')
+XGH_LIA(`https://datatracker.ietf.org/doc/html/rfc3986',`RFC3986 Uniform Resource Identifier (URI): Generic Syntax')
+XGH_LIA(`https://datatracker.ietf.org/doc/html/rfc4646',`RFC4646 Tags for Identifying Languages')
+')
+XGH_HUL(`3',`RFCs I@aq@ve not read',`dnl
+XGH_LIA(`https://datatracker.ietf.org/doc/html/rfc7540',`RFC7540 Hypertext Transfer Protocol Version 2 (HTTP/2)')
+XGH_LIA(`https://datatracker.ietf.org/doc/html/rfc5246',`RFC5246 The Transport Layer Security (TLS) Protocol Version 1.2')
+XGH_LIA(`https://datatracker.ietf.org/doc/html/rfc8446',`RFC8446 The Transport Layer Security (TLS) Protocol Version 1.3')
 ')
 XGH_H(`3',`Talks I@aq@ve watched')
 XGH_P(`I@aq@ve watched them asychronously. This list is not ordered by watch order')
@@ -54,6 +69,7 @@ XGH_LIA(`https://www.youtube.com/watch?v=ojZbFIQSdl8',`Using Types Effectively')
 XGH_LIA(`https://www.youtube.com/watch?v=RHC-uGDbu7s',`In-Game Economies in Team Fortress 2 and Dota 2')
 ')
 XGH_H(`2',`Games')
+dnl # https://www.sbgames.org/
 XGH_H(`3',`Where to publish')
 XGH_WEB(`dnl
 <table>
@@ -118,6 +134,7 @@ dnl # XGH_H(`2',`m4')
 dnl # XGH_P(`Here@aq@s how I@aq@m commenting stuff:')
 dnl # XGH_WEB(`<code>dnl # <code>')
 XGH_HUL(`2',`Disorganized link dump',`dnl
+XGH_LIAL(`https://github.com/andrewrk/malcheck')
 XGH_LIA(`https://matt.sh/howto-c',`how to c (as of 2016)')
 XGH_LIA(`https://stackoverflow.com/questions/1674032/static-const-vs-define-vs-enum',`c - "static const" vs "`#'define" vs "enum" - Stack Overflow')
 XGH_LIA(`http://sekrit.de/webdocs/c/beginners-guide-away-from-scanf.html',`A beginners@aq@ guide XGH_IT(`away') from scanf()')
@@ -210,6 +227,48 @@ XGH_LI(`collecting errors using reflection is banned')
 XGH_LI(`game with mass destruction like Dragon Ball')
 XGH_LIA(`https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/mosh.html',`mosh in putty')
 XGH_LIA(`https://devblogs.microsoft.com/oldnewthing/20170714-00/?p=96605',`counterpoint to Unicode parrots')
+XGH_LIA(`https://www.buildbot.net/',`Buildbot')
+XGH_LIA(`https://www.youtube.com/watch?v=8Z685OF-PS8',`A New Way to look at Networking')
+XGH_LIA(`https://puredata.info/',`Pure Data')
+XGH_LIA(`https://github.com/google/re2',`google/re2')
+XGH_LIA(`https://tldp.org/',`The Linux Documentation Project')
+')
+XGH_HUL(`2',`Webdevus',`dnl
+XGH_LIA(`https://validator.w3.org/',`The W3C Markup Validation Service')
+XGH_LIA(`https://css-tricks.com/snippets/css/a-guide-to-flexbox/',`A Complete Guide to Flexbox | CSS-Tricks')
+XGH_LIA(`https://css-tricks.com/snippets/css/complete-guide-grid',`A Complete Guide to Grid | CSS-Tricks')
+XGH_LIA(`https://www.w3.org/Tools/',`Tools for WWW providers')
+')
+XGH_HUL(`2',`2+2-1=3, quick maths',`dnl
+XGH_LIA(`https://www.mathe-fa.de/pt/',`Plotador Matemático MAFA')
+')
+XGH_HUL(`2',`Building',`dnl
+XGH_LIA(`https://github.com/runestubbe/Crinkler',`runestubbe/Crinkler: Crinkler is an executable file compressor')
+')
+XGH_HUL(`2',`Version control, legalese, licenses',`dnl
+XGH_LIA(`https://git-scm.com/book/en/v2',`Git Pro Book')
+XGH_LIA(`https://wiki.creativecommons.org/wiki/Main_Page',`Creative Commons')
+XGH_LIA(`https://tldp.org/HOWTO/Software-Release-Practice-HOWTO/patching.html',`Good patching practice')
+XGH_LIA(`http://www.kegel.com/academy/opensource.html',`Contributing to Open Source Projects HOWTO')
+')
+XGH_HUL(`2',`Competitive programming, contests',`dnl
+XGH_LIA(`https://en.wikipedia.org/wiki/ICFP_Programming_Contest',`ICFP Programming Contest - Wikipedia')
+')
+XGH_HUL(`2',`Computer graphics',`dnl
+XGH_LIA(`http://www.fmwconcepts.com/imagemagick/index.php',`Fred@aq@s ImageMagick Scripts')
+XGH_LIA(`https://github.com/mxgmn',`mxgmn (Maxim Gumin)')
+XGH_LIA(`https://thebookofshaders.com/',`The Book of Shaders')
+XGH_LIA(`https://lazyfoo.net/tutorials/OpenGL/index.php',`Lazy Foo@aq@ Productions - OpenGL Tutorials')
+XGH_LIA(`https://lazyfoo.net/tutorials/SDL/',`Lazy Foo@aq@ Productions - Beginning Game Programming v2.0')
+XGH_LIA(`https://www.fundza.com/index.html',`CG References & Tutorials')
+')
+XGH_HUL(`2',`Audio',`dnl
+XGH_LIA(`https://wiki.hydrogenaud.io/index.php?title=Topic_Index',`Topic Index - Hydrogenaudio Knowledgebase')
+')
+XGH_HUL(`2',`Low-level',`dnl
+XGH_LIA(`https://wiki.osdev.org/Main_Page',`Expanded Main Page - OSDev Wiki')
+XGH_LIA(`https://rada.re/n/radare2.html',`radare2')
+XGH_LIA(`https://www.ollydbg.de/',`OllyDbg v1.10')
 ')
 dnl # .PS
 dnl # box "MS Word" wid 1.5
@@ -257,3 +316,64 @@ dnl # Lista de parâmetros	Vírgula	Proibido
 dnl # Uma expressão	Operadores	Proibido
 dnl # \fIstatements\fP primários	Ponto e vírgula	Obrigatório
 dnl # .TE
+XGH_HUL(`2',`Optimilaziations',`dnl
+XGH_LIA(`https://github.com/facebookincubator/BOLT',`facebookincubator/BOLT: Binary Optimization and Layout Tool')
+XGH_LIA(`https://www.agner.org/optimize/',`Software optimization resources. C++ and assembly. Windows, Linux, BSD, Mac OS X')
+XGH_LIA(`http://www.brendangregg.com/perf.html',`Linux perf Examples')
+XGH_LIA(`https://cellperformance.beyond3d.com/articles/index.html',`CellPerformance')
+')
+XGH_HUL(`2',`Document processing',`dnl
+XGH_LIA(`https://www.schaffter.ca/mom/momdoc/definitions.html',`Mom -- Definitions and Terms')
+XGH_LIA(`http://www.faqs.org/faqs/text-faq/',`comp.text Frequently Asked Questions')
+')
+XGH_HUL(`2',`Rice',`dnl
+XGH_LIA(`https://github.com/djpohly/dwl',`djpohly/dwl: dwm for Wayland')
+XGH_LIA(`https://bbs.archlinux.org/viewtopic.php?id=161740',`A Noobs Quest to Understanding dwm [and window managers in general] / Newbie Corner / Arch Linux Forums')
+XGH_LIA(`https://news.ycombinator.com/item?id=11070797',`Ask HN: What do you use to manage dotfiles? | Hacker News')
+')
+XGH_HUL(`2',`Unicode (nightmare)',`dnl
+XGH_LIA(`http://utf8everywhere.org/',`UTF-8 Everywhere')
+XGH_LIA(`https://www.cl.cam.ac.uk/~mgk25/unicode.html',`UTF-8 and Unicode FAQ')
+')
+XGH_HUL(`2',`Memory management',`dnl
+XGH_LIA(`https://www.memorymanagement.org/',`Home — Memory Management Reference 4.0 documentation')
+')
+XGH_HUL(`2',`Tooling',`dnl
+XGH_LIA(`https://www.in-ulm.de/~mascheck/various/uuoc/',`Useful use of cat(1)')
+XGH_LIA(`https://sanctum.geek.nz/arabesque/actually-using-ed/',`Actually using ed | Arabesque')
+XGH_LIA(`https://stackoverflow.com/questions/91791/grep-and-sed-equivalent-for-xml-command-line-processing',`Grep and Sed Equivalent for XML Command Line Processing - Stack Overflow')
+XGH_LIA(`https://beyondgrep.com/more-tools/',`More tools for searching source code')
+XGH_LIA(`https://stackoverflow.com/questions/1878974/redefine-tab-as-4-spaces',`vim - Redefine tab as 4 spaces - Stack Overflow')
+')
+XGH_HUL(`2',`Code generation',`dnl
+XGH_LIA(`https://www.colm.net/open-source/ragel/',`Ragel State Machine Compiler')
+')
+XGH_HUL(`2',`Testing',`dnl
+XGH_LIA(`https://dwheeler.com/essays/apple-goto-fail.html',`The Apple goto fail vulnerability: lessons learned')
+XGH_LIA(`https://stackoverflow.com/questions/65820/unit-testing-c-code',`Unit Testing C Code - Stack Overflow')
+')
+XGH_HUL(`2',`Floating-point',`dnl
+XGH_LIA(`https://0.30000000000000004.com/',`Floating Point Math')
+')
+XGH_HUL(`2',`The C programming language',`dnl
+XGH_LIA(`https://www.open-std.org/jtc1/sc22/wg14/www/docs/n3787.pdf',`Array constant expressions (C2y proposal)')
+XGH_LIAL(`http://unixwiz.net/techtips/reading-cdecl.html')
+XGH_LIAL(`http://www.lysator.liu.se/c/')
+')
+XGH_HUL(`2',`Checksums',`dnl
+XGH_LIAL(`https://barrgroup.com/embedded-systems/how-to/additive-checksums')
+XGH_LIAL(`https://barrgroup.com/Embedded-Systems/How-To/CRC-Math-Theory')
+XGH_LIAL(`https://barrgroup.com/Embedded-Systems/How-To/CRC-Calculation-C-Code')
+XGH_LIAL(`https://www.zlib.net/crc_v3.txt')
+')
+XGH_HUL(`2',`Geometry',`dnl
+XGH_LIAL(`https://dyn4j.org/2010/01/sat/')
+')
+XGH_HUL(`2',`X-Macros',`dnl
+XHG_LIAL(`https://gist.github.com/linneman/99ff9ff86d7b4c69604b012bfcc4c258')
+')
+XGH_HUL(`2',`Free assets',`dnl
+XGH_LIAL(`https://www.findsounds.com/')
+XGH_LIAL(`https://www.soundeffectsplus.com/')
+XGH_LIAL(`https://freesound.org/')
+')

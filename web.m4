@@ -22,6 +22,8 @@ define(`XGH_AI',`<li>XGH_A($@)</li>')dnl
 define(`XGH_HR',`<hr />')dnl
 define(`XGH_WEB',`$*')dnl
 define(`XGH_GAME',`<li>$1`'$2`'XGH_GAME___PART3`'define(`XGH_GAME___PART3')</li>')dnl
+define(`XGH_GAME2',`<li>$1`'ifelse(`1',`$#',,`XGH_GAME2_(shift($@))')`'XGH_GAME___PART3`'define(`XGH_GAME___PART3')</li>')dnl
+define(`XGH_GAME2_',`ifelse(`0',`$#',,`1',`$#',`XGH_GAME_LOC$1',`XGH_GAME_LOC$1`'XGH_GAME2_(shift($@))')')dnl
 define(`XGH_GAME_LOC',` [$1]')dnl
 define(`XGH_GAME___PART3')dnl
 define(`XGH___ALPHABET',`abcdefghijklmnopqrstuvwxyz')dnl
@@ -51,6 +53,7 @@ define(`XGH_GAME_LOCi',`define(`XGH_GAME_LOC___i',`1') [<a href="$3">XGH_GAME___
 define(`XGH_GAME_LOCi2',`ifelse(1,$#,,`define(`XGH_GAME_LOC___i',incr(XGH_GAME_LOC___i)) <sup><a href="$2">XGH_GAME_LOC___i</a>XGH_GAME_ATTR___2$1</sup>XGH_GAME_LOCi2(shift(shift($@)))')')dnl
 define(`XGH_IMG',`<img width="300px" src="./$1.$2" alt="$3">')dnl
 define(`XGH_IT',`<i>$1</i>')dnl
+define(`XGH_CI',`<code>$1</code>')
 m4wrap(`divert(0)dnl
 <!DOCTYPE html>
 <html lang="en">

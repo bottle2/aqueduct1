@@ -265,9 +265,64 @@ dnl # XGH_LIA(`https://www.youtube.com/user/IlaryRhineKlange/featured',`IlaryRhi
 dnl # XGH_LIA(`https://www.youtube.com/user/avrilfan2213',`avrilfan2213 - YouTube')
 dnl # XGH_LIA(`https://open.spotify.com/playlist/0wbWiD8bxhhSFMLyNx8Mf8?si=WOwM4zGnQQmdFHTXNfl12g',`Japanese Vibes - Spotify')
 dnl # Nerd music:
+dnl # https://www.youtube.com/watch?v=_GM-9f2seLU
 dnl # https://www.youtube.com/watch?v=b-Cr0EWwaTk
 dnl # https://www.youtube.com/watch?v=SYRlTISvjww
 dnl # https://www.youtube.com/watch?v=1S1fISh-pag
 dnl # what about phonk?
+dnl # whatever:
+dnl # Hide Devious Methods
+dnl # Alpha Omega - Realism / Visions
+dnl # Dom & Roland - Back For The Future
+dnl # Sugizo - Replicants
+dnl # dead kennedys frankenchrist
+dnl # StripE - Fighting for Freedom 
+dnl # dream theater octavarium
+dnl # Pantera - Vulgar Display Of Power 
+dnl # GETO BOYS - STILL 
+dnl # NWE Straight Outa Compton
+dnl # Ndee Naldinho - O 5º Vigia 
+dnl # RZO - O Trem 
+dnl # Racionais
+dnl # good monstercat:
+dnl # https://www.youtube.com/watch?v=F70bYM_rirU
+dnl # https://www.youtube.com/watch?v=WWNnBpuZMuI
+dnl # https://www.youtube.com/watch?v=wqZ5iLOUOGA
+dnl # https://www.youtube.com/watch?v=XN4WpPd-Ek0
+dnl # https://www.youtube.com/watch?v=uVU_loTEeVk
+dnl # Razorblade Romance
+dnl # bobby brown goes down
+dnl # Jerry Lee Lewis
+dnl # Queens of the Stone Age - Songs for the Dead
+dnl # The Mars Volta - De-Loused in the Comatorium
+dnl # Marilyn Manson - Antichrist Superstar
+dnl # Slayer - Reign in Blood
+dnl # Afrob - Rolle mit Hip-Hop (German Rap)
+dnl # Aphex Twin - Drukqs
+dnl # Bajofondo
+dnl # Boards of Canada
+dnl # Lift Your Skinny Fists Like Antennas to Heaven
+dnl # https://jaypedia.xyz/2023_prog
+dnl # https://www.youtube.com/watch?v=okHz7CE8wp0
+dnl # https://www.youtube.com/watch?v=ybJoNEhi7rQ
+dnl # What
+dnl # https://music.youtube.com/watch?v=ulPDzcTwBBI
+dnl # Turk rap?
+dnl # https://www.youtube.com/watch?v=z9KfvYVSfHY
+dnl # Farazi V Kayra - Sarhoş Palavraları ve Nahoş Nidalar ( Full Albüm )
+dnl # Farazi v Kayra - Sarhoş Palavraları ve İbretlik Hikayeler (Full Albüm) 
+dnl # https://www.youtube.com/watch?v=gwSv7t1xa2g
+dnl # What?
+dnl # https://www.youtube.com/watch?v=Qv-7t5kljIU&list=PL2g0zFo9TJOC9LKjb8NCJZQLFMFg52YU9&index=3
+dnl # https://www.youtube.com/watch?v=gSXMQ-3PZ6g&list=PL2g0zFo9TJOC9LKjb8NCJZQLFMFg52YU9&index=2
+dnl # https://www.urbandictionary.com/define.php?term=jump-up
+dnl # https://www.youtube.com/watch?v=lP2xC5eC2xM
+dnl # God Rest Ye Deadly Gentlemen 
+dnl # https://www.youtube.com/watch?v=3qnrewFcnQs
+dnl # https://www.youtube.com/watch?v=PBumWpOOobw
+dnl # https://www.youtube.com/watch?v=u0n4eMGXAyk
+dnl # https://www.youtube.com/watch?v=RkkGVgOqPuM
+dnl # https://www.youtube.com/watch?v=eR-aDgaUPG0
+dnl # https://www.youtube.com/watch?v=N4Db0oYKXvw
 XGH_KILLED(`undefine(`$1')')dnl
 undefine(`XGH_KILLED')dnl

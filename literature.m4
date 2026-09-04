@@ -1,0 +1,12 @@
+XGH_TIT(`Literature')
+XGH_UL(`dnl
+XGH_LIAL(`https://elan.school/')
+XGH_LIAL(`https://www.newgrounds.com/bbs/topic/1539430/1')
+XGH_LI(`Bechdel test')
+XGH_LIAL(`https://en.wikipedia.org/wiki/The_Most_Dangerous_Game')
+XGH_LIAL(`https://en.wikipedia.org/wiki/The_Shadow_over_Innsmouth')
+XGH_LIAL(`https://en.wikipedia.org/wiki/The_Twelve_Chairs')
+XGH_LI(`H.P. Lovecraft Historical Society')
+XGH_LIAL(`https://pt.wikipedia.org/wiki/Codex_Seraphinianus')
+XGH_LIAL(`I@aq@m Starting to Worry About This Black Box of Doom')
+')

@@ -263,3 +263,69 @@ dnl # Pontypool
 dnl # Os Homens que Encaravam Cabras
 dnl # Scanners
 dnl # Bee Movie (first movie of the Internet)
+dnl # https://www.youtube.com/watch?v=Aq1PV8JcstA&t=3781s
+dnl # Night of the Lepus
+dnl # Farscape
+dnl # Serenity
+dnl # Mr. Nobody
+dnl # Battlestar Gallactica
+dnl # Badlands
+dnl # Patriot Games
+dnl # Le fabuleux destin d'Amélie Poulain
+dnl # O Portão
+dnl # Bonnie e Clyde
+dnl # Ases do espaço
+dnl # O Grito
+dnl # Amaldiçoados
+dnl # A Chave Mestra
+dnl # Alita
+dnl # Sweeney Todd: The Demon Barber of Fleet Street
+dnl # Pixar (company)
+dnl # Helix, série do SyFy
+dnl # Solo Leveling
+dnl # Tales of Demons and Gods
+dnl # De Olhos bem fechados (Tom Cruise, Stanley Kubrick)
+dnl # The Menu (2022?)
+dnl # Heavy Metal - Universo em Fantasia
+dnl # Barbarella (1968) 
+dnl # Perfect Blue
+dnl # Monster
+dnl # Fist of the North Star
+dnl # Silent Hill
+dnl # helluva boss
+dnl # Dr. Katz
+dnl # Labyrinth (1986)
+dnl # Colors (1988)
+dnl # Legend (1985)
+dnl # Deadpool
+dnl # Dillinger: Inimigo Público nº 1
+dnl # Wings 1927
+dnl # Safety Last(1928)
+dnl # Slipknot - Iowa  <--- GOAT GOAT GOAT GOAT GOAT
+dnl # Mudvayne-L.D. 50 (2000) [Full Album] 
+dnl # Massive Attack Mezzanine
+dnl # Birds (movie)
+dnl # Beauty and the Beast
+dnl # Walking with Monsters
+dnl # Army of Darkness
+dnl # Dormindo com o inimigo
+dnl # Loki série
+dnl # filme live action do Speed Racer
+dnl # filme Serra Pelada (2013)
+dnl # C appears in Serial Experiments Lain
+dnl # O terceiro homem
+dnl # O tigre e o dragão
+dnl # Texhnolyze
+dnl # The Faculty
+dnl # Kung Pow Enter the Fist
+dnl # wandavision
+dnl # Operation Takedown
+dnl # Robin Hood: Men in Tights
+dnl # Wind River
+dnl # https://www.tertulianarrativa.com.br/
+dnl # slc punk!
+dnl # http://moongadget.com/origins/lightsabers.html
+dnl # X2 (2003)
+dnl # Kindergarden Cop (who is your daddy and what does he do)
+dnl # https://www.youtube.com/watch?v=vErJFmUF7DM
+dnl # https://www.imdb.com/pt/name/nm0001088/

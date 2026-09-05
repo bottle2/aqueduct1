@@ -18,7 +18,6 @@ define(`XGH_MOVIX',`<li>$1`'XGH_MOV(shift(shift($@)))`'$2</li>')dnl
 define(`XGH_HUL',`XGH_H(`$1',`$2')`'XGH_NL`'XGH_UL(`$3')')dnl
 define(`XGH_A',`<a href="$1">$2</a>')dnl
 define(`XGH_A2',`XGH_A(`$2',`$1')')dnl
-define(`XGH_AI',`<li>XGH_A($@)</li>')dnl
 define(`XGH_HR',`<hr />')dnl
 define(`XGH_WEB',`$*')dnl
 define(`XGH_GAME',`<li>$1`'$2`'XGH_GAME___PART3`'define(`XGH_GAME___PART3')</li>')dnl
@@ -54,6 +53,22 @@ define(`XGH_GAME_LOCi2',`ifelse(1,$#,,`define(`XGH_GAME_LOC___i',incr(XGH_GAME_L
 define(`XGH_IMG',`<img width="300px" src="./$1.$2" alt="$3">')dnl
 define(`XGH_IT',`<i>$1</i>')dnl
 define(`XGH_CI',`<code>$1</code>')
+define(`XGH_AUTHOR_N',`XGH_AUTHOR___$2`'XGH_CONT2(`AUTHOR2',$@)')dnl
+define(`XGH_AUTHOR_P',`$2`'XGH_CONT1(`AUTHOR2',$@)')dnl
+define(`XGH_AUTHOR_R',`XGH_AUTHOR___$2`'XGH_CONT1(`AUTHOR2',$@)')dnl
+define(`XGH_HAUTHOR',`<h$1>XGH_AUTHOR(shift($@))</h$1>')dnl
+define(`XGH_MUSIC',`XGH_MUSIC__$#($@)')dnl
+define(`XGH_MUSIC__1',`$1')dnl
+define(`XGH_MUSIC__2',`$1 ($2)')dnl
+define(`XGH_MUSIC__3',`$1 ($2)')dnl
+define(`XGH_MUSIC_NA',`<li>XGH_MUSIC($@)</li>')dnl
+define(`XGH_MOOD_UL2',`ifelse(`$#',`1',`ifelse(`$1',,,`XGH_MUSIC_NA$1')',`XGH_MUSIC_NA$1`'XGH_MOOD_UL2(shift($@))')')dnl
+define(`XGH_MOOD_UL',`<p>XGH_MOOD___$1:</p>ifelse(`$#',`1',,`<ul>XGH_MOOD_UL2(shift($@))</ul>')')dnl
+define(`XGH_MOOD_UL1',`XGH_MOOD_UL(`$1',`(shift($@))')')dnl
+define(`XGH_C_EN',`&ndash;')dnl
+define(`XGH_AUTHOR_S',`define(`XGH___AUTHOR',`XGH_AUTHOR($@)')')dnl
+define(`XGH_MOODH',`<h$1>XGH_MOOD___$2</h$1>')dnl
+define(`XGH_MUSIC_LI',`<li>XGH___AUTHOR XGH_C_EN XGH_MUSIC($@)</li>')dnl
 m4wrap(`divert(0)dnl
 <!DOCTYPE html>
 <html lang="en">

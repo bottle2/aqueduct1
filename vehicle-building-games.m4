@@ -1252,10 +1252,10 @@ XGH_GAME2(`Waste of Space',
 ')
 XGH_P(`Previous efforts to list many vehicle building games:')
 XGH_UL(`dnl
-XGH_AI(`https://steamcommunity.com/app/301520/discussions/2/1679190184072055800/',`My starting point and where the idea of writing this up came from')
-XGH_AI(`https://reddit.com/r/Robocraft/comments/4ixdna/a_big_list_of_vehicle_building_games/',`This Reddit thread at r/Robocraft')
-XGH_AI(`https://reddit.com/r/Games/comments/4ixqqc/big_list_of_vehicle_building_games/',`The same thread above reposted at r/Games')
-XGH_AI(`https://reddit.com/r/Robocraft/comments/87hoff/any_good_rc_clones_for_a_guy_who_likes_the_old/',`This thread at r/Robocraft')
-XGH_AI(`https://reddit.com/r/RobocraftRefugees/',`This interesting subreddit')
+XGH_LIA(`https://steamcommunity.com/app/301520/discussions/2/1679190184072055800/',`My starting point and where the idea of writing this up came from')
+XGH_LIA(`https://reddit.com/r/Robocraft/comments/4ixdna/a_big_list_of_vehicle_building_games/',`This Reddit thread at r/Robocraft')
+XGH_LIA(`https://reddit.com/r/Games/comments/4ixqqc/big_list_of_vehicle_building_games/',`The same thread above reposted at r/Games')
+XGH_LIA(`https://reddit.com/r/Robocraft/comments/87hoff/any_good_rc_clones_for_a_guy_who_likes_the_old/',`This thread at r/Robocraft')
+XGH_LIA(`https://reddit.com/r/RobocraftRefugees/',`This interesting subreddit')
 ')
 XGH_HR

@@ -1,0 +1,9 @@
+define(`XGH_CAT',`$1$2')dnl
+define(`XGH_CONT1',`XGH_$1(`$2',shift(shift(shift($@))))')dnl
+define(`XGH_CONT2',`XGH_$1(`$2',shift(shift(shift(shift($@)))))')dnl
+define(`XGH_AUTHOR_')dnl
+define(`XGH_AUTHOR2',`XGH_CAT(`XGH_AUTHOR_',substr(`$1',`0',`1'))(substr(`$1',`1'),shift($@))')dnl
+define(`XGH_AUTHOR',`ifelse(
+  `$#',`1',`XGH_AUTHOR2(`R',$@)',
+  `$#',`2',`XGH_AUTHOR2(`N',$@)',
+           `XGH_AUTHOR2($@)')')dnl

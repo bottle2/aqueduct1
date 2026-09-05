@@ -51,6 +51,7 @@ build web/not_found.html: m42 web.m4 not_found.m4
 build web/programming.html: m42 web.m4 programming.m4
 build web/bookmarks.html: m42 web.m4 bookmarks.m4
 build web/dead.html: m42 web.m4 dead.m4
+build web/music.html: m42 base.m4 collect.m4 music.m4 web.m4 music.m4
 build web/meme2.jpg: arb web/meme.jpg
   cmd1=magick
   cmd2=-resize 1200x627 -quality 100 -background "rgb(244,242,238)" -gravity center -extent 1200x627

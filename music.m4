@@ -1,176 +1,115 @@
-define(`XGH_WEB_TITLE',`List of music')dnl
-ifelse(XGH_OUTPUT,`html',`dnl
-`'divert(1)dnl
-`'define(`XGH_AUTHOR',`  <p>$2</p>')dnl
-dnl `'define(`MUSIC',`')dnl
-`'define(`XGH_H',`  <h$1>$2</h$1>')dnl
-`'define(`XGH_T',`  <p>XGH_T_$1:</p>')dnl
-`'define(`XGH_T_ULTRA',`Ultra')dnl
-`'define(`XGH_T_HIGH',`High testosterone')dnl
-`'define(`XGH_T_MID',`Okay')dnl
-`'define(`XGH_T_LOW',`Low testosterone')dnl
-')dnl
-dnl
-define(`XGH_AUTHOR_2',`')dnl
-define(`XGH_KILLED',`define(`XGH_KILL',`$1')dnl
-`'XGH_KILL(`XGH_T')`'dnl
-`'XGH_KILL(`XGH_AUTHOR')`'dnl
-`'XGH_KILL(`XGH_AUTHOR_N')`'dnl
-`'XGH_KILL(`XGH_AUTHOR_P')`'dnl
-`'XGH_KILL(`XGH_AUTHOR_R')`'dnl
-`'XGH_KILL(`MUSIC')`'dnl
-`'XGH_KILL(`YTID')`'dnl
-`'XGH_KILL(`XGH_H')`'dnl
-`'undefine(`XGH_KILL')')dnl
-XGH_KILLED(`ifdef(`$1',,`define(`$1',`dnl')')')dnl
-dnl
-XGH_H(`1',`List of music')
-XGH_AUTHOR(`BRITNEY',`Britney Spears')
-`'XGH_T(`MID')
-`'MUSIC(`...Baby One More Time',`1999')
-`'MUSIC(`Gimme More')
-dnl
-XGH_AUTHOR(`DUA_LIPA',`Dua Lipa')
-`'XGH_T(`HIGH')
-`'MUSIC(`Levitating Feat. DaBaby')
-dnl
-XGH_AUTHOR(`KATY_PERRY',`Katy Perry')
-`'XGH_T(`ULTRA')
-`'MUSIC(`Dark Horse',`2014',`YTID(`0KSOMA3QBU0',`-to 3:36')')
-`'XGH_T(`HIGH')
-`'MUSIC(`Roar',`2013')
-`'XGH_T(`MID')
-`'MUSIC(`Last Friday Night (T.G.I.F)',`2011')
-`'MUSIC(`California Gurls ft. Snoop Dogg')
-`'MUSIC(`Hot N Cold')
-dnl
-XGH_AUTHOR(`KESHA',`Ke$ha')
-`'XGH_T(`HIGH')
-`'MUSIC(`TiK ToK')
-`'MUSIC(`We R Who We R')
-`'XGH_T(`MID')
-`'MUSIC(`Die Yound',`2012')
-dnl
-XGH_AUTHOR(`LADY_GAGA',`Lady Gaga')
-`'XGH_T(`HIGH')
-`'MUSIC(`Just Dance',`2008')
-`'MUSIC(`Applause')
-`'XGH_T(`MID')
-`'MUSIC(`Monster')
-`'XGH_T(`LOW')
-`'MUSIC(`Alejandro')
-dnl
-XGH_AUTHOR(`MILEY_CYRUS',`Miley Cyrus')
-`'XGH_T(`MID')
-`'MUSIC(`Paty In The U.S.A.')
-dnl
-XGH_AUTHOR(`RIHANNA',`Rihanna')
-`'XGH_T(`HIGH')
-`'MUSIC(`We Found Love ft. Calvin Harris',`2011')
-`'MUSIC(`Where Have You Been',`2001')
-`'MUSIC(`Only Girl (In The World)')
-`'MUSIC(`Umbrella ft. JAY-Z')
-`'MUSIC(`SOS')
-`'MUSIC(`Don@aq@t Stop The Music')
-`'MUSIC(`Pon De Replay')
-`'XGH_T(`LOW')
-`'MUSIC(`S&M')
-dnl
-XGH_AUTHOR(`NELLY_FURTADO',`Nelly Furtado')
-`'XGH_T(`HIGH')
-`'MUSIC(`Promiscuous ft. Timbaland',`2009',`YTID(`0J3vgcE5i2o',`-ss 0:0:03.504 -to 0:03:58.655')')
-`'XGH_T(`MID')
-`'MUSIC(`Say It Right',`2006',`YTID(`6JnGBs88sL0',`-ss 0:0:10.677')')
-dnl
-XGH_AUTHOR(`SHAKIRA',`Shakira')
-`'XGH_T(`HIGH')
-`'MUSIC(`Whenever, Wherever',`2001',`YTID(`weRHyjj34ZE')')
-`'MUSIC(`Ojos Así',`1998',`YTID(`5BzkbSq7pww')')
-`'MUSIC(`Can@aq@t Remember to Forget You ft. Rihanna',`2014',`YTID(`o3mP3mJDL2k',`-to 0:03:24')')
-dnl
-XGH_AUTHOR(`TAYLOR_SWIFT',`Taylor Swift')
-`'XGH_T(`ULTRA')
-`'MUSIC(`Shake It Off',`2014',`YTID(`nfWlot6h_JM',`-to 0:03:47')')
-dnl
-XGH_AUTHOR(`THE_BLACK_EYED_PEAS',`The Black Eyed Peas')
-`'XGH_T(`MID')
-`'MUSIC(`Meet Me Halfway',`2009')
-dnl
+XGH_TIT(`List of music')
+define(`XGH_MOOD___ULTRA',`Ultra')dnl
+define(`XGH_MOOD___HIGH',`High testosterone')dnl
+define(`XGH_MOOD___MID',`Okay')dnl
+define(`XGH_MOOD___LOW',`Low testosterone')dnl
+XGH_HAUTHOR(`2',`BRITNEY',`Britney Spears')
+XGH_MOOD_UL(`MID',
+  `(`...Baby One More Time',`1999')',
+  `(`Gimme More')',
+)
+XGH_HAUTHOR(`2',`DUA_LIPA',`Dua Lipa')
+XGH_MOOD_UL1(`HIGH', `Levitating Feat. DaBaby')
+XGH_HAUTHOR(`2',`KATY_PERRY',`Katy Perry')
+XGH_MOOD_UL1(`ULTRA', `Dark Horse',`2014',`YTID(`0KSOMA3QBU0',`-to 3:36')')
+XGH_MOOD_UL1(`HIGH',`Roar',`2013')
+XGH_MOOD_UL(`MID',
+  `(`Last Friday Night (T.G.I.F)',`2011')',
+  `(`California Gurls ft. Snoop Dogg')',
+  `(`Hot N Cold')',
+)
+XGH_HAUTHOR(`2',`KESHA',`Ke$ha')
+XGH_MOOD_UL(`HIGH',
+  `(`TiK ToK')',
+  `(`We R Who We R')',
+)
+XGH_MOOD_UL1(`MID',`Die Yound',`2012')
+XGH_HAUTHOR(`2',`LADY_GAGA',`Lady Gaga')
+XGH_MOOD_UL(`HIGH',
+  `(`Just Dance',`2008')',
+  `(`Applause')',
+)
+XGH_MOOD_UL1(`MID',`Monster')
+XGH_MOOD_UL1(`LOW',`Alejandro')
+XGH_HAUTHOR(`2',`MILEY_CYRUS',`Miley Cyrus')
+XGH_MOOD_UL1(`MID',`Paty In The U.S.A.')
+XGH_HAUTHOR(`2',`RIHANNA',`Rihanna')
+XGH_MOOD_UL(`HIGH',
+  `(`We Found Love ft. Calvin Harris',`2011')',
+  `(`Where Have You Been',`2001')',
+  `(`Only Girl (In The World)')',
+  `(`Umbrella ft. JAY-Z')',
+  `(`SOS')',
+  `(`Don@aq@t Stop The Music')',
+  `(`Pon De Replay')',
+)
+XGH_MOOD_UL1(`LOW',`S&M')
+XGH_HAUTHOR(`2',`NELLY_FURTADO',`Nelly Furtado')
+XGH_MOOD_UL1(`HIGH',
+  `Promiscuous ft. Timbaland',`2009',
+  `YTID(`0J3vgcE5i2o',`-ss 0:0:03.504 -to 0:03:58.655')')
+XGH_MOOD_UL1(`MID',
+  `Say It Right',`2006',
+  `YTID(`6JnGBs88sL0',`-ss 0:0:10.677')')
+XGH_HAUTHOR(`2',`SHAKIRA',`Shakira')
+XGH_MOOD_UL(`HIGH',
+  `(`Whenever, Wherever',`2001',`YTID(`weRHyjj34ZE')')',
+  `(`Ojos Así',`1998',`YTID(`5BzkbSq7pww')')',
+  `(`Can@aq@t Remember to Forget You ft. Rihanna',`2014',`YTID(`o3mP3mJDL2k',`-to 0:03:24')')',
+)
+XGH_HAUTHOR(`2',`TAYLOR_SWIFT',`Taylor Swift')
+XGH_MOOD_UL1(`ULTRA',`Shake It Off',`2014',`YTID(`nfWlot6h_JM',`-to 0:03:47')')
+XGH_HAUTHOR(`2',`THE_BLACK_EYED_PEAS',`The Black Eyed Peas')
+XGH_MOOD_UL1(`MID',`Meet Me Halfway',`2009')
 XGH_H(`2',`Miscellaneous')
-dnl
-ifelse(XGH_OUTPUT,`html',`dnl
-`'define(`XGH_T',`  <h3>XGH_T_$1</h3>')dnl
-')dnl
-dnl
-dnl
-XGH_T(`HIGH')
-dnl # TODO
-XGH_AUTHOR(`MACKLEMORE_RYAN_LEWIS',`Macklemore & Ryan Lewis')
-MUSIC(`Can@aq@t Hold Us feat. Ray Dalton',`2013',`YTID(`2zNSgSzhBfM',`-ss 0:0:07 -to 0:06:00')')
-dnl
-XGH_AUTHOR(`ONE_REPUBLIC',`One Republic')
-MUSIC(`Counting Stars',`2014')
-dnl
-XGH_AUTHOR(`ZARA_LARSSON',`Zara Larsson')
-MUSIC(`Lush Life',`2015')
-dnl
-dnl # XGH_AUTHOR_N(`PITBULL',`Pitbull',`P(`,', `R(`KESHA')')')
-dnl # XGH_AUTHOR(`N',`PITBULL',`Pitbull',`P',`, ',`R',`KESHA')
-dnl # XGH_AUTHOR(`NPR',`PITBULL',`Pitbull',`, ',`KESHA')
-dnl # XGH_AUTHOR(`PITBULL',`Pitbull')`'XGH_(`, ')`'ADD_AUTHOR(`KESHA')
-XGH_AUTHOR(`PITBULL',`Pitbull')
-ADD_AUTHOR(`KESHA')
-MUSIC(`Timber',`2013',`YTID(`hHUbLv4ThOo',`-ss 0:0:01 -to 0:3:22')')
-dnl
-XGH_AUTHOR(`NICKI_MINAJ',`Nicki Minaj')
-MUSIC(`Starships')
-dnl
-XGH_AUTHOR(`DAVID_GUETTA',`David Guetta')
-MUSIC(`Where Them Girls At')
-dnl
-XGH_AUTHOR(`CAPTAIN SPARKLEZ',`Captain Sparklez')
-MUSIC(`Revenge')
-MUSIC(`TNT')
-dnl
-XGH_T(`MID')
-dnl
-XGH_AUTHOR(`COLDPLAY',`Coldplay')
-MUSIC(`Hymn For The Weekend',`2016')
-dnl
-XGH_AUTHOR(`JESSIE_J',`Jessie J')
-MUSIC(`Price Tag ft. B.o.B',`2001')
-dnl
-XGH_AUTHOR(`DEMI_LOVATO',`Demi Lovato')
-MUSIC(`Heart Attack',`2013')
-dnl
-XGH_AUTHOR(`AVA_MAX',`Ava Max')
-MUSIC(`Sweet but Psycho',`2020')
-dnl
-XGH_AUTHOR(`CLEAN_BANDIT',`Clean Bandit')
-MUSIC(`Rather Be ft. Jess Glynne')
-dnl
-XGH_AUTHOR(`CARLY_RAE_JEPSEN',`Carly Rae Jepsen')
-MUSIC(`Call Me Maybe')
-dnl
-XGH_AUTHOR(`CASCADA',`Cascada')
-MUSIC(`Everytime We Touch')
-dnl
-XGH_AUTHOR(`CHARLI XCX',`Charli XCX')
-MUSIC(`Boom Clap')
-dnl
-XGH_T(`LOW')
-dnl
-XGH_AUTHOR(`NAUGHTY_BOY',`Naughty Boy')
-MUSIC(`La la la ft Sam Smith',`2013',`YTID(`3O1_3zBUKM8',`-ss 0:0:12 -to 0:03:48')')
-dnl
-XGH_AUTHOR(`RAG_N_BONE',`Rag@aq@n@aq@Bone Man')
-MUSIC(`Human',`2016')
-dnl
-XGH_AUTHOR(`ESTELLE',`Estelle')
-MUSIC(`American Boy [Feat. Kanye West]')
-dnl
-XGH_AUTHOR(`POLLO',`Pollo')
-MUSIC(`Vagalumes (part. Ivo Mozart)')
+XGH_MOODH(`3',`HIGH')
+XGH_UL(`
+XGH_AUTHOR_S(`MACKLEMORE_RYAN_LEWIS',`Macklemore & Ryan Lewis')
+XGH_MUSIC_LI(`Can@aq@t Hold Us feat. Ray Dalton',`2013',`YTID(`2zNSgSzhBfM',`-ss 0:0:07 -to 0:06:00')')
+XGH_AUTHOR_S(`ONE_REPUBLIC',`One Republic')
+XGH_MUSIC_LI(`Counting Stars',`2014')
+XGH_AUTHOR_S(`ZARA_LARSSON',`Zara Larsson')
+XGH_MUSIC_LI(`Lush Life',`2015')
+XGH_AUTHOR_S(`NPR',`PITBULL',`Pitbull',`, ',`KESHA')
+XGH_MUSIC_LI(`Timber',`2013',`YTID(`hHUbLv4ThOo',`-ss 0:0:01 -to 0:3:22')')
+XGH_AUTHOR_S(`NICKI_MINAJ',`Nicki Minaj')
+XGH_MUSIC_LI(`Starships')
+XGH_AUTHOR_S(`DAVID_GUETTA',`David Guetta')
+XGH_MUSIC_LI(`Where Them Girls At')
+XGH_AUTHOR_S(`CAPTAIN_SPARKLEZ',`Captain Sparklez')
+XGH_MUSIC_LI(`Revenge')
+XGH_MUSIC_LI(`TNT')
+')
+XGH_MOODH(`3',`MID')
+XGH_UL(`
+XGH_AUTHOR_S(`COLDPLAY',`Coldplay')
+XGH_MUSIC_LI(`Hymn For The Weekend',`2016')
+XGH_AUTHOR_S(`JESSIE_J',`Jessie J')
+XGH_MUSIC_LI(`Price Tag ft. B.o.B',`2001')
+XGH_AUTHOR_S(`DEMI_LOVATO',`Demi Lovato')
+XGH_MUSIC_LI(`Heart Attack',`2013')
+XGH_AUTHOR_S(`AVA_MAX',`Ava Max')
+XGH_MUSIC_LI(`Sweet but Psycho',`2020')
+XGH_AUTHOR_S(`CLEAN_BANDIT',`Clean Bandit')
+XGH_MUSIC_LI(`Rather Be ft. Jess Glynne')
+XGH_AUTHOR_S(`CARLY_RAE_JEPSEN',`Carly Rae Jepsen')
+XGH_MUSIC_LI(`Call Me Maybe')
+XGH_AUTHOR_S(`CASCADA',`Cascada')
+XGH_MUSIC_LI(`Everytime We Touch')
+XGH_AUTHOR_S(`CHARLI_XCX',`Charli XCX')
+XGH_MUSIC_LI(`Boom Clap')
+')
+XGH_MOODH(`3',`LOW')
+XGH_UL(`
+XGH_AUTHOR_S(`NAUGHTY_BOY',`Naughty Boy')
+XGH_MUSIC_LI(`La la la ft Sam Smith',`2013',`YTID(`3O1_3zBUKM8',`-ss 0:0:12 -to 0:03:48')')
+XGH_AUTHOR_S(`RAG_N_BONE',`Rag@aq@n@aq@Bone Man')
+XGH_MUSIC_LI(`Human',`2016')
+XGH_AUTHOR_S(`ESTELLE',`Estelle')
+XGH_MUSIC_LI(`American Boy [Feat. Kanye West]')
+XGH_AUTHOR_S(`POLLO',`Pollo')
+XGH_MUSIC_LI(`Vagalumes (part. Ivo Mozart)')
+')
 dnl # https://www.youtube.com/watch?v=XnBbjc5hmho
 dnl # https://www.youtube.com/watch?v=oh2LWWORoiM
 dnl # Sources:
@@ -324,5 +263,3 @@ dnl # https://www.youtube.com/watch?v=u0n4eMGXAyk
 dnl # https://www.youtube.com/watch?v=RkkGVgOqPuM
 dnl # https://www.youtube.com/watch?v=eR-aDgaUPG0
 dnl # https://www.youtube.com/watch?v=N4Db0oYKXvw
-XGH_KILLED(`undefine(`$1')')dnl
-undefine(`XGH_KILLED')dnl

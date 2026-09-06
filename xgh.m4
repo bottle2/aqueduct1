@@ -1,4 +1,6 @@
 XGH_TIT(`Translation of XGH and related blogposts'
+dnl # toba: in XGH everything goes, except screwing yourself
+dnl # toba: In XGH you can do whatever you want, but the caboose is closed for business. (P.P.)
 dnl # .HEADING 2 "Steve Jobs is badass, isn't he?"
 dnl # .PP
 dnl # This post is being written in a MacBook, but not always I use my Apple

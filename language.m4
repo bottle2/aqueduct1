@@ -22,3 +22,5 @@ dnl # https://napontadalingua-por-sol.blogspot.com/2018/05/errado-sem-sombra-de-
 dnl # https://en.wiktionary.org/wiki/jettison#English
 dnl # chuva de verão = sunshower
 dnl # https://speaklikeabrazilian.com/o/o+que+%C3%A9+um+peido+pra+quem+t%C3%A1+cagado/
+dnl # https://www12.senado.leg.br/manualdecomunicacao/verbetes-acessorio/estrangeirismos-grafados-sem-italico-ou-aspas
+dnl # https://www12.senado.leg.br/manualdecomunicacao/estilos/abreviatura

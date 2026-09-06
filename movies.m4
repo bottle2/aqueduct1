@@ -329,3 +329,6 @@ dnl # X2 (2003)
 dnl # Kindergarden Cop (who is your daddy and what does he do)
 dnl # https://www.youtube.com/watch?v=vErJFmUF7DM
 dnl # https://www.imdb.com/pt/name/nm0001088/
+dnl # https://www.studiobinder.com/blog/what-is-a-chyron-definition/
+dnl # https://www.youtube.com/watch?v=lEDGdzulfoQ
+dnl # https://www.triskaidekafiles.com/

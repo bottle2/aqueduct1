@@ -263,3 +263,16 @@ dnl # https://www.youtube.com/watch?v=u0n4eMGXAyk
 dnl # https://www.youtube.com/watch?v=RkkGVgOqPuM
 dnl # https://www.youtube.com/watch?v=eR-aDgaUPG0
 dnl # https://www.youtube.com/watch?v=N4Db0oYKXvw
+dnl # https://www.newgrounds.com/bbs/topic/19733/999
+dnl # Pantera: Reinventing the Steel
+dnl # https://www.youtube.com/watch?v=r7f39Z_qSR8
+dnl # Team Sleep  Ever Since WWI 
+dnl # https://modarchive.org/index.php
+dnl # https://www.youtube.com/watch?v=0KaBYaQGwbs
+dnl # https://www.youtube.com/watch?v=hZm85q6zt6s
+dnl # https://www.youtube.com/watch?v=sV2H712ldOI
+dnl # DON@aq@ WANT YOUR LOVE
+dnl # https://www.youtube.com/watch?v=Wpfx50yCs4E
+dnl # London Grammar
+dnl # Flight Facilities
+dnl # https://www.newgrounds.com/playlist/226666/mister-scoops

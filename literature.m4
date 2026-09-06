@@ -9,4 +9,8 @@ XGH_LIAL(`https://en.wikipedia.org/wiki/The_Twelve_Chairs')
 XGH_LI(`H.P. Lovecraft Historical Society')
 XGH_LIAL(`https://pt.wikipedia.org/wiki/Codex_Seraphinianus')
 XGH_LIAL(`I@aq@m Starting to Worry About This Black Box of Doom')
+XGH_LI(`Hitchhikers Guide')
+dnl # https://arlindo-correia.com/joyce.html
+dnl # https://tvtropes.org/pmwiki/pmwiki.php/Webcomic/VGCats
+dnl # book of five rings
 ')

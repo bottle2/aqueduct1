@@ -3,7 +3,6 @@ XGH_HUL(`2',`Funnies and culture',`dnl
 XGH_LIAL(`https://www.youtube.com/watch?v=b2F-DItXtZs')
 XGH_LIA(`https://www.mindprod.com/jgloss/unmain.html',`unmaintainable code : Java Glossary')
 XGH_LIA(`https://github.com/PradyX/unified_kernel_sdm660/commit/f0ee5596b7e4ae1fb8e0f6bf7263cacec559fb76',`fs: block TikTok from launching · PradyX/unified_kernel_sdm660@f0ee559')
-XGH_LIA(`https://starwarsintrocreator.kassellabs.io/`#'!/DN75dLHAcDbCzQ-ScoQ1 (o site)',`nem te conto')
 XGH_LIA(`https://commandcenter.blogspot.com/2020/01/unix-quiz-answers.html',`command center: Unix Quiz answers')
 XGH_LIA(`https://www.jwz.org/doc/censorzilla.html',`CensorZilla')
 XGH_LIA(`https://web.archive.org/web/20161118152015/http://ifaq.wap.org/computers/',`Infrequently Asked Questions: Computers')
@@ -17,7 +16,7 @@ XGH_LIA(`https://web.archive.org/web/20010413235350/http://www.microsoft.com/NTS
 XGH_LIA(`https://home.treasury.gov/policy-issues/financial-sanctions/sanctions-programs-and-country-information',`Sanctions Programs and Country Information | U.S. Department of the Treasury')
 XGH_LIAL(`https://www.la-rache.com/')
 XGH_LIAL(`https://web.archive.org/web/20080102040259/https://www.zedshaw.com/rants/rails_is_a_ghetto.html')
-XGH_LIAL(`https://nohello.net')
+XGH_LIAL(`http://macrochan.org/view.php?u=ATRZ5RQOXGTDCLZYM4MT6KQZTBNO6J7E')
 ')
 XGH_HUL(`2',`Exquisite stuff',`dnl
 XGH_LIAL(`https://www.glasseyeart.com/post/seeing-red-a-brief-history-of-red-glass')

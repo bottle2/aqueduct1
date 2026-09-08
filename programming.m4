@@ -17,6 +17,7 @@ XGH_LI(`Experiments with SO_REUSEPORT')
 XGH_LI(`Figure out code formatting for groff (already done ad nauseum by many people)')
 XGH_LI(`Document and refine my dependency calculation for m4 and pic, and resource management for groff and gamedev')
 XGH_LI(`Investigate ASN.1')
+XGH_LI(`Return to competitive programming')
 ')
 XGH_HUL(`3',`What terrifies me',`dnl
 XGH_LI(`Binary compatibility')
@@ -25,6 +26,7 @@ XGH_LI(`Accessbility')
 ')
 XGH_HUL(`3',`Problems',`dnl
 XGH_LI(`Automatic .gitignore for generated code')
+XGH_LI(`Use m4 or a subset of it as a library for a Web server, it could generate thousands of little buffers and then we use XGH_A2(`XGH_C(`uv_write')',`https://docs.libuv.org/en/v1.x/stream.html`#'c.uv_write') to send most of all at once')
 ')
 XGH_HUL(`3',`Flaws in my formation',`dnl
 XGH_LI(`Ability to calculate time complexity of an algorithm')

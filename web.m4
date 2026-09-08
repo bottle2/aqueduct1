@@ -4,6 +4,8 @@ define(`XGH_H',`<h$1>$2</h$1>')dnl
 define(`XGH_TIT',`define(`XGH_WEB_TITLE',`$1')XGH_H(`1',`$1')')dnl
 define(`XGH_UL',`<ul>XGH_NL`'$1`'dnl
 </ul>')dnl
+define(`XGH_OL',`<ol>
+$1`'</ol>')
 define(`XGH_LI',`<li>XGH_NL`'$1`'XGH_NL</li>')dnl
 define(`XGH_LIA',`XGH_LI(`<a href="$1">$2</a>')')dnl
 define(`XGH_LIAL',`XGH_LI(`<a href="$1">$1</a>')')dnl

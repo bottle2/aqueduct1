@@ -1,0 +1,14 @@
+define(`XGH_PT',`define(`$1',`divert(`0')`'$2`'XGH_NL`'divert(`-1')')')dnl
+XGH_PT(`XGH_MOV',`ifelse(`$#',`4',`https://www.wikidata.org/wiki/$2')')dnl
+define(`XGH_JOIN',`ifelse(`0',`$#',,`1',`$#',`$1',`$1`'XGH_JOIN(shift($@))')')dnl
+define(`XGH_HUL',`XGH_JOIN(shift(shift($@)))')dnl
+define(`XGH_UL',`XGH_JOIN($@)')dnl
+XGH_PT(`XGH_LIA',`$1')dnl
+XGH_PT(`XGH_LIAL',`$1')dnl
+XGH_PT(`XGH_LIAR',`./$1.html')dnl
+XGH_PT(`XGH_A',`$1')dnl
+XGH_PT(`XGH_A2',`$2')dnl
+define(`XGH_P',`$1')dnl
+define(`XGH_LI',`$1')dnl
+define(`XGH_TIT',)dnl
+divert(`-1')dnl

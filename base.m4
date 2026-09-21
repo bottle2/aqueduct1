@@ -1,3 +1,5 @@
+define(`XGH_NL',`
+')dnl
 define(`XGH_CAT',`$1$2')dnl
 define(`XGH_CONT1',`XGH_$1(`$2',shift(shift(shift($@))))')dnl
 define(`XGH_CONT2',`XGH_$1(`$2',shift(shift(shift(shift($@)))))')dnl

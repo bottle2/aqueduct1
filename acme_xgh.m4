@@ -145,7 +145,7 @@ static int_least32_t acme_xgh_resource_stack;
 
     #profile = '{' ws profile_field (ws ',' ws profile_field)* ws '}';
 
-    write data noerror nofinal noentry; 
+    write data noerror nofinal XGH_RAGEL_NOENTRY; 
 }%%
 
 %%{

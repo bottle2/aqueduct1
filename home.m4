@@ -6,6 +6,7 @@ XGH_LIAR(`movies',`List of movies')
 XGH_LIAR(`programming',`Programming stuff')
 XGH_LIA(`https://github.com/bottle2/aqueduct1',`Source code for this website')
 XGH_LIAR(`dead',`Dead interests')
+XGH_LIAR(`stats',`Website statistics')
 ')
 XGH_P(`Future directions:')
 XGH_UL(`dnl

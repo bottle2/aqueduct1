@@ -1,7 +1,14 @@
 ninja:build.ninja
+	ninja
 
 build.ninja:ninja.m4
 	m4 ninja.m4 > build.ninja
+
+ptermux:
+	printf "include(\`profile/termux.m4')\`'" > profile.m4
+
+stats:
+	ninja uri_xgh && m4 base.m4 dump.m4 home.m4 movies.m4 vehicle-building-games.m4 programming.m4 bookmarks.m4 dead.m4 | ./uri_xgh
 
 # XXX This is a mess OMG
 PAGES=bookmarks.html vehicle-building-games.html
@@ -123,7 +130,7 @@ percent.m4:percent
 	./$< > $@
 
 percent:percent.c
-	cc -O3 $< -o $@
+	cc -O3 -Wno-string-plus-int $< -o $@
 
 run:site key_private.donotcommit domain.csr
 	./site
@@ -183,7 +190,7 @@ edu_m4.pdf:edu_m4.mom
 
 DATA=music.m4 vehicle-building-games.m4 movies.m4 bookmarks.m4
 
-include $(OBJ:.o=.d)
+#include $(OBJ:.o=.d)
 
 .SUFFIXES: .c .d .rl .svg .ctt
 

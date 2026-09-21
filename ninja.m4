@@ -32,14 +32,17 @@ build build.ninja: regen ninja.m4
 build json_xgh.c: ragel json_xgh.rl
 build json_xgh: cc2 json_xgh.c
   cflags=-DIS_JSON_XGH_MAIN
-build acme_xgh.rh: m4 acme_xgh.m4
-build acme_xgh.h: ragel acme_xgh.rh
+#build acme_xgh.rh: m4 profile.m4 acme_xgh.m4
+#build acme_xgh.h: ragel acme_xgh.rh
 #build vrum: cc2 vrum.c | acme_xgh.h
+
+build uri_xgh.c: ragel uri_xgh.rl
+build uri_xgh: cc2 uri_xgh.c
 
 # Website
 
 rule arb
-  command=$cmd1 $in $cmd2 $out #cmd3
+  command=$cmd1 $in $cmd2 $out $cmd3
 
 dnl # define(`PAGE_XS',`define(`X',`$1')`'X(home,index)`'undefine(`X')')dnl
 
@@ -55,6 +58,10 @@ build web/music.html: m42 base.m4 collect.m4 music.m4 web.m4 music.m4
 build web/meme2.jpg: arb web/meme.jpg
   cmd1=magick
   cmd2=-resize 1200x627 -quality 100 -background "rgb(244,242,238)" -gravity center -extent 1200x627
+
+build web/stats.html: arb base.m4 dump.m4 home.m4 movies.m4 vehicle-building-games.m4 programming.m4 bookmarks.m4 dead.m4 macacarium.m4 | uri_xgh stats.m4 web.m4
+  cmd1=m4
+  cmd2=| ./uri_xgh | m4 base.m4 web.m4 - stats.m4 >
 
 # build web/music.html: m42 music.m4 template.m4
 #  arg=-DXGH_OUTPUT=html

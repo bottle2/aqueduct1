@@ -6,10 +6,16 @@ define(`XGH_MOV',`ifelse(`$#',`4',`dnl
 define(`XGH_MOVI',`XGH_MOV($@)')dnl
 define(`XGH_MOVIX',`XGH_MOV(shift(shift($@)))')dnl
 define(`XGH_HUL',`$*')dnl
+define(`XGH_HUL2',`XGH_H2($@)`'$*')dnl
+define(`XGH_HUL3',`$*')dnl
+define(`XGH_HUL4',`XGH_H2($@)`'$*')dnl
 define(`XGH_UL',`$*')dnl
 define(`XGH_HAUTHOR',`XGH_AUTHOR(shift($@))')dnl
 define(`XGH_AUTHOR_N',`define(`XGH_AUTHOR___$2',`$3')`'XGH_CONT2(`AUTHOR2',$@)')dnl
 define(`XGH_AUTHOR_P',`XGH_CONT1(`AUTHOR2',$@)')dnl
 define(`XGH_AUTHOR_R',`XGH_CONT1(`AUTHOR2',$@)')dnl
 define(`XGH_AUTHOR_S',`XGH_AUTHOR($@)')dnl
+define(`XGH_TOCA',`divert(3)$*`'divert(-1)')dnl
+define(`XGH_H2',`XGH_H_UPD(`$1')XGH_TOCA(`<li><a href="`#'$2">XGH_H___CNT $3</a></li>')')dnl
+XGH_H_RESET`'dnl
 divert(-1)

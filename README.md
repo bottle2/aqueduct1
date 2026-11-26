@@ -1,5 +1,21 @@
 # The Web server and website written in C
 
+Reverse engineer in C the following: https://github.com/diafygi/acme-tiny/blob/main/acme_tiny.py
+
+Brainrot: https://datatracker.ietf.org/doc/html/rfc8555
+
+https://github.com/haproxy/haproxy/blob/master/src/acme.c
+
+What is this? https://cryptography.io/en/latest/statements/state-of-openssl/
+
+https://www.youtube.com/watch?v=RUIguklWwx0
+
+https://www.haproxy.com/blog/state-of-ssl-stacks
+
+debuginfod
+
+https://www.howsmyssl.com/
+
 ## Libraries
 
 There are some libraries emerging.

@@ -1,5 +1,8 @@
 XGH_TIT(`Dead interests')
-XGH_HUL(`2',`Electronics, embedded systems, esoteric/niche machines',`dnl
+XGH_P(`Table of contents:')
+XGH_TOC
+XGH_HUL2(`2',`elec',`Electronics, embedded systems, esoteric/niche machines',`dnl
+XGH_LIAL(`https://arm.jonpalmisc.com/')
 XGH_LIAL(`https://mathweb.ucsd.edu/~sbuss/CourseWeb/Math268_2013W/Bennett_Reversibiity.pdf')
 XGH_LIA(`https://wiki.osdev.org/Main_Page',`Expanded Main Page - OSDev Wiki')
 XGH_LIAL(`https://developer.arm.com/documentation/dui0801/h/A64-Floating-point-Instructions/FJCVTZS')
@@ -27,7 +30,7 @@ XGH_LIAL(`https://www.youtube.com/watch?v=45X4VP8CGtk')
 XGH_LIAL(`https://github.com/xoreaxeaxeax/movfuscator')
 XGH_LIAL(`https://pwnednetwork.com/public/pdf/mov.pdf')
 ')
-XGH_HUL(`2',`Arts and 3D modelling',`dnl
+XGH_HUL2(`2',`arts_3d',`Arts and 3D modelling',`dnl
 XGH_LIAL(`https://github.com/bezo97/IFSRenderer')
 XGH_LIAL(`https://github.com/AnimatorPro/Animator-Pro/')
 XGH_LIA(`https://www.youtube.com/playlist?list=PLa1F2ddGya_-UvuAqHAksYnB0qL9yWDO6',`Blender Fundamentals 2.8')
@@ -35,19 +38,20 @@ XGH_LIA(`https://cgsociety.org/',`CGSociety')
 XGH_LIA(`https://blenderartists.org/',`Blender Artists Community')
 XGH_LIA(`https://prodesigntools.com/',`ProDesignTools - Helping Adobe<sup>&reg;</sup> Users since 2009')
 ')
-XGH_HUL(`2',`LaTeX',`dnl
+XGH_HUL2(`2',`latex',`LaTeX',`dnl
 XGH_LIA(`https://www.tablesgenerator.com/',`TablesGenerator.com')
 XGH_LIA(`https://www.overleaf.com/',`Overleaf, Online LaTeX Editor')
 XGH_LIA(`https://www.codecogs.com/latex/eqneditor.php?lang=pt-br',`Editor Online de Equações LaTeX - crie, integre e baixe')
 XGH_LIA(`https://code.google.com/archive/p/mdtufsm-ppgi/source/default/source',`Google Code Archive - Long-term storage for Google Code Project Hosting.')
 XGH_LI(`TeXstudio')
 ')
-XGH_HUL(`2',`Natural language processing (NLP)',`dnl
+XGH_HUL2(`2',`nlp',`Natural language processing (NLP)',`dnl
 XGH_LIAL(`https://web.archive.org/web/20220121065533/http://www2.tulane.edu/~howard/')
 XGH_LIA(`https://nlpprogress.com/',`Tracking Progress in Natural Language Processing | NLP-progress')
 XGH_LIA(`https://en.wikipedia.org/wiki/Wikipedia:Language_recognition_chart',`Wikipedia:Language recognition chart - Wikipedia')
 ')
-XGH_HUL(`2',`Programming languages',`dnl
+XGH_HUL2(`2',`prog_langs',`Programming languages',`dnl
+XGH_LIAL(`https://github.com/mthom/scryer-prolog')
 XGH_LI(`OPS5')
 XGH_LIAL(`https://github.com/adobe-research/ActionScript4/blob/master/as4wp/AS4wp121031.pdf')
 XGH_LIAL(`https://github.com/Co-dfns/Co-dfns')
@@ -81,7 +85,7 @@ XGH_LI(`Joi')
 XGH_LI(`Erlang')
 XGH_LI(`Dafny')
 ')
-XGH_HUL(`3',`Parsers',`dnl
+XGH_HUL2(`3',`parsers',`Parsers',`dnl
 XGH_LIAL(`https://docs.godotengine.org/en/stable/about/faq.html`#'what-were-the-motivations-behind-creating-gdscript')
 XGH_LIAL(`https://en.wikipedia.org/wiki/Most_vexing_parse')
 XGH_LIAL(`https://web.archive.org/web/20120930202629/http://www.research.ibm.com/XML/IBM_Zurich_XML_Accelerator_Engine_paper_2004May04.pdf')
@@ -96,12 +100,13 @@ XGH_LIA(`http://crockford.com/javascript/tdop/tdop.html',`Top Down Operator Prec
 XGH_LIA(`https://pdos.csail.mit.edu/~baford/packrat/thesis/',`Packrat Parsing: a Practical Linear-Time Algorithm with Backtracking')
 XGH_LIA(`https://www.piumarta.com/software/peg/',`peg/leg')
 ')
-XGH_HUL(`2',`Literal undiagnosed untreated undisguised schizophrenia',`dnl
+XGH_HUL2(`2',`schizo',`Literal undiagnosed untreated undisguised schizophrenia',`dnl
 XGH_LIA(`https://isynchronise.com/',`isynchronise – the home of synchronic computation')
 XGH_LI(`Gangstalking, targeted individual (TI)')
 XGH_LI(`GameB')
 ')
-XGH_HUL(`2',`Cybersecurity',`dnl
+XGH_HUL2(`2',`cyber',`Cybersecurity',`dnl
+XGH_LIAL(`https://0xk4n3ki.github.io/posts/Heavens-Gate-Technique/')
 XGH_LIAL(`https://phrack.org/issues/71/6')
 XGH_LIAL(`https://github.com/JuliaPoo/Artfuscator')
 XGH_LIAL(`https://localmess.github.io/')
@@ -115,23 +120,23 @@ XGH_LIAL(`https://hacktricks.wiki')
 XGH_LIA(`https://rada.re/n/radare2.html',`radare2')
 XGH_LIA(`https://www.ollydbg.de/',`OllyDbg v1.10')
 ')
-XGH_HUL(`2',`Artificial Intelligence',`dnl
+XGH_HUL2(`2',`ai',`Artificial Intelligence',`dnl
 XGH_LIAL(`https://leekwars.com/')
 XGH_LIAL(`https://www.red3d.com/cwr/steer/')
 XGH_LIA(`https://github.com/codeplea/genann',`GitHub - codeplea/genann: simple neural network library in ANSI C')
 XGH_LIA(`http://leenissen.dk/fann/wp/',`Fast Artificial Neural Network Library (FANN)')
 XGH_LIA(`http://lwneuralnet.sourceforge.net/',`Lightweight Neural Network')
 ')
-XGH_HUL(`2',`College stuff',`dnl
+XGH_HUL2(`2',`college',`College stuff',`dnl
 XGH_LIAL(`http://www.penta.ufrgs.br/edu/telelab/2/war-of-t.htm')
 XGH_LIA(`http://www-usr.inf.ufsm.br/~benhur/l12020a/',`ELC1065 - Laboratório de Programação I - UFSM')
 ')
-XGH_HUL(`2',`Crypto',`dnl
+XGH_HUL2(`2',`crypto_scam',`Crypto',`dnl
 XGH_LIA(`https://bitcoinbook.info/',`Mastering Bitcoin – The Bitcoin Book – Programming the Open Blockchain')
 XGH_LIA(`https://bitcointalk.org/index.php?topic=375643.0',`I AM HODLING')
 XGH_LIA(`https://challenges.ethereum.org/',`Ethereum Bounties')
 ')
-XGH_HUL(`2',`Actual crypto',`dnl
+XGH_HUL2(`2',`crypto',`Actual crypto',`dnl
 XGH_LI(`Bellare & Hoang, 2024, Efficient Schemes for Committing Authenticated Encryption')
 XGH_LI(`ChaCha20-Poly1305')
 XGH_LI(`CMT-4 scheme')
@@ -145,7 +150,11 @@ XGH_LIAL(`https://www.cloudflare.com/learning/access-management/what-is-mutual-t
 XGH_LIAL(`https://csrc.nist.gov/csrc/media/events/workshop-on-cybersecurity-in-a-post-quantum-world/documents/papers/session3-kate-paper.pdf')
 XGH_LIAL(`https://forum.torproject.org/t/tor-relays-post-quantum-cryptography-in-tors-tls-layer-help-needed/21288')
 ')
-XGH_HUL(`2',`Pseudo-intellectualism',`dnl
+XGH_HUL2(`2',`nerdice',`Pseudo-intellectualism',`dnl
+XGH_LIAL(`https://www.nytimes.com/2006/07/02/business/yourmoney/giving-it-away-then-and-now.html')
+XGH_LIAL(`https://en.wikipedia.org/wiki/Efficiency_movement')
+XGH_LIAL(`https://www.gutenberg.org/cache/epub/17090/pg17090-images.html')
+XGH_LIAL(`https://www.huffingtonpost.co.uk/christopher-ts-harvey/competition-is-a-sin_b_17444620.html')
 XGH_LI(`https://www.newgrounds.com/bbs/topic/1559091/37#bbspost28369325_post_text')
 XGH_LIAL(`https://open.spotify.com/show/3n2o8vpsRalBeU5U7kWbLX')
 XGH_LIAL(`https://www.musictheory.net/exercises')
@@ -162,16 +171,16 @@ XGH_LIA(`https://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/30
 XGH_LIA(`https://predictionbook.com/',`PredictionBook: How sure are you?')
 XGH_LIAL(`https://www.amazon.ca/Anti-Oedipus-Capitalism-Schizophrenia-Gilles-Deleuze/dp/0143105825')
 ')
-XGH_HUL(`2',`Tech support',`dnl
+XGH_HUL2(`2',`support',`Tech support',`dnl
 XGH_LIAL(`https://www.supergrubdisk.org/super-grub2-disk/')
 XGH_LIA(`https://gbatemp.net/threads/medicat-usb-a-multiboot-linux-usb-for-pc-repair.361577/',`MediCat USB - A Multiboot Linux USB for PC Repair')
 XGH_LIA(`https://github.com/ventoy/Ventoy',`ventoy/Ventoy: A new bootable USB solution.')
 XGH_LIA(`https://web.archive.org/web/20180711192755/http://mirror.corenoc.de/digitalrivercontent.net/',`Microsoft DigitalRiver Mirror')
 ')
-XGH_HUL(`2',`Smartphone ROM hacking',`dnl
+XGH_HUL2(`2',`android',`Smartphone ROM hacking',`dnl
 XGH_LIA(`https://wiki.postmarketos.org/wiki/Motorola_Moto_G4_Play_(motorola-harpia)',`Motorola Moto G4 Play (motorola-harpia) - postmarketOS')
 ')
-XGH_HUL(`2',`Minimalist software, distros, package managers, nerd drama, chronically/terminally online worries, software activism',`dnl
+XGH_HUL2(`2',`nerd_nerd',`Minimalist software, distros, package managers, nerd drama, chronically/terminally online worries, software activism',`dnl
 XGH_LIAL(`https://lore.kernel.org/lkml/CAHk-=wjajMJyoTv2KZdpVRoPn0LFZ94Loci37WLVXmMxDbLOjg@mail.gmail.com')
 XGH_LIAL(`https://lkml.org/lkml/2025/2/6/404')
 XGH_LIAL(`https://wiki.debian.org/DontBreakDebian')
@@ -203,13 +212,13 @@ XGH_LIA(`https://web.archive.org/web/20151210081611/https://github.com/opal/opal
 XGH_LIA(`gemini://gemini.circumlunar.space/docs/specification.gmi',`Project Gemini Speculative specification')
 XGH_LIA(`https://www.wired.com/story/roblox-online-games-irl-fascism-roman-empire/')
 ')
-XGH_HUL(`2',`Services',`dnl
+XGH_HUL2(`2',`services',`Services',`dnl
 XGH_LIA(`https://sourcehut.org/',`sourcehut - the hacker@aq@s forge')
 XGH_LIA(`https://www.rsync.net/index.html',`rsync - Cloud Storage for Offsite Backup')
 XGH_LIA(`https://www.flickr.com/',`Flickr')
 XGH_LIA(`https://github.com/borgbackup/borg',`GitHub - borgbackup/borg')
 ')
-XGH_HUL(`2',`Art',`dnl
+XGH_HUL2(`2',`art',`Art',`dnl
 XGH_LIAL(`http://www.segerman.org/')
 XGH_LIAL(`https://art.z97.io/')
 XGH_LIAL(`https://www.youtube.com/watch?v=5XyNe8UESTs')
@@ -223,7 +232,7 @@ XGH_LIAL(`http://patriciogonzalezvivo.com')
 XGH_LI(`Jeff Lee Johnson (paintings)')
 XGH_LIAL(`https://www.youtube.com/@PerfectScarecrow')
 ')
-XGH_HUL(`3',`Web art',`dnl
+XGH_HUL2(`3',`webart',`Web art',`dnl
 XGH_LIAL(`https://urlsnake.com/')
 XGH_LIAL(`https://archive.is/20250201101356/https://www.newyorker.com/humor/daily-shouts/how-to-draw-a-horse')
 XGH_LIA(`http://subgenius.com/pam1/pamphlet_p1.html',`Pamphlet `#'1 - page 1')
@@ -232,7 +241,7 @@ XGH_LIA(`https://parahumans.wordpress.com/',`Worm | A Complete Web Serial')
 XGH_LIA(`http://home.mcom.com/people/paquin/',`Temple @aq@O@aq@ Pacman')
 XGH_LIA(`https://www.jwz.org/webcollage/',`WebCollage: Exterminate All Rational Thought')
 ')
-XGH_HUL(`2',`Doing research',`dnl
+XGH_HUL2(`2',`research',`Doing research',`dnl
 XGH_LIA(`https://www.sbc.org.br/documentos-da-sbc/category/169-templates-para-artigos-e-ca%20pitulos-de-livros',`Templates para Artigos e Capitulos de Livros')
 XGH_LIA(`https://www.edx.org/',`edX')
 XGH_LIA(`https://pt.coursera.org/',`Coursera')
@@ -246,17 +255,17 @@ XGH_LIA(`https://www.epo.org/searching-for-patents.html',`EPO')
 XGH_LIA(`https://www.uspto.gov/',`United States Patent and Trademark Office')
 XGH_LIA(`https://www.gov.br/inpi/pt-br',`Instituto Nacional de Propriedade Industrial')
 ')
-XGH_HUL(`2',`Demos',`dnl
+XGH_HUL2(`2',`demo',`Demos',`dnl
 XGH_LIA(`https://joshdata.me/iceberger.html',`Iceberger')
 ')
-XGH_HUL(`2',`Blogs and people',`dnl
+XGH_HUL2(`2',`blogs_people',`Blogs and people',`dnl
 XGH_LIAL(`https://www.muppetlabs.com/~breadbox/')
 XGH_LIAL(`https://en.wikipedia.org/wiki/Christopher_Strachey')
 XGH_LIAL(`https://web.archive.org/web/20260611173707/https://eklitzke.org/')
 XGH_LIAL(`https://liuliu.me')
 XGH_LIAL(`http://recp.me/')
 XGH_LIAL(`https://danielabrecht.ch/')
-XGH_LI(`http://levien.com/')
+XGH_LIAL(`http://levien.com/')
 XGH_LIAL(`https://www.ayman-badawi.com/')
 XGH_LIAL(`https://www.janko.at/')
 XGH_LIAL(`https://www.s-johansson.org/')
@@ -287,31 +296,31 @@ XGH_LIA(`https://pbrisbin.com/',`pbrisbin dot com')
 XGH_LIAL(`https://andrewkelley.me/')
 XGH_LIAL(`https://www.jenlowe.net/')
 ')
-XGH_HUL(`2',`Online communities',`dnl
+XGH_HUL2(`2',`online',`Online communities',`dnl
 XGH_LI(`SDF Public Access Unix System')
 XGH_LIA(`https://bbs.archlinux.org/index.php',`Arch Linux Forums')
 XGH_LIAL(`https://handmade.network/')
 XGH_LIAL(`https://www.youtube.com/watch?v=rGSFSNt4hqQ')
 ')
-XGH_HUL(`2',`Drugs',`dnl
+XGH_HUL2(`2',`drugs',`Drugs',`dnl
 XGH_LIA(`https://www.shroomery.org/',`Shroomery')
 ')
-XGH_HUL(`2',`Unity and C#',`dnl
+XGH_HUL2(`2',`unity_csharp',`Unity and C`#'',`dnl
 XGH_LIAL(`https://web.archive.org/web/20240716145719/https://www.what-could-possibly-go-wrong.com/the-dispatcher-pattern/')
 XGH_LIAL(`https://catlikecoding.com/unity/tutorials/movement/')
 XGH_LIAL(`https://isdotnetopen.com/')
 ')
-XGH_HUL(`2',`Java',`dnl
+XGH_HUL2(`2',`java',`Java',`dnl
 XGH_LIAL(`https://web.archive.org/web/20220302162347/https://www.caelum.com.br/apostila-java-orientacao-objetos')
 XGH_LIAL(`https://www.alura.com.br/artigos/historia-da-caelum')
 ')
-XGH_HUL(`2',`Gaymer',`dnl
+XGH_HUL2(`2',`games',`Gaymer',`dnl
 XGH_LIAL(`https://tboi.com/')
 XGH_LIAL(`https://noclip.website/')
 XGH_LIAL(`https://www.youtube.com/@xellia4087/playlists')
 XGH_LIAL(`https://docs.google.com/spreadsheets/d/1yfo-LYDvHMphE4xhdMH2EaB4q1HJ98canRxOqlclIcQ/edit?usp=sharing')
 ')
-XGH_HUL(`2',`Inevitable link dump',`dnl
+XGH_HUL2(`2',`dump',`Inevitable link dump',`dnl
 XGH_LIAL(`https://en.wikipedia.org/wiki/Financial_Information_eXchange')
 XGH_LIAL(`https://en.wikipedia.org/wiki/File:ICANN_History_Project_-_Interview_with_Fadi_Chehad%C3%A9,_ICANN_CEO_(2012-2016)_(105E).webm')
 XGH_LIAL(`https://www.youtube.com/watch?v=1fKvTyhgCSo')
@@ -342,7 +351,21 @@ XGH_LIAL(`https://en.wikipedia.org/wiki/Nobel_disease')
 XGH_LIAL(`https://en.wikipedia.org/wiki/Replication_crisis')
 XGH_LIAL(`https://en.wikipedia.org/wiki/Tsundoku')
 ')
-XGH_HUL(`2',`Infinite lore glitch',`dnl
+XGH_HUL2(`2',`history',`Infinite lore glitch',`dnl
+XGH_LIAL(`https://isolveproblems.substack.com/p/how-microsoft-vaporized-a-trillion')
+XGH_LIAL(`https://www.smithsonianmag.com/smart-news/john-d-rockefeller-richest-person-ever-live-period-180961705/')
+XGH_LIAL(`https://en.wikipedia.org/wiki/Ida_Tarbell')
+XGH_LIAL(`https://en.wikipedia.org/wiki/Grace_in_Christianity')
+XGH_LIAL(`https://en.wikipedia.org/wiki/Project_Iceworm')
+XGH_LIAL(`https://en.wikipedia.org/wiki/1968_Thule_Air_Base_B-52_crash')
+XGH_LIAL(`https://en.wikipedia.org/wiki/Operation_Sea-Spray')
+XGH_LIAL(`https://pt.wikipedia.org/wiki/Fra%C3%A7%C3%A3o_do_Ex%C3%A9rcito_Vermelho')
+XGH_LIAL(`https://pt.wikipedia.org/wiki/Acordo_de_Schengen')
+XGH_LIAL(`https://pt.wikipedia.org/wiki/Programa_de_Contraintelig%C3%AAncia')
+XGH_LIAL(`https://en.wikipedia.org/wiki/Fall_of_Saigon')
+XGH_LIAL(`https://en.wikipedia.org/wiki/C%C3%B4n_%C4%90%E1%BA%A3o_Prison')
+XGH_LIAL(`https://www.youtube.com/watch?v=U_UryFjKUsM')
+XGH_LI(`Revolução dos Boxers')
 XGH_LIA(`https://home.treasury.gov/policy-issues/financial-sanctions/sanctions-programs-and-country-information',`Sanctions Programs and Country Information | U.S. Department of the Treasury')
 XGH_LIAL(`https://seer.ufrgs.br/index.php/aedos/article/view/88452/56679')
 XGH_LIAL(`https://www.bbc.com/news/world-asia-china-22278037')
@@ -379,11 +402,11 @@ XGH_LIAL(`https://www.nbcnews.com/news/world/china-forcefully-harvests-organs-de
 XGH_LIAL(`https://pt.wikipedia.org/wiki/A%C3%A9cio_(general)')
 XGH_LIAL(`https://pt.wikipedia.org/wiki/Maim%C3%B4nides')
 ')
-XGH_HUL(`2',`Meteorology',`dnl
+XGH_HUL2(`2',`meteorology',`Meteorology',`dnl
 XGH_LIAL(`https://en.wikipedia.org/wiki/South_Atlantic_Anomaly')
 XGH_LIAL(`https://en.wikipedia.org/wiki/Foehn_wind')
 ')
-XGH_HUL(`2',`Fashion and aesthetic',`dnl
+XGH_HUL2(`2',`fashion',`Fashion, aesthetic, health and fitness',`dnl
 XGH_LIAL(`https://www.glasseyeart.com/post/seeing-red-a-brief-history-of-red-glass')
 XGH_LIAL(`https://en.wikipedia.org/wiki/Uranium_glass')
 XGH_LIAL(`https://en.wikipedia.org/wiki/Zoot_suit')
@@ -391,17 +414,19 @@ XGH_LIAL(`https://thevou.com/blog')
 XGH_LIAL(`https://usgraphics.com/products/berkeley-mono')
 XGH_LIAL(`https://en.wikipedia.org/wiki/Paper_embossing')
 XGH_LIAL(`https://cari.institute/aesthetics/vectorheart')
+XGH_LIAL(`https://liamrosen.com/fitness')
+XGH_LIAL(`https://web.archive.org/web/20190122234620/http%3A%2F%2F4chanfit.wikia.com/wiki/Harsh@aq@s_Worksheet_(WIP)')
 ')
-XGH_HUL(`2',`Funny numbers',`dnl
+XGH_HUL2(`2',`numbers',`Funny numbers',`dnl
 XGH_LIAL(`https://www.jetbrains.com/lp/devecosystem-2023/c/')
 XGH_LIAL(`https://www.usdebtclock.org/')
 XGH_LIAL(`https://www.numbeo.com/cost-of-living/country_price_rankings?itemId=17')
 XGH_LIAL(`https://iso-9899.info/candide/pisg/c.html')
 ')
-XGH_HUL(`2',`Filthy Frank',`dnl
+XGH_HUL2(`2',`papa_franku',`Filthy Frank',`dnl
 XGH_LIAL(`https://www.youtube.com/watch?v=dv3_5XaSIXI')
 ')
-XGH_HUL(`2',`Nerd facts, funnies and history',`dnl
+XGH_HUL2(`2',`more_nerd',`Nerd facts, funnies and history',`dnl
 XGH_LIA(`http://www.cypherspace.org/adam/shirt/',`perl RSA "munitions" T-Shirt homepage')
 XGH_LIA(`https://lore.kernel.org/ksummit/CAHk-=wiB6FJknDC5PMfpkg4gZrbSuC3d391VyReM4Wb0+JYXXA@mail.gmail.com/',`Re: Maintainers / Kernel Summit 2021 planning kick-off - Linus Torvalds')
 XGH_LIA(`https://www.unicode.org/L2/L2018/18122-mate-emoji.pdf',`18122-mate-emoji.pdf')
@@ -422,8 +447,11 @@ XGH_LI(`emacs=eight megabytes and constantly swapping')
 XGH_LI(`EMACS meaning escape-meta-alt-control-shift, of course')
 XGH_LIA(`https://hard-drive.net/',`Hard Drive')
 ')
-XGH_HUL(`2',`Biology and medicine',`dnl
-XGH_LI(`Horse fact: they sleep for two hours at a time')
+XGH_HUL2(`2',`biology_medicine',`Biology and medicine',`dnl
+XGH_LI(`I@aq@ve read two pages of: XGH_A(`https://www.pnas.org/doi/10.1073/pnas.1803245115')')
+XGH_LI(`draft genome assemblies')
+XGH_LIAL(`Synteny')
+XGH_LIAL(`Contig')
 XGH_LIAL(`https://www.hokeniryo1.metro.tokyo.lg.jp/shokuhin/eng/hugu/index.html')
 XGH_LIAL(`https://evolution.berkeley.edu/what-are-evograms/jaws-to-ears-in-the-ancestors-of-mammals/')
 XGH_LIAL(`https://www.elephantvoices.org/the-elephant-ethogram')
@@ -438,11 +466,11 @@ XGH_LIAL(`https://pubmed.ncbi.nlm.nih.gov/32366948/')
 XGH_LIAL(`https://pubmed.ncbi.nlm.nih.gov/39115027/')
 XGH_LIAL(`https://pmc.ncbi.nlm.nih.gov/articles/PMC6469458/')
 ')
-XGH_HUL(`2',`Former Flash developers, cartoon-related stuff',`dnl
+XGH_HUL2(`2',`flash_cartoon',`Former Flash developers, cartoon-related stuff',`dnl
 XGH_LIAL(`http://cockroach.se/')
 XGH_LIAL(`https://www.roomwithamoose.com/')
 ')
-XGH_HUL(`2',`Floating-point',`dnl
+XGH_HUL2(`2',`float',`Floating-point',`dnl
 XGH_LIA(`https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html',`What Every Computer Scientist Should Know About Floating-Point Arithmetic')
 XGH_LIA(`https://0.30000000000000004.com/',`Floating Point Math')
 XGH_LIAL(`https://www.h-schmidt.net/FloatConverter/IEEE754.html')
@@ -450,6 +478,6 @@ XGH_LIAL(`https://randomascii.wordpress.com/2012/09/09/game-developer-magazine-f
 XGH_LIAL(`https://fabiensanglard.net/floating_point_visually_explained/')
 XGH_LIAL(`https://float.exposed/0x44bf9400')
 ')
-XGH_HUL(`2',`Events etc.',`dnl
+XGH_HUL2(`2',`events',`Events etc.',`dnl
 XGH_LI(`38th Chaos Communication Congress')
 ')

@@ -11,7 +11,7 @@ rule m4
          | sort | uniq | xargs echo "$out:" > $out.d
 
 rule m42
-  command=m4 $arg $in | sed "s/@aq@/'/g" > $out
+  command=set -o pipefail; m4 $arg $in | sed "s/@aq@/'/g" > $out
 
 rule ragel
   depfile=$out.d
@@ -47,14 +47,15 @@ rule arb
 dnl # define(`PAGE_XS',`define(`X',`$1')`'X(home,index)`'undefine(`X')')dnl
 
 # TODO warnings
-build web/index.html: m42 web.m4 home.m4
-build web/movies.html: m42 collect.m4 movies.m4 web.m4 movies.m4
-build web/vehicle-building-games.html: m42 web.m4 vehicle-building-games.m4
-build web/not_found.html: m42 web.m4 not_found.m4
-build web/programming.html: m42 web.m4 programming.m4
-build web/bookmarks.html: m42 web.m4 bookmarks.m4
-build web/dead.html: m42 web.m4 dead.m4
+build web/index.html: m42 base.m4 web.m4 home.m4
+build web/movies.html: m42 base.m4 collect.m4 movies.m4 web.m4 movies.m4
+build web/vehicle-building-games.html: m42 base.m4 web.m4 vehicle-building-games.m4
+build web/not_found.html: m42 base.m4 web.m4 not_found.m4
+build web/programming.html: m42 base.m4 collect.m4 programming.m4 web.m4 programming.m4
+build web/bookmarks.html: m42 base.m4 web.m4 bookmarks.m4
+build web/dead.html: m42 base.m4 collect.m4 dead.m4 web.m4 dead.m4
 build web/music.html: m42 base.m4 collect.m4 music.m4 web.m4 music.m4
+
 build web/meme2.jpg: arb web/meme.jpg
   cmd1=magick
   cmd2=-resize 1200x627 -quality 100 -background "rgb(244,242,238)" -gravity center -extent 1200x627

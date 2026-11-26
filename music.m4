@@ -276,3 +276,9 @@ dnl # https://www.youtube.com/watch?v=Wpfx50yCs4E
 dnl # London Grammar
 dnl # Flight Facilities
 dnl # https://www.newgrounds.com/playlist/226666/mister-scoops
+dnl # https://www.newgrounds.com/bbs/topic/1558705/1
+dnl # https://www.youtube.com/watch?v=N8PMvaxlXNI&sttick=0
+dnl # https://www.youtube.com/watch?v=eM1Lj9hsUfc
+dnl # https://www.youtube.com/watch?v=59Q_lhgGANc
+dnl # https://www.youtube.com/watch?v=a5dx4ueCn44
+dnl # kmfdm: angst, nihil, xtort, and the symbols album and also adios

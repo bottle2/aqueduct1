@@ -1,5 +1,6 @@
 XGH_TIT(`Bookmarks')
 XGH_HUL(`2',`Funnies and culture',`dnl
+XGH_LIAL(`https://sackheads.org/~bnaylor/spew/away_msgs.html')
 XGH_LIAL(`https://www.youtube.com/watch?v=b2F-DItXtZs')
 XGH_LIA(`https://www.mindprod.com/jgloss/unmain.html',`unmaintainable code : Java Glossary')
 XGH_LIA(`https://github.com/PradyX/unified_kernel_sdm660/commit/f0ee5596b7e4ae1fb8e0f6bf7263cacec559fb76',`fs: block TikTok from launching · PradyX/unified_kernel_sdm660@f0ee559')

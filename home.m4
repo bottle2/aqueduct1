@@ -1,4 +1,5 @@
 XGH_TIT(`Home')
+XGH_P(`I don@aq@t use AI and I have never used AI. All my work is my own effort.')
 XGH_UL(`dnl
 XGH_LIAR(`vehicle-building-games',`List of vehicle building games')
 XGH_LIAR(`bookmarks',`Outdated collection of links')

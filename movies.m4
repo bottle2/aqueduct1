@@ -1,5 +1,8 @@
 XGH_TIT(`Movies')
-XGH_HUL(`2',`Martial arts',`dnl
+XGH_UL(`XGH_LI(`Skip to XGH_A(``#'acs',`animes, cartoons and series')')')
+XGH_P(`Table of contents:')
+XGH_TOC
+XGH_HUL2(`2',`kung_fu',`Martial arts',`dnl
 XGH_MOVI(`FIST_OF_FURY',`Q253565', `1972',`Fist of Fury')
 XGH_MOVI(`IP_MAN',      `Q573743', `2008',`Ip Man')
 XGH_MOVI(`O_VOO',       `Q462409', `1972',`O Voo do Dragão')
@@ -8,46 +11,46 @@ XGH_MOVI(`PROJECT_A',   `Q1144590',`1983',`Projeto China')
 XGH_MOVI(`POLICE_STORY',`Q594033', `1985',`Police Story')
 XGH_MOVI(`WHEELS_ON_MEALS',`Q60792',`1984',`Wheels on Meals')
 ')
-XGH_HUL(`2',`Angry movies',`dnl
+XGH_HUL2(`2',`angry',`Angry movies',`dnl
 XGH_MOVI(`TROPA_DE_ELITE',`Q282781',  `2007',`Tropa de Elite')
 XGH_MOVI(`WHIPLASH',      `Q15648198',`2014',`Whiplash')
 XGH_MOVI(`SCARFACE',      `Q47075',   `1983',`Scarface')
 XGH_MOVI(`FIST_OF_FURY')
 XGH_MOVI(`FALLING_DOWN',  `Q289598',  `1993',`Um Dia de Fúria')
 ')
-XGH_HUL(`2',`War',`XGH_MOVI(`THREE_KINGS',`Q1357016',`1999',`Three Kings')')
-XGH_HUL(`3',`The Troubles',`XGH_MOVI(`_71',`Q12100227',`2014',`@aq@71')')
-XGH_HUL(`3',`Cold War',`dnl
+XGH_HUL2(`2',`war',`War',`XGH_MOVI(`THREE_KINGS',`Q1357016',`1999',`Three Kings')')
+XGH_HUL2(`3',`the_troubles',`The Troubles',`XGH_MOVI(`_71',`Q12100227',`2014',`@aq@71')')
+XGH_HUL2(`3',`cold_war',`Cold War',`dnl
 XGH_MOVI(`DR_FANTASTICO',`Q105702',`1964',`Dr. Fantástico')
 ')
-XGH_HUL(`3',`World War II',`dnl
+XGH_HUL2(`3',`ww2',`World War II',`dnl
 XGH_MOVI(`THE_GREAT_ESCAPE',   `Q110354',  `1963',`The Great Escape')
 XGH_MOVI(`IP_MAN')
 XGH_MOVI(`SAVING_PRIVATE_RYAN',`Q165817',  `1998',`Saving Private Ryan')
 XGH_MOVI(`DUNKIRK',            `Q21935651',`2017',`Dunkirk')
 ')
-XGH_HUL(`3',`Vietnam',`dnl
+XGH_HUL2(`3',`vietnam',`Vietnam',`dnl
 XGH_MOVI(`DEER_HUNTER',       `Q201674',`1978',`The Deer Hunter')
 XGH_MOVI(`APOCALYPSE_NOW',    `Q182692',`1979',`Apocalypse Now')
 XGH_MOVI(`PLATOON',           `Q190643',`1986',`Platoon')
 XGH_MOVI(`NASCIDO_PARA_MATAR',`Q243439',`1987',`Full Metal Jacket')
 XGH_MOVI(`TROPIC_THUNDER',    `Q380981',`2008',`Tropic Thunder')
 ')
-XGH_HUL(`2',`LGBT movies',`dnl
+XGH_HUL2(`2',`lgbt',`LGBT movies',`dnl
 XGH_MOVI(`PAPILLON',         `Q596965',`1973',`Papillon')
 XGH_MOVI(`DOG_DAY_AFTERNOON',`Q458656',`1975',`Dog Day Afternoon')
 ')
-XGH_HUL(`2',`Strong women',`dnl
+XGH_HUL2(`2',`women',`Strong women',`dnl
 XGH_MOVI(`DAWN_OF_THE_DEAD',`Q219155',`1978',`Despertar dos Mortos')
 ')
-XGH_HUL(`2',`Mad Max',`dnl
+XGH_HUL2(`2',`mad_max',`Mad Max',`dnl
 XGH_MOVI(`MAD_MAX_1',`Q248775',   `1979',`Mad Max')
 XGH_MOVI(`MAD_MAX_2',`Q1125262',  `1981',`Mad Max 2: A Caçada Continua')
 XGH_MOVI(`MAD_MAX_3',`Q426663',   `1985',`Mad Max: Além da Cúpula do Trovão')
 XGH_MOVI(`MAD_MAX_4',`Q1757288',  `2015',`Mad Max: Estrada da Fúria')
 XGH_MOVI(`MAD_MAX_5',`Q100361125',`2015',`Furiosa: Uma Saga Mad Max')
 ')
-XGH_HUL(`2',`Other watched',`dnl
+XGH_HUL2(`2',`other',`Other watched',`dnl
 XGH_MOVI(`SPHERE',          `Q744500',   `1998',`Sphere')
 XGH_MOVI(`WALL_STREET_WOLF',`Q1392744',  `2013',`The Wolf of Wall Street')
 XGH_MOVI(`ALERTA_LOBO',     `Q60852120', `2019',`Alerta Lobo')
@@ -68,7 +71,7 @@ XGH_MOVI(`HARD_BOILED',     `Q573823',   `1992',`Hard Boiled')
 XGH_MOVI(`OFFICE_SPACE',    `Q1044523',  `1999',`Como Enlouquecer seu Chefe')
 XGH_MOVI(`EXTERMINIO',      `Q221075',   `2002',`Extermínio')
 ')
-XGH_HUL(`2',`Unwatched',`dnl
+XGH_HUL2(`2',`unwatched',`Unwatched',`dnl
 XGH_MOVI(`BRANQUELAS',           `Q575848',  `2004',`White Chicks')
 XGH_MOVI(`RRR',                  `Q60424165',`2022',`RRR')
 XGH_MOVI(`THE_PLAYER',           `Q1551573', `1992',`The Player')
@@ -220,7 +223,7 @@ XGH_MOVI(`NIGHTCRAWLER',      `Q15154975',`2014',`Nightcrawler')
 XGH_MOVI(  `ATIVIDADE_PARANORMAL',`Q381028', `2007',`Atividade Paranormal')
 XGH_MOVI(`INATIVIDADE_PARANORMAL',`Q3178409',`2013',`Inatividade Paranormal')
 ')
-XGH_HUL(`2',`Movies I watched ages ago',`dnl
+XGH_HUL2(`2',`seen_long_ago',`Movies I watched ages ago',`dnl
 XGH_MOVI(`QUE_ISSO_COMPANHEIRO',`Q137703',`1997',`O Que é Isso, Companheiro?')
 XGH_MOVI(`ALIENS',              `Q104814',`1986',`Aliens')
 XGH_MOVI(`CORACAO_CAVALEIRO',   `Q114076',`2001',`Coração de Cavaleiro')
@@ -230,24 +233,26 @@ XGH_MOVI(`NARNIA_1',            `Q485803',`2005',`As Crônicas de Nárnia: O Le�
 XGH_MOVIX(`',`: first movie filmed with Fusion Camera System',`CENTER_OF_EARTH',`Q250770',`2008',`Viagem ao Centro da Terra: O Filme')
 XGH_MOVI(`SCROOGE',             `Q86791', `2009',`Os Fantasmas de Scrooge')
 ')
-XGH_HUL(`2',`Terrible movies (don@aq@t see)',`dnl
+XGH_HUL2(`2',`terrible',`Terrible movies (don@aq@t see)',`dnl
 XGH_MOVI(`TERRA_SANTOS_PECADORES',`Q112054623',`2023',`Na Terra de Santos e Pecadores')
 XGH_MOVIX(`',`: unreal low initiative, highly disorganized humans, unreal reaction times, adults without strength to hold children back, weak plot-driven dialogue, bad crowd scenes, unreal ignorance, unreal lack of communication, unreal outcome, lack of more action in the end. Cast comrpises surprising amount of actors from The Walking dead',`THE_MIST',`Q695209',`2007',`O Nevoeiro')
 ')
-XGH_HUL(`2',`Banned movies',`dnl
+XGH_HUL2(`2',`banned',`Banned movies',`dnl
 XGH_MOVI(`JUPITER_ASCENDING',`Q12125299',`2015',`Jupiter Ascending')
 XGH_MOVI(`THE_JACKAL',       `Q167437',  `1997',`O Chacal')
 XGH_MOVIX(`',`: soundtrack allegedly inspired by <a href="https://www.youtube.com/watch?v=QspuCt1FM9M">a Justin Bieber song slowed down 800%</a>',`DREDD',`Q276772',`2012',`Dredd')
 XGH_MOVI(`BLADE_TRINITY',`Q217008',`2004',`Blade: Trinity')
 ')
-XGH_H(`1',`List of animes, cartoons and series')
-XGH_HUL(`2',`Seen',`dnl
+XGH_H3(`1',`acs',`List of animes, cartoons and series')
+dnl # Gundam ep. 32
+dnl # Speed and Cenat beat Minecraft (old)
+XGH_HUL3(`2',`acs_seen',`Seen',`dnl
 ')
-XGH_HUL(`2',`Dropped',`dnl
+XGH_HUL3(`2',`acs_dropped',`Dropped',`dnl
 ')
-XGH_HUL(`2',`Want to see',`dnl
+XGH_HUL3(`2',`acs_want',`Want to see',`dnl
 ')
-XGH_HUL(`2',`Unseen',`dnl
+XGH_HUL3(`2',`acs_unseen',`Unseen',`dnl
 XGH_MOVI(`DANGER_5',        `Q5215988', `2011–2015',`Danger 5')
 XGH_MOVI(`EXPANSE',         `Q18389644',`2015-2022',`The Expanse')
 XGH_MOVI(`FUNDACAO',        `Q56281007',`2021-',    `Fundação')
@@ -332,3 +337,9 @@ dnl # https://www.imdb.com/pt/name/nm0001088/
 dnl # https://www.studiobinder.com/blog/what-is-a-chyron-definition/
 dnl # https://www.youtube.com/watch?v=lEDGdzulfoQ
 dnl # https://www.triskaidekafiles.com/
+dnl # Ginger Snaps (2000)
+dnl # Stalag 17 (1953)
+dnl # A Ponte do Rio Kwai (1957)
+dnl # Wild Horse Nine
+dnl # Crippled Avengers
+dnl # JFK (1991)

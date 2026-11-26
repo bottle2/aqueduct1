@@ -1,23 +1,32 @@
-define(`XGH_NL',`
-')dnl
+define(`XGH_C0XX',`ifdef(`XGH__DECO',`XGH_CAT(defn(`XGH__DECO'),$1)(shift($@))')')dnl
+define(`XGH_C1',`XGH_CAT(defn(`XGH__DECO'),$'`2)(shift(shift($'`@)))')dnl
+define(`XGH_C2',`XGH_CAT(defn(`XGH__DECO'),$'`3)(shift(shift(shift($'`@))))')dnl
+_
+define(`XGH_TOC',`<nav><ol>XGH_NL`'undivert(3)</ol></nav>`'XGH_C0XX($@)')dnl
 define(`XGH_H',`<h$1>$2</h$1>')dnl
-define(`XGH_TIT',`define(`XGH_WEB_TITLE',`$1')XGH_H(`1',`$1')')dnl
-define(`XGH_UL',`<ul>XGH_NL`'$1`'dnl
-</ul>')dnl
-define(`XGH_OL',`<ol>
-$1`'</ol>')
+define(`XGH_H2',`XGH_H_UPD(`$1')<h$1 id="$2">XGH_H___CNT $3</h$1>')dnl
+define(`XGH_H3',`<h$1 id="$2">$3</h$1>')
+define(`XGH_TIT',`define(`XGH_WEB_TITLE',`$1')XGH_H(`1',`$1')`''defn(`XGH_C1'))dnl
+define(`XGH_TIT2',`define(`XGH_WEB_TITLE',`$2')XGH_H3(`1',`$1',`$2')')dnl
+_
+define(`XGH_UL',`<ul>XGH_NL`'$1`'</ul>')dnl
+define(`XGH_OL',`<ol>XGH_NL`'$1`'</ol>')dnl
 define(`XGH_LI',`<li>XGH_NL`'$1`'XGH_NL</li>')dnl
 define(`XGH_LIA',`XGH_LI(`<a href="$1">$2</a>')')dnl
 define(`XGH_LIAL',`XGH_LI(`<a href="$1">$1</a>')')dnl
 define(`XGH_LIAR',`XGH_LIA(`./$1.html',`$2')')dnl
-define(`XGH_P',`<p>XGH_NL`'$1`'XGH_NL</p>')dnl
+_
+define(`XGH_P',`<p>XGH_NL`'$1`'XGH_NL</p>`''defn(`XGH_C1'))dnl
 define(`XGH_DL',`<dl>XGH_NL`'$1</dl>')dnl
 define(`XGH_DI',`<dt>$1</dt>XGH_NL<dd>XGH_NL`'$2`'XGH_NL</dd>')dnl
 define(`XGH_AMP',`&amp;')dnl
 define(`XGH_MOV',`<a href="https://www.wikidata.org/wiki/XGH_MOV___$1___WIKIDATA">XGH_MOV___$1___TITLE (XGH_MOV___$1___YEAR)</a>')dnl
 define(`XGH_MOVI',`<li>XGH_MOV($@)</li>')dnl
 define(`XGH_MOVIX',`<li>$1`'XGH_MOV(shift(shift($@)))`'$2</li>')dnl
+define(`XGH_TOCA',)dnl
 define(`XGH_HUL',`XGH_H(`$1',`$2')`'XGH_NL`'XGH_UL(`$3')')dnl
+define(`XGH_HUL2',`XGH_H2(`$1',`$2',`$3')`'XGH_NL`'XGH_UL(`$4')')dnl
+define(`XGH_HUL3',`XGH_H3(`$1',`$2',`$3')`'XGH_NL`'XGH_UL(`$4')')dnl
 define(`XGH_A',`<a href="$1">$2</a>')dnl
 define(`XGH_A2',`XGH_A(`$2',`$1')')dnl
 define(`XGH_HR',`<hr />')dnl
@@ -54,7 +63,7 @@ define(`XGH_GAME_LOCi',`define(`XGH_GAME_LOC___i',`1') [<a href="$3">XGH_GAME___
 define(`XGH_GAME_LOCi2',`ifelse(1,$#,,`define(`XGH_GAME_LOC___i',incr(XGH_GAME_LOC___i)) <sup><a href="$2">XGH_GAME_LOC___i</a>XGH_GAME_ATTR___2$1</sup>XGH_GAME_LOCi2(shift(shift($@)))')')dnl
 define(`XGH_IMG',`<img width="300px" src="./$1.$2" alt="$3">')dnl
 define(`XGH_IT',`<i>$1</i>')dnl
-define(`XGH_CI',`<code>$1</code>')
+define(`XGH_CI',`<code><![CDATA[$1]]></code>')
 define(`XGH_AUTHOR_N',`XGH_AUTHOR___$2`'XGH_CONT2(`AUTHOR2',$@)')dnl
 define(`XGH_AUTHOR_P',`$2`'XGH_CONT1(`AUTHOR2',$@)')dnl
 define(`XGH_AUTHOR_R',`XGH_AUTHOR___$2`'XGH_CONT1(`AUTHOR2',$@)')dnl
@@ -71,17 +80,86 @@ define(`XGH_C_EN',`&ndash;')dnl
 define(`XGH_AUTHOR_S',`define(`XGH___AUTHOR',`XGH_AUTHOR($@)')')dnl
 define(`XGH_MOODH',`<h$1>XGH_MOOD___$2</h$1>')dnl
 define(`XGH_MUSIC_LI',`<li>XGH___AUTHOR XGH_C_EN XGH_MUSIC($@)</li>')dnl
+_
+define(`XGH_L2_',`m4exit(69)')dnl
+define(`XGH_L2_I',`<li>$1</li>XGH_NL`''defn(`XGH_C1'))dnl
+_ TODO deduplicate code
+define(`XGH_L2_U',
+ `<li>$1
+`'pushdef(`XGH__DECO',`XGH_L2_')dnl
+`'pushdef(`XGH_L2_',`</ul></li>popdef(`XGH__DECO')popdef(`XGH_L2_')XGH_C0XX($'`@)')dnl
+`'<ul>
+`'XGH_L2_$2(shift(shift($@)))
+')dnl
+define(`XGH_L2_L',`XGH_LIAL($1)`'XGH_NL`''defn(`XGH_C1'))dnl
+define(`XGH_L2_A',`XGH_LIA($1,$2)`'XGH_NL`''defn(`XGH_C2'))dnl
+define(`XGH_L2_S',`pushdef(`XGH__STACK',`$1')`''defn(`XGH_C1'))dnl
+define(`XGH_A3',`XGH_A2(`$1',defn(`XGH__STACK'))`'popdef(`XGH__STACK')')dnl
+define(`XGH_UL2',
+ `pushdef(`XGH__DECO',`XGH_L2_')dnl
+`'pushdef(`XGH_L2_',`</ul>popdef(`XGH__DECO')popdef(`XGH_L2_')XGH_C0XX($'`@)')dnl
+`'<ul>
+`'XGH_L2_$1(shift($@))
+')dnl
+_
+define(`XGH_HUL4',
+ `XGH_H2(`$1',`$2',`$3')
+`'XGH_UL2(shift(shift(shift($@))))
+')dnl
+define(`XGH_HUL5',
+ `XGH_H3(`$1',`$2',`$3')
+`'XGH_UL2(shift(shift(shift($@))))
+')dnl
+_
+define(`XGH_',`m4exit(`67')')dnl
+define(`XGH_OMEGA',
+ `pushdef(`XGH__DECO',`XGH_')dnl
+`'pushdef(`XGH_',`</ul>popdef(`XGH__DECO')popdef(`XGH_')')dnl
+`'XGH_$1(shift($@))
+')dnl
+_
+define(`XGH_RFC_U',`https://datatracker.ietf.org/doc/html/rfc$1')dnl
+dnl#define(`XGH_COPYRIGHT',
+dnl#  `ifelse(
+dnl#    `$#',`0',
+dnl#      `errprint(`error: copyright years not defined using XGH_COPYRIGHT_YEARS')m4exit(1)',
+dnl#      `define(`XGH_COPYRIGHT_YEARS',`$*')'dnl
+dnl#`')'dnl
+dnl#)dnl
+dnl#We don't get to have a sticky footer for now because web
+define(`XGH_FOOTER',)dnl
+define(`XGH_NO_FOOTER',`define(`XGH_FOOTER',)')dnl
+XGH_H_RESET`'dnl
 m4wrap(`divert(0)dnl
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:image" content="./meme2.jpg" />
-<meta property="og:site_name" content="Home of the greatest m4 enthusiast" />
+<!--<meta property="og:image" content="./meme2.jpg" />-->
+<!--<meta property="og:site_name" content="Home of the greatest m4 enthusiast" />-->
 <!--<link rel="icon" type="image/svg+xml" href="./logo.svg">-->
 <title>XGH_WEB_TITLE - aqueduct1</title>
+<style>
+nav ol {
+  list-style-type: none;
+}
+</style>
 </head>
 <body>')dnl
-m4wrap(`divert(9)</body>XGH_NL</html>')dnl
+m4wrap(`divert(9)dnl
+`'XGH_FOOTER(`<footer>
+`'`'<hr />
+`'`'<p>Copyright &copy; XGH_COPYRIGHT_YEARS Bento Borges Schirmer</p>
+`'`'<p>
+`'`'  I have never used generative AI in any of my production or
+`'`'  contributions, for instance: code, texts, slideshow presentations,
+`'`'  class scripts, presentation scripts, diagrams, charts and figures.
+`'`'  Furthermore generative AI is not part of my daily life, e.g. to
+`'`'  summarize, explain, learn, sketch, get ideas or correct.
+`'`'</p>
+`'</footer>
+`'')dnl
+`'</body>
+`'</html>')dnl
 divert(1)dnl
